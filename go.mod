@@ -1,0 +1,1 @@
+module "golang_course_comdiv"
