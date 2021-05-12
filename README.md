@@ -23,6 +23,9 @@
 В результате должно быть напечатано следующее:
 
 ```
+Out from go run
+Hello, Go!
+Using just created lesson_002_noid(.exe)
 Result is: Hello, Go!
 All is Ok!
 ```
@@ -46,7 +49,7 @@ All is Ok!
 В соответствии с [заданием](https://stepik.org/lesson/228260/step/1?unit=200793), 
 добавлено начальное [`Hello, go` приложение](cmd/lesson_001_hellogo.go).
 
-Запуск программы добавлен в [Makefile]
+Запуск программы добавлен в [Makefile](Makefile)
 
 1. `make run_lesson_001_hellogo` - запустит только этот пример
 2. `make runall` - для запуска в составе всех примеров
