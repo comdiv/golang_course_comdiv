@@ -6,8 +6,7 @@ if [[ "$GOPATH" == "" ]]; then
 	exit 1
 fi;
 
-# упростим использование GO
-PATH=$GOPATH:$PATH
+
 
 
 # точный путь до текущего скрипта для гарантии корректного размещения результатов
@@ -15,6 +14,9 @@ CWD="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
 # целевая директория для файла проекта
 PROJECTDIR=$CWD/../tmp/lesson_002_noid  
+
+# упростим использование GO и результатов проекта
+PATH=$PROJECTDIR:$GOPATH:$PATH
 
 # гарантировано удаляем директорию проекта, чтобы было убедительнее что мы все делаем чисто
 rm -rf $PROJECTDIR
@@ -35,10 +37,18 @@ func main() {
   fmt.Println("Hello, Go!")
 }
 
-' > hello.go
+' > lesson_002_noid.go
 
-# выполняем и ловим результат в переменную
-RESULT=$(go run hello.go)
+# просто запуск
+echo "Out from go run"
+go run lesson_002_noid.go
+
+# компиляция проекта
+go build lesson_002_noid.go
+
+# запуск с только что собранного бинарного файла
+echo "Using just created lesson_002_noid(.exe)"
+RESULT=$(lesson_002_noid)
 
 # выводим полученный результат в консоль
 echo "Result is: $RESULT"
