@@ -4,3 +4,9 @@ run_lesson_001_hellogo:
 
 runall: run_lesson_001_hellogo
 
+test_experiments :
+	echo "Testing of different experiments"
+	go test ./internal/experiments
+
+test: test_experiments
+
