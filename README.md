@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/comdiv/golang_course_comdiv)](https://goreportcard.com/report/github.com/comdiv/golang_course_comdiv)
+
 # golang_course_comdiv
 Репозиторий для изучения golang Садыков Фагим
 
