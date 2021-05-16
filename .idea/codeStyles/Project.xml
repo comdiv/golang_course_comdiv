@@ -5,7 +5,7 @@
     </GoCodeStyleSettings>
     <codeStyleSettings language="go">
       <indentOptions>
-        <option name="USE_TAB_CHARACTER" value="false" />
+        <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
   </code_scheme>
