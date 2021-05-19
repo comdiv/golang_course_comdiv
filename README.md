@@ -45,7 +45,7 @@
 1. https://medium.com/eureka-engineering/understanding-allocations-in-go-stack-heap-memory-9a2631b5035d
 2. https://habr.com/ru/company/ruvds/blog/442648/
 3. https://habr.com/ru/post/497994/
-4.https://golang.org/cmd/compile/
+4. https://golang.org/cmd/compile/
    
 Посмотрел руками пример кода со слайсом через `go build -gcflags "-m=2" cmd/lesson_004/lesson_004_heap_and_stack.go`
 
