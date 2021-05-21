@@ -1,4 +1,4 @@
-package SortedLinkedList
+package linked
 
 // SortedLinkedList - объект, который содержит данные и управляет сортировкой
 type SortedLinkedList struct {
@@ -15,13 +15,13 @@ func NewSortedLinkedList() *SortedLinkedList {
 	return &SortedLinkedList{}
 }
 
-// IndexSize - количество узлов значений в индексе, по сути число уникальных элементов
-func (this *SortedLinkedList) IndexSize() int {
+// UniqueSize - количество узлов значений в индексе, по сути число уникальных элементов
+func (this *SortedLinkedList) UniqueSize() int {
 	return this.indexSize
 }
 
-// ItemCount - количество всех чисел в индексе без учета уникальности
-func (this *SortedLinkedList) ItemCount() int {
+// Size - количество всех чисел в индексе без учета уникальности
+func (this *SortedLinkedList) Size() int {
 	return this.itemCount
 }
 
@@ -35,9 +35,9 @@ func (this *SortedLinkedList) Tail() *SortedLinkedListItem {
 	return this.tail
 }
 
-// GetDistinct - получить срез только уникальных упорядоченных чисел из индекса
-func (this *SortedLinkedList) GetDistinct() []int {
-	var result = make([]int, this.IndexSize())
+// GetUnique - получить срез только уникальных упорядоченных чисел из индекса
+func (this *SortedLinkedList) GetUnique() []int {
+	var result = make([]int, this.UniqueSize())
 	if this.head != nil {
 		for i, current := 0, this.head; current != nil; i, current = i+1, current.next {
 			result[i] = current.Value()
@@ -47,7 +47,7 @@ func (this *SortedLinkedList) GetDistinct() []int {
 }
 
 func (this *SortedLinkedList) GetAll() []int {
-	var result = make([]int, this.ItemCount())
+	var result = make([]int, this.Size())
 	if this.head != nil {
 		for i, current := 0, this.head; current != nil; i, current = i+current.Count(), current.next {
 			for j := i; j < i+current.Count(); j++ {
@@ -133,18 +133,23 @@ func (this *SortedLinkedList) InsertAllVar(values ...int) {
 }
 
 // Delete - удаление элемента из связанного списка
-func (this *SortedLinkedList) Delete(value int) bool { // true - deleted, false - not found
+func (this *SortedLinkedList) Delete(value int, all bool) bool { // true - deleted, false - not found
 	target, targetType := this.FindItemFor(value)
 	if targetType == FOUND_TYPE_FOUND { // элемент найден
-		this.indexSize--
-		this.itemCount -= target.count
-		if target == this.head {
-			this.head = target.next
+		if all || target.Count() == 1 {
+			this.indexSize--
+			this.itemCount -= target.count
+			if target == this.head {
+				this.head = target.next
+			}
+			if target == this.tail {
+				this.tail = target.prev
+			}
+			target.Delete()
+		} else {
+			this.itemCount--
+			target.count--
 		}
-		if target == this.tail {
-			this.tail = target.prev
-		}
-		target.Delete()
 		return true
 	} else {
 		return false
@@ -159,6 +164,25 @@ type SortedLinkedListItem struct {
 	count int
 	prev  *SortedLinkedListItem
 	next  *SortedLinkedListItem
+}
+
+func NewSortedLinkedListItem(value int) *SortedLinkedListItem {
+	return NewSortedLinkedListItemC(value, 1)
+}
+func NewSortedLinkedListItemC(value int, count int) *SortedLinkedListItem {
+	return &SortedLinkedListItem{value: value, count: count}
+}
+
+func (this *SortedLinkedListItem) Inc() {
+	this.count++
+}
+
+func (this *SortedLinkedListItem) Dec() {
+	if this.count == 1 {
+		this.Delete()
+	} else {
+		this.count--
+	}
 }
 
 // Value - значение числа в SortedLinkedListItem

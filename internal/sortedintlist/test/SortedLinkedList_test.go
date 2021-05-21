@@ -1,15 +1,16 @@
-package SortedLinkedList
+package test
 
 import (
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"
 	"math/rand"
 	"reflect"
 	"testing"
 )
 
 func TestSortedLinkedList_GetDistinct(t *testing.T) {
-	l := NewSortedLinkedList()
+	l := linked.NewSortedLinkedList()
 	l.InsertAllVar(8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
-	all := l.GetDistinct()
+	all := l.GetUnique()
 	expected := []int{1, 2, 4, 5, 6, 8}
 	if !reflect.DeepEqual(all, expected) {
 		t.Errorf("Вернулись не те значения `%v`", all)
@@ -17,7 +18,7 @@ func TestSortedLinkedList_GetDistinct(t *testing.T) {
 }
 
 func TestSortedLinkedList_GetAll(t *testing.T) {
-	l := NewSortedLinkedList()
+	l := linked.NewSortedLinkedList()
 	l.InsertAllVar(8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
 	all := l.GetAll()
 	expected := []int{1, 1, 2, 4, 4, 4, 5, 5, 6, 8}
@@ -27,23 +28,23 @@ func TestSortedLinkedList_GetAll(t *testing.T) {
 }
 
 func TestSortedLinkedList_ItemCount(t *testing.T) {
-	l := NewSortedLinkedList()
+	l := linked.NewSortedLinkedList()
 	l.InsertAllVar(1, 2, 4, 4, 4)
-	if l.ItemCount() != 5 {
-		t.Errorf("Expected 5 but was %d", l.ItemCount())
+	if l.Size() != 5 {
+		t.Errorf("Expected 5 but was %d", l.Size())
 	}
 }
 
 func TestSortedLinkedList_IndexSize(t *testing.T) {
-	l := NewSortedLinkedList()
+	l := linked.NewSortedLinkedList()
 	l.InsertAllVar(1, 2, 4, 4, 4)
-	if l.IndexSize() != 3 {
-		t.Errorf("Expected 3 but was %d", l.IndexSize())
+	if l.UniqueSize() != 3 {
+		t.Errorf("Expected 3 but was %d", l.UniqueSize())
 	}
 }
 
 func TestSortedLinkedList_FindItemFor(t *testing.T) {
-	l := NewSortedLinkedList()
+	l := linked.NewSortedLinkedList()
 	var items = [3]int{5, 10, 100}
 	l.Insert(items[0])
 	l.Insert(items[1])
@@ -52,71 +53,75 @@ func TestSortedLinkedList_FindItemFor(t *testing.T) {
 	// можем все найти прямо
 	for _, x := range items {
 		trg, tp := l.FindItemFor(x)
-		if !(trg.Value() == x && tp == FOUND_TYPE_FOUND) {
+		if !(trg.Value() == x && tp == linked.FOUND_TYPE_FOUND) {
 			t.Errorf("%v %v", trg, tp)
 		}
 	}
 	trg, tp := l.FindItemFor(items[0] - 100)
-	if !(trg.Value() == items[0] && tp == FOUND_TYPE_NEXT) {
+	if !(trg.Value() == items[0] && tp == linked.FOUND_TYPE_NEXT) {
 		t.Errorf("%v %v", trg, tp)
 	}
 	trg, tp = l.FindItemFor(items[2] + 100)
-	if !(trg.Value() == items[2] && tp == FOUND_TYPE_PREV) {
+	if !(trg.Value() == items[2] && tp == linked.FOUND_TYPE_PREV) {
 		t.Errorf("%v %v", trg, tp)
 	}
 	trg, tp = l.FindItemFor(items[1] + 10)
-	if !(trg.Value() == items[1] && tp == FOUND_TYPE_PREV) {
+	if !(trg.Value() == items[1] && tp == linked.FOUND_TYPE_PREV) {
 		t.Errorf("%v %v", trg, tp)
 	}
 }
 
 func TestSortedLinkedList_Insert(t *testing.T) {
-	l := NewSortedLinkedList()
+	l := linked.NewSortedLinkedList()
 	var inserted bool
 	inserted = l.Insert(1)
-	if !(inserted && l.IndexSize() == 1 && l.ItemCount() == 1) {
-		t.Errorf("%v %v %v", inserted, l.IndexSize(), l.ItemCount())
+	if !(inserted && l.UniqueSize() == 1 && l.Size() == 1) {
+		t.Errorf("%v %v %v", inserted, l.UniqueSize(), l.Size())
 	}
 	inserted = l.Insert(10)
-	if !(inserted && l.IndexSize() == 2 && l.ItemCount() == 2) {
-		t.Errorf("%v %v %v", inserted, l.IndexSize(), l.ItemCount())
+	if !(inserted && l.UniqueSize() == 2 && l.Size() == 2) {
+		t.Errorf("%v %v %v", inserted, l.UniqueSize(), l.Size())
 	}
 
 	inserted = l.Insert(10)
-	if !(!inserted && l.IndexSize() == 2 && l.ItemCount() == 3) {
-		t.Errorf("%v %v %v", inserted, l.IndexSize(), l.ItemCount())
+	if !(!inserted && l.UniqueSize() == 2 && l.Size() == 3) {
+		t.Errorf("%v %v %v", inserted, l.UniqueSize(), l.Size())
 	}
 }
 
 func TestSortedLinkedList_Delete(t *testing.T) {
-	l := NewSortedLinkedList()
+	l := linked.NewSortedLinkedList()
 	l.Insert(1)
 	l.Insert(10)
 	l.Insert(11)
 	l.Insert(12)
 	l.Insert(12)
 	l.Insert(12)
-	if !(l.IndexSize() == 4 && l.ItemCount() == 6) {
-		t.Errorf("%v %v", l.IndexSize(), l.ItemCount())
+	if !(l.UniqueSize() == 4 && l.Size() == 6) {
+		t.Errorf("%v %v", l.UniqueSize(), l.Size())
 	}
 	var deleted bool
-	deleted = l.Delete(10)
-	if !(deleted && l.IndexSize() == 3 && l.ItemCount() == 5) {
-		t.Errorf("%v %v %v", deleted, l.IndexSize(), l.ItemCount())
+	deleted = l.Delete(10, true)
+	if !(deleted && l.UniqueSize() == 3 && l.Size() == 5) {
+		t.Errorf("%v %v %v", deleted, l.UniqueSize(), l.Size())
 	}
-	deleted = l.Delete(77777)
-	if !(!deleted && l.IndexSize() == 3 && l.ItemCount() == 5) {
-		t.Errorf("%v %v %v", deleted, l.IndexSize(), l.ItemCount())
+	deleted = l.Delete(77777, true)
+	if !(!deleted && l.UniqueSize() == 3 && l.Size() == 5) {
+		t.Errorf("%v %v %v", deleted, l.UniqueSize(), l.Size())
 	}
-	deleted = l.Delete(12)
-	if !(deleted && l.IndexSize() == 2 && l.ItemCount() == 2) {
-		t.Errorf("%v %v %v", deleted, l.IndexSize(), l.ItemCount())
+	deleted = l.Delete(12, false)
+	if !(deleted && l.UniqueSize() == 3 && l.Size() == 4) {
+		t.Errorf("%v %v %v", deleted, l.UniqueSize(), l.Size())
+	}
+	deleted = l.Delete(12, true)
+	if !(deleted && l.UniqueSize() == 2 && l.Size() == 2) {
+		t.Errorf("%v %v %v", deleted, l.UniqueSize(), l.Size())
 	}
 }
 
 func TestSortedLinkedList_Tail(t *testing.T) {
 	val := rand.Intn(100)
-	l := NewSortedLinkedList()
+	l := linked.NewSortedLinkedList()
 	l.Insert(val)
 	if l.Tail() == nil {
 		t.Errorf("При вставке первого элемента Tail не должен был остаться nil!")
@@ -132,7 +137,7 @@ func TestSortedLinkedList_Tail(t *testing.T) {
 	if initalTail.Next() != l.Tail() || l.Tail().Prev() != initalTail {
 		t.Errorf("При добавлении в хвост связи между элементами не были сформированы")
 	}
-	l.Delete(val + 1)
+	l.Delete(val+1, true)
 	if l.Tail() != initalTail {
 		t.Errorf("После удаления последнего элемента Tail должен был откатиться на элемент назад")
 	}
@@ -142,7 +147,7 @@ func TestSortedLinkedList_Tail(t *testing.T) {
 }
 func TestSortedLinkedList_Head(t *testing.T) {
 	val := rand.Intn(100)
-	l := NewSortedLinkedList()
+	l := linked.NewSortedLinkedList()
 	l.Insert(val)
 	if l.Head() == nil {
 		t.Errorf("При вставке первого элемента Tail не должен был остаться nil!")
@@ -158,7 +163,7 @@ func TestSortedLinkedList_Head(t *testing.T) {
 	if initialHead.Prev() != l.Head() || l.Head().Next() != initialHead {
 		t.Errorf("При добавлении в начало связи между элементами не были сформированы")
 	}
-	l.Delete(val - 1)
+	l.Delete(val-1, true)
 	if l.Head() != initialHead {
 		t.Errorf("После удаления первого элемента Head должен был откатиться на элемент назад")
 	}
@@ -168,13 +173,13 @@ func TestSortedLinkedList_Head(t *testing.T) {
 }
 
 func TestNewSortedLinkedList(t *testing.T) {
-	var list_1 *SortedLinkedList = NewSortedLinkedList()
+	var list_1 *linked.SortedLinkedList = linked.NewSortedLinkedList()
 
-	if list_1.ItemCount() != 0 {
-		t.Errorf("ItemCount должен быть 0, а он %d", list_1.ItemCount())
+	if list_1.Size() != 0 {
+		t.Errorf("Size должен быть 0, а он %d", list_1.Size())
 	}
-	if list_1.IndexSize() != 0 {
-		t.Errorf("IndexSize должен быть 0, а он %d", list_1.IndexSize())
+	if list_1.UniqueSize() != 0 {
+		t.Errorf("UniqueSize должен быть 0, а он %d", list_1.UniqueSize())
 	}
 
 	if list_1.Head() != nil {
@@ -184,7 +189,7 @@ func TestNewSortedLinkedList(t *testing.T) {
 	if list_1.Tail() != nil {
 		t.Errorf("Tail должен быть nil, а он %p", list_1.Tail())
 	}
-	var list_2 *SortedLinkedList = NewSortedLinkedList()
+	var list_2 *linked.SortedLinkedList = linked.NewSortedLinkedList()
 	if list_1 == list_2 {
 		t.Errorf("NewSortedLinkedList shoud generate distinct, not singleton lists")
 	}
@@ -192,7 +197,7 @@ func TestNewSortedLinkedList(t *testing.T) {
 
 func TestSortedLinkedListItem_Count(t *testing.T) {
 	expected := rand.Intn(100)
-	item := SortedLinkedListItem{count: expected}
+	item := linked.NewSortedLinkedListItemC(1, expected)
 	if item.Count() != expected {
 		t.Errorf("Expected %d but was %d", expected, item.Count())
 	}
@@ -200,7 +205,7 @@ func TestSortedLinkedListItem_Count(t *testing.T) {
 
 func TestSortedLinkedListItem_Value(t *testing.T) {
 	expected := rand.Intn(100)
-	item := SortedLinkedListItem{value: expected}
+	item := linked.NewSortedLinkedListItem(expected)
 	if item.Value() != expected {
 		t.Errorf("Expected %d but was %d", expected, item.Value())
 	}
@@ -212,12 +217,12 @@ func BenchmarkSortedLinkedList_InsertAndDelete10000_5000(b *testing.B) {
 		values[i] = rand.Intn(5000)
 	}
 	for n := 0; n < b.N; n++ {
-		list := NewSortedLinkedList()
+		list := linked.NewSortedLinkedList()
 		for _, v := range values {
 			list.Insert(v)
 		}
 		for _, v := range values {
-			list.Delete(v)
+			list.Delete(v, true)
 		}
 	}
 }
@@ -227,12 +232,12 @@ func BenchmarkSortedLinkedList_AllAndUnique10000_5000(b *testing.B) {
 	for i, _ := range values {
 		values[i] = rand.Intn(5000)
 	}
-	list := NewSortedLinkedList()
+	list := linked.NewSortedLinkedList()
 	for _, v := range values {
 		list.Insert(v)
 	}
 	for n := 0; n < b.N; n++ {
 		list.GetAll()
-		list.GetDistinct()
+		list.GetUnique()
 	}
 }

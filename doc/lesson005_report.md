@@ -41,7 +41,7 @@ all - prints all values (with duplicates)
 unique - prints only unique values
 ```
 
-Код содержится в [этой директории](../cmd/lesson_005/InsertDeleteSortedArray)
+Код содержится в [этой директории](../cmd/lesson_005/sortedintlist)
 
 Тестами более менее охвачена даже консоль (подмена Stdin, Stdout файлами)
 
