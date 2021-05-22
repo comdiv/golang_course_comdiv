@@ -1,4 +1,4 @@
-# Занятие 004 2021-05-21
+# Занятие 006 2021-05-21
 
 1. [Stepic: 2.4 Структуры](https://classroom.google.com/u/0/c/MzM5NDA2NTc2ODk5/a/MzQxNDE0MTE1MDQ1/details)
 
