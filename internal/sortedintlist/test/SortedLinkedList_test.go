@@ -3,44 +3,36 @@ package test
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"
 	"math/rand"
-	"reflect"
 	"testing"
 )
 
-func TestSortedLinkedList_GetDistinct(t *testing.T) {
-	l := linked.NewSortedLinkedList()
-	l.InsertAllVar(8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
-	all := l.GetUnique()
-	expected := []int{1, 2, 4, 5, 6, 8}
-	if !reflect.DeepEqual(all, expected) {
-		t.Errorf("Вернулись не те значения `%v`", all)
-	}
+func TestSortedLinkedList_GetUnique(t *testing.T) {
+	GenericTestSorted_GetUnique(linked.NewSortedLinkedList(), t)
 }
 
 func TestSortedLinkedList_GetAll(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	l.InsertAllVar(8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
-	all := l.GetAll()
-	expected := []int{1, 1, 2, 4, 4, 4, 5, 5, 6, 8}
-	if !reflect.DeepEqual(all, expected) {
-		t.Errorf("Вернулись не те значения `%v`", all)
-	}
+	GenericTestSorted_GetAll(l, t)
 }
 
-func TestSortedLinkedList_ItemCount(t *testing.T) {
+func TestSortedLinkedList_Size(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	l.InsertAllVar(1, 2, 4, 4, 4)
-	if l.Size() != 5 {
-		t.Errorf("Expected 5 but was %d", l.Size())
-	}
+	GenericTestSorted_Size(l, t)
 }
 
-func TestSortedLinkedList_IndexSize(t *testing.T) {
+func TestSortedLinkedList_UniqueSize(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	l.InsertAllVar(1, 2, 4, 4, 4)
-	if l.UniqueSize() != 3 {
-		t.Errorf("Expected 3 but was %d", l.UniqueSize())
-	}
+	GenericTestSorted_UniqueSize(l, t)
+}
+
+func TestSortedLinkedList_Insert(t *testing.T) {
+	l := linked.NewSortedLinkedList()
+	GenericTestSorted_Insert(l, t)
+}
+
+func TestSortedLinkedList_Delete(t *testing.T) {
+	l := linked.NewSortedLinkedList()
+	GenericTestSorted_Delete(l, t)
 }
 
 func TestSortedLinkedList_FindItemFor(t *testing.T) {
@@ -68,54 +60,6 @@ func TestSortedLinkedList_FindItemFor(t *testing.T) {
 	trg, tp = l.FindItemFor(items[1] + 10)
 	if !(trg.Value() == items[1] && tp == linked.FOUND_TYPE_PREV) {
 		t.Errorf("%v %v", trg, tp)
-	}
-}
-
-func TestSortedLinkedList_Insert(t *testing.T) {
-	l := linked.NewSortedLinkedList()
-	var inserted bool
-	inserted = l.Insert(1)
-	if !(inserted && l.UniqueSize() == 1 && l.Size() == 1) {
-		t.Errorf("%v %v %v", inserted, l.UniqueSize(), l.Size())
-	}
-	inserted = l.Insert(10)
-	if !(inserted && l.UniqueSize() == 2 && l.Size() == 2) {
-		t.Errorf("%v %v %v", inserted, l.UniqueSize(), l.Size())
-	}
-
-	inserted = l.Insert(10)
-	if !(!inserted && l.UniqueSize() == 2 && l.Size() == 3) {
-		t.Errorf("%v %v %v", inserted, l.UniqueSize(), l.Size())
-	}
-}
-
-func TestSortedLinkedList_Delete(t *testing.T) {
-	l := linked.NewSortedLinkedList()
-	l.Insert(1)
-	l.Insert(10)
-	l.Insert(11)
-	l.Insert(12)
-	l.Insert(12)
-	l.Insert(12)
-	if !(l.UniqueSize() == 4 && l.Size() == 6) {
-		t.Errorf("%v %v", l.UniqueSize(), l.Size())
-	}
-	var deleted bool
-	deleted = l.Delete(10, true)
-	if !(deleted && l.UniqueSize() == 3 && l.Size() == 5) {
-		t.Errorf("%v %v %v", deleted, l.UniqueSize(), l.Size())
-	}
-	deleted = l.Delete(77777, true)
-	if !(!deleted && l.UniqueSize() == 3 && l.Size() == 5) {
-		t.Errorf("%v %v %v", deleted, l.UniqueSize(), l.Size())
-	}
-	deleted = l.Delete(12, false)
-	if !(deleted && l.UniqueSize() == 3 && l.Size() == 4) {
-		t.Errorf("%v %v %v", deleted, l.UniqueSize(), l.Size())
-	}
-	deleted = l.Delete(12, true)
-	if !(deleted && l.UniqueSize() == 2 && l.Size() == 2) {
-		t.Errorf("%v %v %v", deleted, l.UniqueSize(), l.Size())
 	}
 }
 
@@ -208,36 +152,5 @@ func TestSortedLinkedListItem_Value(t *testing.T) {
 	item := linked.NewSortedLinkedListItem(expected)
 	if item.Value() != expected {
 		t.Errorf("Expected %d but was %d", expected, item.Value())
-	}
-}
-
-func BenchmarkSortedLinkedList_InsertAndDelete10000_5000(b *testing.B) {
-	var values [10000]int
-	for i, _ := range values {
-		values[i] = rand.Intn(5000)
-	}
-	for n := 0; n < b.N; n++ {
-		list := linked.NewSortedLinkedList()
-		for _, v := range values {
-			list.Insert(v)
-		}
-		for _, v := range values {
-			list.Delete(v, true)
-		}
-	}
-}
-
-func BenchmarkSortedLinkedList_AllAndUnique10000_5000(b *testing.B) {
-	var values [10000]int
-	for i, _ := range values {
-		values[i] = rand.Intn(5000)
-	}
-	list := linked.NewSortedLinkedList()
-	for _, v := range values {
-		list.Insert(v)
-	}
-	for n := 0; n < b.N; n++ {
-		list.GetAll()
-		list.GetUnique()
 	}
 }
