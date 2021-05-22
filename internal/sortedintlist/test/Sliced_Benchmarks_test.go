@@ -41,7 +41,7 @@ func BenchmarkSortedSliced_GetAll(b *testing.B) {
 	}, b)
 }
 func BenchmarkSortedSliced_GetUnique(b *testing.B) {
-	GenericBenchmarkSorted_GetAll(func() sortedintlist.ISortedIntList {
+	GenericBenchmarkSorted_GetUnique(func() sortedintlist.ISortedIntList {
 		return slices.NewSortedIntListSliced()
 	}, b)
 }

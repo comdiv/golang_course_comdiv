@@ -41,7 +41,7 @@ func BenchmarkSortedLinkedList_GetAll(b *testing.B) {
 	}, b)
 }
 func BenchmarkSortedLinkedList_GetUnique(b *testing.B) {
-	GenericBenchmarkSorted_GetAll(func() sortedintlist.ISortedIntList {
+	GenericBenchmarkSorted_GetUnique(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
 	}, b)
 }

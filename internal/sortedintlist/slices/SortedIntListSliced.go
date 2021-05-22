@@ -7,7 +7,9 @@ import (
 // SortedIntListSliced - реализация ISortedIntList
 type SortedIntListSliced struct {
 	data       []int
+	dups       map[int]int
 	uniqueSize int
+	totalSize  int
 }
 
 // hack to force implementation of interface in goland and check that it implements it
@@ -20,7 +22,7 @@ func NewSortedIntListSliced() *SortedIntListSliced {
 }
 
 func NewSortedIntListSlicedWithData(initialdata []int) *SortedIntListSliced {
-	result := &SortedIntListSliced{data: []int{}}
+	result := &SortedIntListSliced{data: []int{}, dups: make(map[int]int)}
 	if nil != initialdata {
 		for _, v := range initialdata {
 			result.Insert(v)
@@ -30,15 +32,20 @@ func NewSortedIntListSlicedWithData(initialdata []int) *SortedIntListSliced {
 }
 
 func (s *SortedIntListSliced) Insert(value int) bool {
+
 	index, insertIndex := LastIndexOf(s.data, value, true)
 	if index < 0 { // такого значения еще не было
 		s.uniqueSize++
 	}
 	switch {
-	case index == LAST_INDEX_AFTER || index == len(s.data)-1:
+	case index == LAST_INDEX_AFTER:
 		s.data = append(s.data, value)
-	case index == 0 || index == LAST_INDEX_BEFORE:
+	case index == LAST_INDEX_BEFORE:
 		s.data = append([]int{value}, s.data...)
+	case index >= 0:
+		s.dups[value]++
+	case s.totalSize == 0:
+		s.data = append(s.data, value)
 	default:
 		if cap(s.data) > len(s.data) {
 			s.data = append(s.data, 0)
@@ -52,24 +59,26 @@ func (s *SortedIntListSliced) Insert(value int) bool {
 			s.data = newdata
 		}
 	}
+	s.totalSize++
 	return index < 0 // Только для совсем новых значений для конвенции с Linked мы возвращем true
 }
 
 func (s *SortedIntListSliced) Delete(value int, all bool) bool {
 	index, _ := LastIndexOf(s.data, value, true)
 	if index >= 0 {
-		var firstIndex = index
-		var hasDoublicates = index > 0 && s.data[index-1] == value
-		if all && hasDoublicates {
-			for ; firstIndex > 0 && s.data[firstIndex-1] == value; firstIndex-- {
-
-			}
-		}
-		if all || !hasDoublicates { // число полностью уходит
+		var duplicates = s.dups[value]
+		if all || duplicates == 0 { // число полностью уходит
 			s.uniqueSize--
+			copy(s.data[index:], s.data[index+1:])
+			s.data = s.data[:len(s.data)-1]
+		} else {
+			s.dups[value]--
 		}
-		copy(s.data[firstIndex:], s.data[index+1:])
-		s.data = s.data[:len(s.data)-(index-firstIndex+1)]
+		s.totalSize--
+		if all && duplicates > 0 {
+			s.totalSize -= duplicates
+		}
+
 		return true
 	}
 	return false
@@ -147,7 +156,7 @@ func LastIndexOf(data []int, v int, isSorted bool) (int, int) { // index, and la
 }
 
 func (s *SortedIntListSliced) Size() int {
-	return len(s.data)
+	return s.totalSize
 }
 
 func (s *SortedIntListSliced) UniqueSize() int {
@@ -155,21 +164,21 @@ func (s *SortedIntListSliced) UniqueSize() int {
 }
 
 func (s *SortedIntListSliced) GetAll() []int {
-	result := make([]int, len(s.data))
-	copy(result, s.data)
+	result := make([]int, s.totalSize)
+	var targetindex int
+	for _, v := range s.data {
+		result[targetindex] = v
+		targetindex++
+		for d := 0; d < s.dups[v]; d++ {
+			result[targetindex] = v
+			targetindex++
+		}
+	}
 	return result
 }
 
 func (s *SortedIntListSliced) GetUnique() []int {
 	result := make([]int, s.uniqueSize)
-	var lastvalue int
-	var targetindex int
-	for _, v := range s.data {
-		if targetindex == 0 || lastvalue != v {
-			result[targetindex] = v
-			targetindex++
-			lastvalue = v
-		}
-	}
+	copy(result, s.data)
 	return result
 }
