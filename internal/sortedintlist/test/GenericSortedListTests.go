@@ -11,7 +11,7 @@ func GenericTestSorted_GetUnique(l sortedintlist.ISortedIntList, t *testing.T) {
 	all := l.GetUnique()
 	expected := []int{1, 2, 4, 5, 6, 8}
 	if !reflect.DeepEqual(all, expected) {
-		t.Errorf("Вернулись не те значения `%v`", all)
+		t.Errorf("Вернулись не те значения `%v` вместо `%v`", all, expected)
 	}
 }
 
@@ -20,7 +20,7 @@ func GenericTestSorted_GetAll(l sortedintlist.ISortedIntList, t *testing.T) {
 	all := l.GetAll()
 	expected := []int{1, 1, 2, 4, 4, 4, 5, 5, 6, 8}
 	if !reflect.DeepEqual(all, expected) {
-		t.Errorf("Вернулись не те значения `%v`", all)
+		t.Errorf("Вернулись не те значения `%v` вместо `%v`", all, expected)
 	}
 }
 

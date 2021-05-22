@@ -27,3 +27,16 @@ func BenchmarkSortedLinkedList_GetUnique(b *testing.B) {
 		return linked.NewSortedLinkedList()
 	}, b)
 }
+
+func BenchmarkLinkedFind(b *testing.B) {
+	l := linked.NewSortedLinkedList()
+	for i := 0; i < 10000; i++ {
+		l.Insert(i)
+	}
+	b.ResetTimer()
+	var result *linked.SortedLinkedListItem
+	for i := 0; i < b.N; i++ {
+		result, _ = l.FindItemFor(9999)
+	}
+	_ = result
+}
