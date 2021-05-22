@@ -3,10 +3,5 @@
     <GoCodeStyleSettings>
       <option name="LOCAL_PACKAGE_PREFIXES" />
     </GoCodeStyleSettings>
-    <codeStyleSettings language="go">
-      <indentOptions>
-        <option name="SMART_TABS" value="true" />
-      </indentOptions>
-    </codeStyleSettings>
   </code_scheme>
 </component>

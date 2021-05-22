@@ -6,11 +6,29 @@ import (
 	"testing"
 )
 
-func BenchmarkSortedLinkedList_Insert(b *testing.B) {
-	GenericBenchmarkSorted_Insert(func() sortedintlist.ISortedIntList {
+func BenchmarkSortedLinkedList_InsertRandom(b *testing.B) {
+	GenericBenchmarkSorted_InsertRandom(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
 	}, b)
 }
+
+func BenchmarkSortedLinkedList_InsertAscNoDups(b *testing.B) {
+	GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.ISortedIntList {
+		return linked.NewSortedLinkedList()
+	}, b)
+}
+
+func BenchmarkSortedLinkedList_InsertDescNoDups(b *testing.B) {
+	GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.ISortedIntList {
+		return linked.NewSortedLinkedList()
+	}, b)
+}
+func BenchmarkSortedLinkedList_InsertManyDups(b *testing.B) {
+	GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.ISortedIntList {
+		return linked.NewSortedLinkedList()
+	}, b)
+}
+
 func BenchmarkSortedLinkedList_Delete(b *testing.B) {
 	GenericBenchmarkSorted_Delete(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
