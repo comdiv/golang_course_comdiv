@@ -64,7 +64,8 @@ func TestSortedLinkedList_FindItemFor(t *testing.T) {
 }
 
 func TestSortedLinkedList_Tail(t *testing.T) {
-	val := rand.Intn(100)
+	var randomizer = rand.New(rand.NewSource(123445455))
+	val := randomizer.Intn(100)
 	l := linked.NewSortedLinkedList()
 	l.Insert(val)
 	if l.Tail() == nil {
@@ -90,7 +91,8 @@ func TestSortedLinkedList_Tail(t *testing.T) {
 	}
 }
 func TestSortedLinkedList_Head(t *testing.T) {
-	val := rand.Intn(100)
+	var randomizer = rand.New(rand.NewSource(123445455))
+	val := randomizer.Intn(100)
 	l := linked.NewSortedLinkedList()
 	l.Insert(val)
 	if l.Head() == nil {
@@ -140,7 +142,8 @@ func TestNewSortedLinkedList(t *testing.T) {
 }
 
 func TestSortedLinkedListItem_Count(t *testing.T) {
-	expected := rand.Intn(100)
+	var randomizer = rand.New(rand.NewSource(123445455))
+	expected := randomizer.Intn(100)
 	item := linked.NewSortedLinkedListItemC(1, expected)
 	if item.Count() != expected {
 		t.Errorf("Expected %d but was %d", expected, item.Count())
@@ -148,7 +151,8 @@ func TestSortedLinkedListItem_Count(t *testing.T) {
 }
 
 func TestSortedLinkedListItem_Value(t *testing.T) {
-	expected := rand.Intn(100)
+	var randomizer = rand.New(rand.NewSource(123445455))
+	expected := randomizer.Intn(100)
 	item := linked.NewSortedLinkedListItem(expected)
 	if item.Value() != expected {
 		t.Errorf("Expected %d but was %d", expected, item.Value())

@@ -7,9 +7,10 @@ import (
 )
 
 func GenericBenchmarkSorted_InsertRandom(create func() sortedintlist.ISortedIntList, b *testing.B) {
+	var randomizer = rand.New(rand.NewSource(1234567890))
 	var values [10000]int
 	for i, _ := range values {
-		values[i] = rand.Intn(5000)
+		values[i] = randomizer.Intn(5000)
 	}
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
@@ -63,9 +64,10 @@ func GenericBenchmarkSorted_InsertManyDups(create func() sortedintlist.ISortedIn
 }
 
 func GenericBenchmarkSorted_Delete(create func() sortedintlist.ISortedIntList, b *testing.B) {
+	var randomizer = rand.New(rand.NewSource(1234567890))
 	var values [10000]int
 	for i, _ := range values {
-		values[i] = rand.Intn(5000)
+		values[i] = randomizer.Intn(5000)
 	}
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
@@ -82,9 +84,10 @@ func GenericBenchmarkSorted_Delete(create func() sortedintlist.ISortedIntList, b
 }
 
 func GenericBenchmarkSorted_GetAll(create func() sortedintlist.ISortedIntList, b *testing.B) *[]int {
+	var randomizer = rand.New(rand.NewSource(1234567890))
 	var values [10000]int
 	for i, _ := range values {
-		values[i] = rand.Intn(5000)
+		values[i] = randomizer.Intn(5000)
 	}
 	list := create()
 	for _, v := range values {
@@ -99,9 +102,10 @@ func GenericBenchmarkSorted_GetAll(create func() sortedintlist.ISortedIntList, b
 }
 
 func GenericBenchmarkSorted_GetUnique(create func() sortedintlist.ISortedIntList, b *testing.B) *[]int {
+	var randomizer = rand.New(rand.NewSource(1234567890))
 	var values [10000]int
 	for i, _ := range values {
-		values[i] = rand.Intn(5000)
+		values[i] = randomizer.Intn(5000)
 	}
 	list := create()
 	for _, v := range values {
