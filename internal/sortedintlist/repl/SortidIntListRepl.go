@@ -63,6 +63,7 @@ func (r *SortedIntListRepl) Execute() {
 			r.ExecuteCommand(cmd)
 		}
 		if exit {
+			r.out.Sync()
 			break
 		}
 	}
