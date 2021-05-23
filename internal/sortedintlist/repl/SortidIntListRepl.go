@@ -37,7 +37,7 @@ func NewSortedListReplF(in *os.File, out *os.File, list sortedintlist.ISortedInt
 	return &SortedIntListRepl{list: list, in: in, out: out}
 }
 
-func (this *SortedIntListRepl) PrintHelp() {
+func (r *SortedIntListRepl) PrintHelp() {
 	fmt.Println("Sorted list holder application")
 	fmt.Println("Commands:")
 	fmt.Println("any positive int ( 10 )  - add it to list")
@@ -49,18 +49,18 @@ func (this *SortedIntListRepl) PrintHelp() {
 	fmt.Println("unique - prints only unique values")
 }
 
-func (this *SortedIntListRepl) Execute() {
+func (r *SortedIntListRepl) Execute() {
 	var cmd string
 	for {
-		fmt.Fscan(this.in, &cmd)
+		fmt.Fscan(r.in, &cmd)
 		exit := false
 		switch cmd {
 		case "exit":
 			exit = true
 		case "help":
-			this.PrintHelp()
+			r.PrintHelp()
 		default:
-			this.ExecuteCommand(cmd)
+			r.ExecuteCommand(cmd)
 		}
 		if exit {
 			break
@@ -68,16 +68,16 @@ func (this *SortedIntListRepl) Execute() {
 	}
 }
 
-func (this *SortedIntListRepl) ExecuteCommand(cmd string) error {
+func (r *SortedIntListRepl) ExecuteCommand(cmd string) error {
 	switch cmd {
 	case "all":
-		fmt.Fprintf(this.out, "%v\n", this.list.GetAll())
+		fmt.Fprintf(r.out, "%v\n", r.list.GetAll())
 	case "unique":
-		fmt.Fprintf(this.out, "%v\n", this.list.GetUnique())
+		fmt.Fprintf(r.out, "%v\n", r.list.GetUnique())
 	case "count":
-		fmt.Fprintf(this.out, "%v\n", this.list.Size())
+		fmt.Fprintf(r.out, "%v\n", r.list.Size())
 	case "size":
-		fmt.Fprintf(this.out, "%v\n", this.list.UniqueSize())
+		fmt.Fprintf(r.out, "%v\n", r.list.UniqueSize())
 	default:
 		var removeAll bool = false
 		var numberPart string = cmd
@@ -87,13 +87,13 @@ func (this *SortedIntListRepl) ExecuteCommand(cmd string) error {
 		}
 		ival, err := strconv.Atoi(numberPart)
 		if err != nil {
-			fmt.Fprintf(this.out, "Error command: %v (%v)\n", cmd, err)
+			fmt.Fprintf(r.out, "Error command: %v (%v)\n", cmd, err)
 			return err
 		} else {
 			if ival >= 0 {
-				this.list.Insert(ival)
+				r.list.Insert(ival)
 			} else {
-				this.list.Delete(-ival, removeAll)
+				r.list.Delete(-ival, removeAll)
 			}
 		}
 	}
