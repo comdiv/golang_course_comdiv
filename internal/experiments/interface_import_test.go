@@ -63,3 +63,32 @@ func TestI2(t *testing.T) {
 	assert.Equal(t, "", i2.Hello())
 	assert.Equal(t, false, i2.IsGood())
 }
+
+// для чего это может быть полезно
+// типа мок на частичную реализацию интерфейса
+type FaceMock struct {
+	ISomeIFace // короче это не НАСЛЕДОВАНИЕ, это УТВЕРЖДЕНИЕ что типа "собираюсь реализовать"
+}
+
+// реализовали только один метода
+func (s *FaceMock) Hello() string {
+	return "from mock"
+}
+
+// и спокойно тестируемся с тем, что реализовали
+func TestMock_ImplementedMethod(t *testing.T) {
+	var mock ISomeIFace = new(FaceMock)
+	assert.Equal(t, "from mock", mock.Hello())
+}
+
+// а второй метод так и не реализован
+func TestMock_NotImplementedMethod(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			errString := fmt.Sprint(r)
+			assert.Equal(t, "runtime error: invalid memory address or nil pointer dereference", errString)
+		}
+	}()
+	var mock ISomeIFace = new(FaceMock)
+	assert.Equal(t, "false", mock.IsGood())
+}
