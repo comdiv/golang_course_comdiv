@@ -124,7 +124,7 @@ func TestNewSortedLinkedList(t *testing.T) {
 	assert.Nil(t, l.Head())
 	assert.Nil(t, l.Tail())
 	var l2 = linked.NewSortedLinkedList()
-	assert.NotEqual(t, l, l2)
+	assert.NotSame(t, l, l2)
 }
 
 func TestSortedLinkedListItem_Count(t *testing.T) {

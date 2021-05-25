@@ -1,5 +1,7 @@
 package slices
 
+import "errors"
+
 // SortedIntListSliced - реализация ISortedIntReplProvider
 type SortedIntListSliced struct {
 	data       []int
@@ -9,15 +11,21 @@ type SortedIntListSliced struct {
 }
 
 func (s *SortedIntListSliced) IsIntRangeInitialized() bool {
-	panic("implement me")
+	return s.totalSize > 0
 }
 
 func (s *SortedIntListSliced) GetMin() (int, error) {
-	panic("implement me")
+	if !s.IsIntRangeInitialized() {
+		return 0, errors.New("list is not initialized")
+	}
+	return s.data[0], nil
 }
 
 func (s *SortedIntListSliced) GetMax() (int, error) {
-	panic("implement me")
+	if !s.IsIntRangeInitialized() {
+		return 0, errors.New("list is not initialized")
+	}
+	return s.data[len(s.data)-1], nil
 }
 
 func NewSortedIntListSliced() *SortedIntListSliced {
