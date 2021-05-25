@@ -11,14 +11,15 @@ type exchangeCase struct {
 }
 
 func TestExchangePointer(t *testing.T) {
+	var randomizer = rand.New(rand.NewSource(655646))
 	exchangeCases := []*exchangeCase{
 		{1, 2},
 		{3, 4},
 		{5, 6},
-		{rand.Intn(100), rand.Intn(200)},
-		{rand.Intn(100), rand.Intn(200)},
-		{rand.Intn(100), rand.Intn(200)},
-		{rand.Intn(100), rand.Intn(200)},
+		{randomizer.Intn(100), randomizer.Intn(200)},
+		{randomizer.Intn(100), randomizer.Intn(200)},
+		{randomizer.Intn(100), randomizer.Intn(200)},
+		{randomizer.Intn(100), randomizer.Intn(200)},
 	}
 	for _, et := range exchangeCases {
 		var x1, x2 = et.x1, et.x2
