@@ -2,6 +2,7 @@ package slices
 
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -44,6 +45,11 @@ func TestSortedSliced_DeleteSet(t *testing.T) {
 	sortedintlist.GenericTestSorted_DeleteSet(l, t)
 }
 
+func TestSortedSliced_MinMax(t *testing.T) {
+	l := NewSortedIntListSliced()
+	sortedintlist.GenericTestSorted_MinMax(l, t)
+}
+
 func TestLastIndexOfSortedSlice(t *testing.T) {
 	cases := []struct {
 		sorted   bool
@@ -67,18 +73,12 @@ func TestLastIndexOfSortedSlice(t *testing.T) {
 	for _, c := range cases {
 		// сначала проверим всегда без оптимизаций
 		result, _ := LastIndexOf(c.data, c.value, false)
-		if result != c.expected {
-			t.Errorf("In `%v` %d should have index %d but was %d", c.data, c.value, c.expected, result)
-		}
+		assert.Equal(t, c.expected, result)
 
 		if c.sorted {
 			result, last := LastIndexOf(c.data, c.value, true)
-			if result != c.expected {
-				t.Errorf("In sorted `%v` %d should have index %d but was %d", c.data, c.value, c.expected, result)
-			}
-			if last != c.exlast {
-				t.Errorf("In `%v` %d should have last index %d but was %d", c.data, c.value, c.exlast, last)
-			}
+			assert.Equal(t, c.expected, result)
+			assert.Equal(t, c.exlast, last)
 		}
 	}
 }

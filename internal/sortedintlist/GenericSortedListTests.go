@@ -1,74 +1,64 @@
 package sortedintlist
 
 import (
-	"reflect"
+	"fmt"
+	"github.com/stretchr/testify/assert"
+	"math/rand"
 	"testing"
 )
 
 func GenericTestSorted_GetUnique(l IIntSetMutable, t *testing.T) {
 	InsertAllVar(l, 8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
-	all := l.GetUnique()
+	unique := l.GetUnique()
 	expected := []int{1, 2, 4, 5, 6, 8}
-	if !reflect.DeepEqual(all, expected) {
-		t.Errorf("Вернулись не те значения `%v` вместо `%v`", all, expected)
-	}
+	assert.ElementsMatch(t, expected, unique)
 }
 
 func GenericTestSorted_GetAll(l IIntListMutable, t *testing.T) {
 	InsertAllVar(l, 8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
 	all := l.GetAll()
 	expected := []int{1, 1, 2, 4, 4, 4, 5, 5, 6, 8}
-	if !reflect.DeepEqual(all, expected) {
-		t.Errorf("Вернулись не те значения `%v` вместо `%v`", all, expected)
-	}
+	assert.ElementsMatch(t, expected, all)
 }
 
 func GenericTestSorted_Size(l IIntListMutable, t *testing.T) {
 	InsertAllVar(l, 1, 2, 4, 4, 4)
-	if l.Size() != 5 {
-		t.Errorf("Expected 5 but was %d", l.Size())
-	}
+	assert.Equal(t, 5, l.Size())
 }
 
 func GenericTestSorted_UniqueSize(l IIntSetMutable, t *testing.T) {
 	InsertAllVar(l, 1, 2, 4, 4, 4)
-	if l.UniqueSize() != 3 {
-		t.Errorf("Expected 3 but was %d", l.UniqueSize())
-	}
+	assert.Equal(t, 3, l.UniqueSize())
 }
 
 func GenericTestSorted_InsertList(l IIntListMutable, t *testing.T) {
 	var inserted bool
 	inserted = l.Insert(1)
-	if !(inserted && l.Size() == 1) {
-		t.Errorf("%v %v", inserted, l.Size())
-	}
-	inserted = l.Insert(10)
-	if !(inserted && l.Size() == 2) {
-		t.Errorf("%v %v", inserted, l.Size())
-	}
+	assert.True(t, inserted)
+	assert.Equal(t, 1, l.Size())
 
 	inserted = l.Insert(10)
-	if !(!inserted && l.Size() == 3) {
-		t.Errorf("%v %v", inserted, l.Size())
-	}
+	assert.True(t, inserted)
+	assert.Equal(t, 2, l.Size())
+
+	inserted = l.Insert(10)
+	assert.False(t, inserted)
+	assert.Equal(t, 3, l.Size())
 }
 
 func GenericTestSorted_InsertSet(l IIntSetMutable, t *testing.T) {
 	var inserted bool
 	inserted = l.Insert(1)
-	if !(inserted && l.UniqueSize() == 1) {
-		t.Errorf("%v %v", inserted, l.UniqueSize())
-	}
-	inserted = l.Insert(10)
-	if !(inserted && l.UniqueSize() == 2) {
-		t.Errorf("%v %v", inserted, l.UniqueSize())
-	}
+	assert.True(t, inserted)
+	assert.Equal(t, 1, l.UniqueSize())
 
 	inserted = l.Insert(10)
-	if !(!inserted && l.UniqueSize() == 2) {
-		t.Errorf("%v %v", inserted, l.UniqueSize())
-	}
+	assert.True(t, inserted)
+	assert.Equal(t, 2, l.UniqueSize())
+
+	inserted = l.Insert(10)
+	assert.False(t, inserted)
+	assert.Equal(t, 2, l.UniqueSize())
 }
 
 func GenericTestSorted_DeleteList(l IIntListMutable, t *testing.T) {
@@ -83,21 +73,20 @@ func GenericTestSorted_DeleteList(l IIntListMutable, t *testing.T) {
 	}
 	var deleted bool
 	deleted = l.Delete(10, true)
-	if !(deleted && l.Size() == 5) {
-		t.Errorf("%v %v", deleted, l.Size())
-	}
+	assert.True(t, deleted)
+	assert.Equal(t, 5, l.Size())
+
 	deleted = l.Delete(77777, true)
-	if !(!deleted && l.Size() == 5) {
-		t.Errorf("%v %v", deleted, l.Size())
-	}
+	assert.False(t, deleted)
+	assert.Equal(t, 5, l.Size())
+
 	deleted = l.Delete(12, false)
-	if !(deleted && l.Size() == 4) {
-		t.Errorf("%v %v", deleted, l.Size())
-	}
+	assert.True(t, deleted)
+	assert.Equal(t, 4, l.Size())
+
 	deleted = l.Delete(12, true)
-	if !(deleted && l.Size() == 2) {
-		t.Errorf("%v %v", deleted, l.Size())
-	}
+	assert.True(t, deleted)
+	assert.Equal(t, 2, l.Size())
 }
 
 func GenericTestSorted_DeleteSet(l IIntSetMutable, t *testing.T) {
@@ -112,19 +101,57 @@ func GenericTestSorted_DeleteSet(l IIntSetMutable, t *testing.T) {
 	}
 	var deleted bool
 	deleted = l.Delete(10, true)
-	if !(deleted && l.UniqueSize() == 3) {
-		t.Errorf("%v %v", deleted, l.UniqueSize())
-	}
+	assert.True(t, deleted)
+	assert.Equal(t, 3, l.UniqueSize())
+
 	deleted = l.Delete(77777, true)
-	if !(!deleted && l.UniqueSize() == 3) {
-		t.Errorf("%v %v", deleted, l.UniqueSize())
-	}
+	assert.False(t, deleted)
+	assert.Equal(t, 3, l.UniqueSize())
+
 	deleted = l.Delete(12, false)
-	if !(deleted && l.UniqueSize() == 3) {
-		t.Errorf("%v %v", deleted, l.UniqueSize())
-	}
+	assert.True(t, deleted)
+	assert.Equal(t, 3, l.UniqueSize())
+
 	deleted = l.Delete(12, true)
-	if !(deleted && l.UniqueSize() == 2) {
-		t.Errorf("%v %v", deleted, l.UniqueSize())
+	assert.True(t, deleted)
+	assert.Equal(t, 2, l.UniqueSize())
+
+}
+
+func GenericTestSorted_MinMax(minmax IIntMinMax, t *testing.T) {
+
+	l, ok := minmax.(IIntListMutable)
+	if !ok {
+		panic(fmt.Sprintf("Not l list given for test! %v", minmax))
 	}
+	assert.False(t, minmax.IsIntRangeInitialized(), "Should not be initialized at start")
+	_, err := minmax.GetMin()
+	assert.NotNil(t, err, "Should be error to ask min from empty list")
+	_, err = minmax.GetMax()
+	assert.NotNil(t, err, "Should be error to ask max from empty list")
+
+	r := rand.New(rand.NewSource(DEFAULT_BENCH_DATA_SEED))
+	basevalue := r.Intn(DEFAULT_BENCH_DATA_SIZE)
+	l.Insert(basevalue)
+	assert.True(t, minmax.IsIntRangeInitialized(), "Should be initialized if has values")
+	min, err := minmax.GetMin()
+	assert.Nil(t, err, "Min should be working after initialization")
+	assert.Equal(t, basevalue, min)
+	max, err := minmax.GetMax()
+	assert.Nil(t, err, "Min should be working after initialization")
+	assert.Equal(t, basevalue, max)
+
+	delata := r.Intn(1000) + 500
+	expectedmin := basevalue - delata
+	l.Insert(expectedmin)
+	expectedmax := basevalue + delata
+	l.Insert(expectedmax)
+
+	min, err = minmax.GetMin()
+	assert.Nil(t, err, "Min should be working after initialization")
+	assert.Equal(t, expectedmin, min)
+
+	max, err = minmax.GetMax()
+	assert.Nil(t, err, "Min should be working after initialization")
+	assert.Equal(t, expectedmax, max)
 }

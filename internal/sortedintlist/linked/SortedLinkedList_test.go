@@ -3,6 +3,7 @@ package linked_test
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"
+	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"testing"
 )
@@ -46,6 +47,11 @@ func TestSortedLinkedList_DeleteSet(t *testing.T) {
 	sortedintlist.GenericTestSorted_DeleteSet(l, t)
 }
 
+func TestSortedLinkedList_MinMax(t *testing.T) {
+	l := linked.NewSortedLinkedList()
+	sortedintlist.GenericTestSorted_MinMax(l, t)
+}
+
 func TestSortedLinkedList_FindItemFor(t *testing.T) {
 	l := linked.NewSortedLinkedList()
 	var items = [3]int{5, 10, 100}
@@ -56,22 +62,21 @@ func TestSortedLinkedList_FindItemFor(t *testing.T) {
 	// можем все найти прямо
 	for _, x := range items {
 		trg, tp := l.FindItemFor(x)
-		if !(trg.Value() == x && tp == linked.FOUND_TYPE_FOUND) {
-			t.Errorf("%v %v", trg, tp)
-		}
+		assert.Equal(t, x, trg.Value())
+		assert.Equal(t, linked.FOUND_TYPE_FOUND, tp)
 	}
 	trg, tp := l.FindItemFor(items[0] - 100)
-	if !(trg.Value() == items[0] && tp == linked.FOUND_TYPE_NEXT) {
-		t.Errorf("%v %v", trg, tp)
-	}
+	assert.Equal(t, items[0], trg.Value())
+	assert.Equal(t, linked.FOUND_TYPE_NEXT, tp)
+
 	trg, tp = l.FindItemFor(items[2] + 100)
-	if !(trg.Value() == items[2] && tp == linked.FOUND_TYPE_PREV) {
-		t.Errorf("%v %v", trg, tp)
-	}
+	assert.Equal(t, items[2], trg.Value())
+	assert.Equal(t, linked.FOUND_TYPE_PREV, tp)
+
 	trg, tp = l.FindItemFor(items[1] + 10)
-	if !(trg.Value() == items[1] && tp == linked.FOUND_TYPE_PREV) {
-		t.Errorf("%v %v", trg, tp)
-	}
+	assert.Equal(t, items[1], trg.Value())
+	assert.Equal(t, linked.FOUND_TYPE_PREV, tp)
+
 }
 
 func TestSortedLinkedList_Tail(t *testing.T) {
@@ -79,93 +84,59 @@ func TestSortedLinkedList_Tail(t *testing.T) {
 	val := randomizer.Intn(100)
 	l := linked.NewSortedLinkedList()
 	l.Insert(val)
-	if l.Tail() == nil {
-		t.Errorf("При вставке первого элемента Tail не должен был остаться nil!")
-	}
+	assert.NotNil(t, l.Tail())
+
 	initalTail := l.Tail()
-	if l.Tail().Value() != val {
-		t.Errorf("Единственный элемент он же последний и значение ожидалось %d, а на деле %d", val, l.Tail().Value())
-	}
+	assert.Equal(t, val, l.Tail().Value())
+
 	l.Insert(val + 1)
-	if l.Tail().Value() != val+1 {
-		t.Errorf("Мы добавили значение в хвост и Tail должен был измениться на %d, а на деле %d", val+1, l.Tail().Value())
-	}
-	if initalTail.Next() != l.Tail() || l.Tail().Prev() != initalTail {
-		t.Errorf("При добавлении в хвост связи между элементами не были сформированы")
-	}
+	assert.Equal(t, val+1, l.Tail().Value())
+	assert.Equal(t, l.Tail(), initalTail.Next())
+	assert.Equal(t, initalTail, l.Tail().Prev())
+
 	l.Delete(val+1, true)
-	if l.Tail() != initalTail {
-		t.Errorf("После удаления последнего элемента Tail должен был откатиться на элемент назад")
-	}
-	if initalTail.Next() != nil {
-		t.Errorf("После удаления последнего элемента Tail не может ссылаться на следующий элемент")
-	}
+	assert.Equal(t, initalTail, l.Tail())
+	assert.Nil(t, initalTail.Next())
 }
 func TestSortedLinkedList_Head(t *testing.T) {
 	var randomizer = rand.New(rand.NewSource(123445455))
 	val := randomizer.Intn(100)
 	l := linked.NewSortedLinkedList()
 	l.Insert(val)
-	if l.Head() == nil {
-		t.Errorf("При вставке первого элемента Tail не должен был остаться nil!")
-	}
+	assert.NotNil(t, l.Head())
+
 	initialHead := l.Head()
-	if l.Head().Value() != val {
-		t.Errorf("Единственный элемент он же последний и значение ожидалось %d, а на деле %d", val, l.Head().Value())
-	}
+	assert.Equal(t, val, l.Head().Value())
+
 	l.Insert(val - 1)
-	if l.Head().Value() != val-1 {
-		t.Errorf("Мы добавили значение в начало и Head должен был измениться на %d, а на деле %d", val-1, l.Head().Value())
-	}
-	if initialHead.Prev() != l.Head() || l.Head().Next() != initialHead {
-		t.Errorf("При добавлении в начало связи между элементами не были сформированы")
-	}
+	assert.Equal(t, val-1, l.Head().Value())
+	assert.Equal(t, l.Head(), initialHead.Prev())
+
 	l.Delete(val-1, true)
-	if l.Head() != initialHead {
-		t.Errorf("После удаления первого элемента Head должен был откатиться на элемент назад")
-	}
-	if initialHead.Prev() != nil {
-		t.Errorf("После удаления первого элемента Head не может ссылаться на следующий элемент")
-	}
+	assert.Equal(t, initialHead, l.Head())
+	assert.Nil(t, initialHead.Prev())
 }
 
 func TestNewSortedLinkedList(t *testing.T) {
-	var list_1 = linked.NewSortedLinkedList()
-
-	if list_1.Size() != 0 {
-		t.Errorf("Size должен быть 0, а он %d", list_1.Size())
-	}
-	if list_1.UniqueSize() != 0 {
-		t.Errorf("UniqueSize должен быть 0, а он %d", list_1.UniqueSize())
-	}
-
-	if list_1.Head() != nil {
-		t.Errorf("Head должен быть nil, а он %p", list_1.Head())
-	}
-
-	if list_1.Tail() != nil {
-		t.Errorf("Tail должен быть nil, а он %p", list_1.Tail())
-	}
-	var list_2 = linked.NewSortedLinkedList()
-	if list_1 == list_2 {
-		t.Errorf("NewSortedLinkedList shoud generate distinct, not singleton lists")
-	}
+	var l = linked.NewSortedLinkedList()
+	assert.Equal(t, 0, l.Size())
+	assert.Equal(t, 0, l.UniqueSize())
+	assert.Nil(t, l.Head())
+	assert.Nil(t, l.Tail())
+	var l2 = linked.NewSortedLinkedList()
+	assert.NotEqual(t, l, l2)
 }
 
 func TestSortedLinkedListItem_Count(t *testing.T) {
 	var randomizer = rand.New(rand.NewSource(123445455))
 	expected := randomizer.Intn(100)
 	item := linked.NewSortedLinkedListItemC(1, expected)
-	if item.Count() != expected {
-		t.Errorf("Expected %d but was %d", expected, item.Count())
-	}
+	assert.Equal(t, expected, item.Count())
 }
 
 func TestSortedLinkedListItem_Value(t *testing.T) {
 	var randomizer = rand.New(rand.NewSource(123445455))
 	expected := randomizer.Intn(100)
 	item := linked.NewSortedLinkedListItem(expected)
-	if item.Value() != expected {
-		t.Errorf("Expected %d but was %d", expected, item.Value())
-	}
+	assert.Equal(t, expected, item.Value())
 }
