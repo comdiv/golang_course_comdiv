@@ -50,15 +50,6 @@ type IIntMinMax interface {
 	GetMax() (int, error)
 }
 
-// ISortedIntReplProvider - все в одном основа для REPL на основе сортированного списко-листо-минимакса
-type ISortedIntReplProvider interface {
-	IIntInsert
-	IIntDelete
-	IIntList
-	IIntSet
-	IIntMinMax
-}
-
 func InsertAll(l IIntInsert, data []int) {
 	for _, v := range data {
 		l.Insert(v)

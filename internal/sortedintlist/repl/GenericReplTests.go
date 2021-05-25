@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func GenericTestForReplExecute(name string, impl sortedintlist.ISortedIntReplProvider, t *testing.T) {
+func GenericTestForReplExecute(name string, impl sortedintlist.IIntListMutable, t *testing.T) {
 	os.Mkdir("./tmp", fs.ModeDir)
 	out, err := os.Create("./tmp/" + name + ".out.txt")
 	if err != nil {
@@ -17,7 +17,7 @@ func GenericTestForReplExecute(name string, impl sortedintlist.ISortedIntReplPro
 	if err != nil {
 		t.Fail()
 	}
-	in.WriteString("1\n2\n2\n2\n3\n4\n-3\ncount\nsize\nall\nunique\nexit\n")
+	in.WriteString("1\n2\n2\n2\n3\n4\n-3\ncount\nsize\nall\nunique\nmin\nmax\nexit\n")
 	in.Close()
 
 	in, err = os.Open(in.Name())
@@ -33,13 +33,13 @@ func GenericTestForReplExecute(name string, impl sortedintlist.ISortedIntReplPro
 		t.Fail()
 	}
 	text := string(result)
-	expected := "5\n3\n[1 2 2 2 4]\n[1 2 4]\n"
+	expected := "5\n3\n[1 2 2 2 4]\n[1 2 4]\n1\n4\n"
 	if text != expected {
 		t.Errorf("Expected `%s` but was `%s`", expected, text)
 	}
 }
 
-func GenericTestForReplCommand(name string, impl sortedintlist.ISortedIntReplProvider, t *testing.T) {
+func GenericTestForReplCommand(name string, impl sortedintlist.IIntListMutable, t *testing.T) {
 	os.Mkdir("./tmp", fs.ModeDir)
 	out, err := os.Create("./tmp/" + name + ".out.txt")
 	if err != nil {
@@ -57,13 +57,15 @@ func GenericTestForReplCommand(name string, impl sortedintlist.ISortedIntReplPro
 	_ = repl.ExecuteCommand("size")
 	_ = repl.ExecuteCommand("all")
 	_ = repl.ExecuteCommand("unique")
+	_ = repl.ExecuteCommand("min")
+	_ = repl.ExecuteCommand("max")
 
 	result, err := os.ReadFile(out.Name())
 	if err != nil {
 		t.Fail()
 	}
 	text := string(result)
-	expected := "5\n3\n[1 2 2 2 4]\n[1 2 4]\n"
+	expected := "5\n3\n[1 2 2 2 4]\n[1 2 4]\n1\n4\n"
 	if text != expected {
 		t.Errorf("Expected `%s` but was `%s`", expected, text)
 	}

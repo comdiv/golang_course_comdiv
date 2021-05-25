@@ -1,9 +1,5 @@
 package slices
 
-import (
-	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
-)
-
 // SortedIntListSliced - реализация ISortedIntReplProvider
 type SortedIntListSliced struct {
 	data       []int
@@ -22,11 +18,6 @@ func (s *SortedIntListSliced) GetMin() (int, error) {
 
 func (s *SortedIntListSliced) GetMax() (int, error) {
 	panic("implement me")
-}
-
-// hack to force implementation of interface in goland and check that it implements it
-func sortedintlistslicedImplements() sortedintlist.ISortedIntReplProvider {
-	return &SortedIntListSliced{}
 }
 
 func NewSortedIntListSliced() *SortedIntListSliced {
