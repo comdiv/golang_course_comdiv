@@ -5,14 +5,15 @@ import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/slices"
+	"io"
 	"os"
 	"strconv"
 	"strings"
 )
 
 type SortedIntListRepl struct {
-	in     *os.File
-	out    *os.File
+	in     io.Reader
+	out    io.Writer
 	list   sortedintlist.IIntListMutable
 	set    sortedintlist.IIntSet
 	minmax sortedintlist.IIntMinMax
@@ -22,11 +23,11 @@ func NewLinkedListRepl() *SortedIntListRepl {
 	return NewLinkedListReplF(nil, nil) //default files
 }
 
-func NewLinkedListReplF(in *os.File, out *os.File) *SortedIntListRepl {
+func NewLinkedListReplF(in io.Reader, out io.Writer) *SortedIntListRepl {
 	return NewSortedListReplF(in, out, linked.NewSortedLinkedList())
 }
 
-func NewSlicedListReplF(in *os.File, out *os.File) *SortedIntListRepl {
+func NewSlicedListReplF(in io.Reader, out io.Writer) *SortedIntListRepl {
 	return NewSortedListReplF(in, out, slices.NewSortedIntListSliced())
 }
 
@@ -34,14 +35,13 @@ func NewSortedListRepl(list sortedintlist.IIntListMutable) *SortedIntListRepl {
 	return NewSortedListReplF(nil, nil, list)
 }
 
-func NewSortedListReplF(in *os.File, out *os.File, list sortedintlist.IIntListMutable) *SortedIntListRepl {
+func NewSortedListReplF(in io.Reader, out io.Writer, list sortedintlist.IIntListMutable) *SortedIntListRepl {
 	if in == nil {
 		in = os.Stdin
 	}
 	if out == nil {
 		out = os.Stdout
 	}
-
 	return &SortedIntListRepl{
 		list:   list,
 		in:     in,
@@ -79,7 +79,6 @@ func (r *SortedIntListRepl) Execute() {
 			r.ExecuteCommand(cmd)
 		}
 		if exit {
-			r.out.Sync()
 			break
 		}
 	}
