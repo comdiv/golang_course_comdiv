@@ -4,7 +4,7 @@ import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 )
 
-// SortedIntListSliced - реализация ISortedIntList
+// SortedIntListSliced - реализация ISortedIntReplProvider
 type SortedIntListSliced struct {
 	data       []int
 	dups       map[int]int
@@ -12,8 +12,20 @@ type SortedIntListSliced struct {
 	totalSize  int
 }
 
+func (s *SortedIntListSliced) IsIntRangeInitialized() bool {
+	panic("implement me")
+}
+
+func (s *SortedIntListSliced) GetMin() (int, error) {
+	panic("implement me")
+}
+
+func (s *SortedIntListSliced) GetMax() (int, error) {
+	panic("implement me")
+}
+
 // hack to force implementation of interface in goland and check that it implements it
-func sortedintlistslicedImplements() sortedintlist.ISortedIntList {
+func sortedintlistslicedImplements() sortedintlist.ISortedIntReplProvider {
 	return &SortedIntListSliced{}
 }
 

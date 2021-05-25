@@ -6,48 +6,48 @@ import (
 )
 
 func BenchmarkSortedSliced_InsertRandom(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertRandom(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_InsertRandom(func() sortedintlist.IIntInsert {
 		return NewSortedIntListSliced()
 	}, b)
 }
 
 func BenchmarkSortedSliced_InsertAscNoDups(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.IIntInsert {
 		return NewSortedIntListSliced()
 	}, b)
 }
 
 func BenchmarkSortedSliced_InsertDescNoDups(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.IIntInsert {
 		return NewSortedIntListSliced()
 	}, b)
 }
 func BenchmarkSortedSliced_InsertManyDups(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.IIntInsert {
 		return NewSortedIntListSliced()
 	}, b)
 }
 
 func BenchmarkSortedSliced_Delete(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_Delete(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_Delete(func() sortedintlist.IIntCollectionMutable {
 		return NewSortedIntListSliced()
 	}, b)
 }
 
 func BenchmarkSortedSliced_GetAll(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_GetAll(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_GetAll(func() sortedintlist.IIntListMutable {
 		return NewSortedIntListSliced()
 	}, b)
 }
 func BenchmarkSortedSliced_GetUnique(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_GetUnique(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_GetUnique(func() sortedintlist.IIntSetMutable {
 		return NewSortedIntListSliced()
 	}, b)
 }
 
 func GenericLastIndexOfBenchmark(size int, sortedMode bool, b *testing.B) {
 	data := make([]int, size)
-	for i, _ := range data {
+	for i := range data {
 		data[i] = i
 	}
 	b.ResetTimer()

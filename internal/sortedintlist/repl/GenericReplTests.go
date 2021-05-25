@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func GenericTestForReplExecute(name string, impl sortedintlist.ISortedIntList, t *testing.T) {
+func GenericTestForReplExecute(name string, impl sortedintlist.ISortedIntReplProvider, t *testing.T) {
 	os.Mkdir("./tmp", fs.ModeDir)
 	out, err := os.Create("./tmp/" + name + ".out.txt")
 	if err != nil {
@@ -39,7 +39,7 @@ func GenericTestForReplExecute(name string, impl sortedintlist.ISortedIntList, t
 	}
 }
 
-func GenericTestForReplCommand(name string, impl sortedintlist.ISortedIntList, t *testing.T) {
+func GenericTestForReplCommand(name string, impl sortedintlist.ISortedIntReplProvider, t *testing.T) {
 	os.Mkdir("./tmp", fs.ModeDir)
 	out, err := os.Create("./tmp/" + name + ".out.txt")
 	if err != nil {

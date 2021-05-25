@@ -24,14 +24,24 @@ func TestSortedSliced_UniqueSize(t *testing.T) {
 	sortedintlist.GenericTestSorted_UniqueSize(l, t)
 }
 
-func TestSortedSliced_Insert(t *testing.T) {
+func TestSortedSliced_InsertList(t *testing.T) {
 	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_Insert(l, t)
+	sortedintlist.GenericTestSorted_InsertList(l, t)
 }
 
-func TestSortedSliced_Delete(t *testing.T) {
+func TestSortedSliced_InsertSet(t *testing.T) {
 	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_Delete(l, t)
+	sortedintlist.GenericTestSorted_InsertSet(l, t)
+}
+
+func TestSortedSliced_DeleteList(t *testing.T) {
+	l := NewSortedIntListSliced()
+	sortedintlist.GenericTestSorted_DeleteList(l, t)
+}
+
+func TestSortedSliced_DeleteSet(t *testing.T) {
+	l := NewSortedIntListSliced()
+	sortedintlist.GenericTestSorted_DeleteSet(l, t)
 }
 
 func TestLastIndexOfSortedSlice(t *testing.T) {

@@ -5,13 +5,22 @@ import (
 	"testing"
 )
 
-func GenericBenchmarkSorted_InsertRandom(create func() ISortedIntList, b *testing.B) {
-	var randomizer = rand.New(rand.NewSource(1234567890))
-	var values [10000]int
-	for i, _ := range values {
-		values[i] = randomizer.Intn(5000)
+const DEFAULT_BENCH_DATA_SIZE int = 10000
+const DEFAULT_BENCH_DATA_SEED int64 = 1234567890
+
+func GenericBenchmarkSorted_InsertRandom(create func() IIntInsert, b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		list := create()
+		for _, v := range defaultRandomSet {
+			list.Insert(v)
+		}
 	}
-	b.ResetTimer()
+}
+
+func GenericBenchmarkSorted_InsertAscNoDups(create func() IIntInsert, b *testing.B) {
+	var values = generateData(b, func(i int) int {
+		return i
+	})
 	for n := 0; n < b.N; n++ {
 		list := create()
 		for _, v := range values {
@@ -20,12 +29,10 @@ func GenericBenchmarkSorted_InsertRandom(create func() ISortedIntList, b *testin
 	}
 }
 
-func GenericBenchmarkSorted_InsertAscNoDups(create func() ISortedIntList, b *testing.B) {
-	var values [10000]int
-	for i, _ := range values {
-		values[i] = i
-	}
-	b.ResetTimer()
+func GenericBenchmarkSorted_InsertDescNoDups(create func() IIntInsert, b *testing.B) {
+	var values = generateData(b, func(i int) int {
+		return DEFAULT_BENCH_DATA_SIZE - i
+	})
 	for n := 0; n < b.N; n++ {
 		list := create()
 		for _, v := range values {
@@ -34,12 +41,10 @@ func GenericBenchmarkSorted_InsertAscNoDups(create func() ISortedIntList, b *tes
 	}
 }
 
-func GenericBenchmarkSorted_InsertDescNoDups(create func() ISortedIntList, b *testing.B) {
-	var values [10000]int
-	for i, _ := range values {
-		values[i] = 10000 - i
-	}
-	b.ResetTimer()
+func GenericBenchmarkSorted_InsertManyDups(create func() IIntInsert, b *testing.B) {
+	var values = generateData(b, func(i int) int {
+		return i % 20
+	})
 	for n := 0; n < b.N; n++ {
 		list := create()
 		for _, v := range values {
@@ -48,48 +53,23 @@ func GenericBenchmarkSorted_InsertDescNoDups(create func() ISortedIntList, b *te
 	}
 }
 
-func GenericBenchmarkSorted_InsertManyDups(create func() ISortedIntList, b *testing.B) {
-	var values [10000]int
-	for i, _ := range values {
-		values[i] = i % 20
-	}
-	b.ResetTimer()
-	for n := 0; n < b.N; n++ {
-		list := create()
-		for _, v := range values {
-			list.Insert(v)
-		}
-	}
-}
-
-func GenericBenchmarkSorted_Delete(create func() ISortedIntList, b *testing.B) {
-	var randomizer = rand.New(rand.NewSource(1234567890))
-	var values [10000]int
-	for i, _ := range values {
-		values[i] = randomizer.Intn(5000)
-	}
-	b.ResetTimer()
+func GenericBenchmarkSorted_Delete(create func() IIntCollectionMutable, b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		b.StopTimer()
 		list := create()
-		for _, v := range values {
+		for _, v := range defaultRandomSet {
 			list.Insert(v)
 		}
 		b.StartTimer()
-		for _, v := range values {
+		for _, v := range defaultRandomSet {
 			list.Delete(v, true)
 		}
 	}
 }
 
-func GenericBenchmarkSorted_GetAll(create func() ISortedIntList, b *testing.B) *[]int {
-	var randomizer = rand.New(rand.NewSource(1234567890))
-	var values [10000]int
-	for i, _ := range values {
-		values[i] = randomizer.Intn(5000)
-	}
+func GenericBenchmarkSorted_GetAll(create func() IIntListMutable, b *testing.B) *[]int {
 	list := create()
-	for _, v := range values {
+	for _, v := range defaultRandomSet {
 		list.Insert(v)
 	}
 	b.ResetTimer()
@@ -100,14 +80,9 @@ func GenericBenchmarkSorted_GetAll(create func() ISortedIntList, b *testing.B) *
 	return &catchResult
 }
 
-func GenericBenchmarkSorted_GetUnique(create func() ISortedIntList, b *testing.B) *[]int {
-	var randomizer = rand.New(rand.NewSource(1234567890))
-	var values [10000]int
-	for i, _ := range values {
-		values[i] = randomizer.Intn(5000)
-	}
+func GenericBenchmarkSorted_GetUnique(create func() IIntSetMutable, b *testing.B) *[]int {
 	list := create()
-	for _, v := range values {
+	for _, v := range defaultRandomSet {
 		list.Insert(v)
 	}
 	b.ResetTimer()
@@ -117,3 +92,41 @@ func GenericBenchmarkSorted_GetUnique(create func() ISortedIntList, b *testing.B
 	}
 	return &catchResult
 }
+
+// generateDataSRSeed - обобщенны генератор с рандомизатором
+func generateDataSRSeed(b *testing.B, size int, generator func(i int, r *rand.Rand) int, seed int64) []int {
+	defer func() {
+		if nil != b {
+			b.ResetTimer()
+		}
+	}()
+	var randomizer = rand.New(rand.NewSource(seed))
+	var data = make([]int, size)
+	for i := 0; i < size; i++ {
+		data[i] = generator(i, randomizer)
+	}
+	return data
+}
+
+/**
+Различные перегруженные варианты генератора для более простых вариантов использования
+*/
+
+func generateData(b *testing.B, generator func(i int) int) []int {
+	return generateDataSRSeed(b, DEFAULT_BENCH_DATA_SIZE, func(i int, _ *rand.Rand) int { return generator(i) }, DEFAULT_BENCH_DATA_SEED)
+}
+
+func generateDataS(b *testing.B, size int, generator func(i int) int) []int {
+	return generateDataSRSeed(b, size, func(i int, _ *rand.Rand) int { return generator(i) }, DEFAULT_BENCH_DATA_SEED)
+}
+
+func generateDataR(b *testing.B, generator func(i int, r *rand.Rand) int) []int {
+	return generateDataSRSeed(b, DEFAULT_BENCH_DATA_SIZE, generator, 1234567890)
+}
+func generateDataSR(b *testing.B, size int, generator func(i int, r *rand.Rand) int) []int {
+	return generateDataSRSeed(b, size, generator, DEFAULT_BENCH_DATA_SEED)
+}
+
+var defaultRandomSet = generateDataR(nil, func(i int, r *rand.Rand) int {
+	return r.Intn(DEFAULT_BENCH_DATA_SIZE / 2)
+})

@@ -1,6 +1,6 @@
 package sortedintlist
 
-// ISortedIntListRepl - интерфейс командной консоли для работы с ISortedIntList
+// ISortedIntListRepl - интерфейс командной консоли для работы с ISortedIntReplProvider
 // в задаче было про то что есть логика, которая управляет этим списком
 type ISortedIntListRepl interface {
 	// PrintHelp Вывод справки

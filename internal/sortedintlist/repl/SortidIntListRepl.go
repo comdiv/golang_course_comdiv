@@ -13,7 +13,7 @@ import (
 type SortedIntListRepl struct {
 	in   *os.File
 	out  *os.File
-	list sortedintlist.ISortedIntList
+	list sortedintlist.ISortedIntReplProvider
 }
 
 func NewLinkedListRepl() *SortedIntListRepl {
@@ -28,11 +28,11 @@ func NewSlicedListReplF(in *os.File, out *os.File) *SortedIntListRepl {
 	return NewSortedListReplF(in, out, slices.NewSortedIntListSliced())
 }
 
-func NewSortedListRepl(list sortedintlist.ISortedIntList) *SortedIntListRepl {
+func NewSortedListRepl(list sortedintlist.ISortedIntReplProvider) *SortedIntListRepl {
 	return NewSortedListReplF(nil, nil, list)
 }
 
-func NewSortedListReplF(in *os.File, out *os.File, list sortedintlist.ISortedIntList) *SortedIntListRepl {
+func NewSortedListReplF(in *os.File, out *os.File, list sortedintlist.ISortedIntReplProvider) *SortedIntListRepl {
 	if in == nil {
 		in = os.Stdin
 	}
@@ -85,8 +85,8 @@ func (r *SortedIntListRepl) ExecuteCommand(cmd string) error {
 	case "size":
 		fmt.Fprintf(r.out, "%v\n", r.list.UniqueSize())
 	default:
-		var removeAll bool = false
-		var numberPart string = cmd
+		var removeAll = false
+		var numberPart = cmd
 		if strings.HasPrefix(cmd, "--") {
 			removeAll = true
 			numberPart = cmd[1:]

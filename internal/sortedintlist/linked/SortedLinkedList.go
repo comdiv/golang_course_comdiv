@@ -8,6 +8,18 @@ type SortedLinkedList struct {
 	tail      *SortedLinkedListItem
 }
 
+func (l *SortedLinkedList) IsIntRangeInitialized() bool {
+	panic("implement me")
+}
+
+func (l *SortedLinkedList) GetMin() (int, error) {
+	panic("implement me")
+}
+
+func (l *SortedLinkedList) GetMax() (int, error) {
+	panic("implement me")
+}
+
 // NewSortedLinkedList - конструктор для SortedLinkedList
 // isUnique - признак, что значения должны быть уникальными
 // lazySort - признак, что сортировка производится только в момент чтения

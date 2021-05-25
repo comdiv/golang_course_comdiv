@@ -26,14 +26,24 @@ func TestSortedLinkedList_UniqueSize(t *testing.T) {
 	sortedintlist.GenericTestSorted_UniqueSize(l, t)
 }
 
-func TestSortedLinkedList_Insert(t *testing.T) {
+func TestSortedLinkedList_InsertList(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	sortedintlist.GenericTestSorted_Insert(l, t)
+	sortedintlist.GenericTestSorted_InsertList(l, t)
 }
 
-func TestSortedLinkedList_Delete(t *testing.T) {
+func TestSortedLinkedList_InsertSet(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	sortedintlist.GenericTestSorted_Delete(l, t)
+	sortedintlist.GenericTestSorted_InsertSet(l, t)
+}
+
+func TestSortedLinkedList_DeleteList(t *testing.T) {
+	l := linked.NewSortedLinkedList()
+	sortedintlist.GenericTestSorted_DeleteList(l, t)
+}
+
+func TestSortedLinkedList_DeleteSet(t *testing.T) {
+	l := linked.NewSortedLinkedList()
+	sortedintlist.GenericTestSorted_DeleteSet(l, t)
 }
 
 func TestSortedLinkedList_FindItemFor(t *testing.T) {
@@ -120,7 +130,7 @@ func TestSortedLinkedList_Head(t *testing.T) {
 }
 
 func TestNewSortedLinkedList(t *testing.T) {
-	var list_1 *linked.SortedLinkedList = linked.NewSortedLinkedList()
+	var list_1 = linked.NewSortedLinkedList()
 
 	if list_1.Size() != 0 {
 		t.Errorf("Size должен быть 0, а он %d", list_1.Size())
@@ -136,7 +146,7 @@ func TestNewSortedLinkedList(t *testing.T) {
 	if list_1.Tail() != nil {
 		t.Errorf("Tail должен быть nil, а он %p", list_1.Tail())
 	}
-	var list_2 *linked.SortedLinkedList = linked.NewSortedLinkedList()
+	var list_2 = linked.NewSortedLinkedList()
 	if list_1 == list_2 {
 		t.Errorf("NewSortedLinkedList shoud generate distinct, not singleton lists")
 	}
