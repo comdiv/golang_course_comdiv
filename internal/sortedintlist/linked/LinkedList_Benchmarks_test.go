@@ -1,4 +1,4 @@
-package test
+package linked_test
 
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
@@ -7,41 +7,41 @@ import (
 )
 
 func BenchmarkSortedLinkedList_InsertRandom(b *testing.B) {
-	GenericBenchmarkSorted_InsertRandom(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_InsertRandom(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
 	}, b)
 }
 
 func BenchmarkSortedLinkedList_InsertAscNoDups(b *testing.B) {
-	GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
 	}, b)
 }
 
 func BenchmarkSortedLinkedList_InsertDescNoDups(b *testing.B) {
-	GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
 	}, b)
 }
 func BenchmarkSortedLinkedList_InsertManyDups(b *testing.B) {
-	GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
 	}, b)
 }
 
 func BenchmarkSortedLinkedList_Delete(b *testing.B) {
-	GenericBenchmarkSorted_Delete(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_Delete(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
 	}, b)
 }
 
 func BenchmarkSortedLinkedList_GetAll(b *testing.B) {
-	GenericBenchmarkSorted_GetAll(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_GetAll(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
 	}, b)
 }
 func BenchmarkSortedLinkedList_GetUnique(b *testing.B) {
-	GenericBenchmarkSorted_GetUnique(func() sortedintlist.ISortedIntList {
+	sortedintlist.GenericBenchmarkSorted_GetUnique(func() sortedintlist.ISortedIntList {
 		return linked.NewSortedLinkedList()
 	}, b)
 }

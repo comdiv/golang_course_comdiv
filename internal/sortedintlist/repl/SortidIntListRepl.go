@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/slices"
 	"os"
 	"strconv"
 	"strings"
@@ -21,6 +22,10 @@ func NewLinkedListRepl() *SortedIntListRepl {
 
 func NewLinkedListReplF(in *os.File, out *os.File) *SortedIntListRepl {
 	return NewSortedListReplF(in, out, linked.NewSortedLinkedList())
+}
+
+func NewSlicedListReplF(in *os.File, out *os.File) *SortedIntListRepl {
+	return NewSortedListReplF(in, out, slices.NewSortedIntListSliced())
 }
 
 func NewSortedListRepl(list sortedintlist.ISortedIntList) *SortedIntListRepl {

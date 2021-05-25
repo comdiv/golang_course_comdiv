@@ -1,8 +1,7 @@
-package test
+package repl
 
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
-	repl2 "github.com/comdiv/golang_course_comdiv/internal/sortedintlist/repl"
 	"io/fs"
 	"os"
 	"testing"
@@ -26,7 +25,7 @@ func GenericTestForReplExecute(name string, impl sortedintlist.ISortedIntList, t
 		t.Fail()
 	}
 
-	repl := repl2.NewSortedListReplF(in, out, impl)
+	repl := NewSortedListReplF(in, out, impl)
 	repl.Execute()
 
 	result, err := os.ReadFile(out.Name())
@@ -46,7 +45,7 @@ func GenericTestForReplCommand(name string, impl sortedintlist.ISortedIntList, t
 	if err != nil {
 		t.Fail()
 	}
-	repl := repl2.NewSortedListReplF(nil, out, impl)
+	repl := NewSortedListReplF(nil, out, impl)
 	_ = repl.ExecuteCommand("1")
 	_ = repl.ExecuteCommand("2")
 	_ = repl.ExecuteCommand("2")

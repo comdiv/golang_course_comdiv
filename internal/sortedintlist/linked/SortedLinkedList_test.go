@@ -1,38 +1,39 @@
-package test
+package linked_test
 
 import (
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"
 	"math/rand"
 	"testing"
 )
 
 func TestSortedLinkedList_GetUnique(t *testing.T) {
-	GenericTestSorted_GetUnique(linked.NewSortedLinkedList(), t)
+	sortedintlist.GenericTestSorted_GetUnique(linked.NewSortedLinkedList(), t)
 }
 
 func TestSortedLinkedList_GetAll(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	GenericTestSorted_GetAll(l, t)
+	sortedintlist.GenericTestSorted_GetAll(l, t)
 }
 
 func TestSortedLinkedList_Size(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	GenericTestSorted_Size(l, t)
+	sortedintlist.GenericTestSorted_Size(l, t)
 }
 
 func TestSortedLinkedList_UniqueSize(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	GenericTestSorted_UniqueSize(l, t)
+	sortedintlist.GenericTestSorted_UniqueSize(l, t)
 }
 
 func TestSortedLinkedList_Insert(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	GenericTestSorted_Insert(l, t)
+	sortedintlist.GenericTestSorted_Insert(l, t)
 }
 
 func TestSortedLinkedList_Delete(t *testing.T) {
 	l := linked.NewSortedLinkedList()
-	GenericTestSorted_Delete(l, t)
+	sortedintlist.GenericTestSorted_Delete(l, t)
 }
 
 func TestSortedLinkedList_FindItemFor(t *testing.T) {

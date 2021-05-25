@@ -10,9 +10,9 @@ test_experiments :
 
 test_sorted_linked_list :
 	echo "Testing sorted linked list"
-	go test github.com/comdiv/golang_course_comdiv/internal/sortedintlist/test
+	go test github.com/comdiv/golang_course_comdiv/internal/sortedintlist/...
 	echo "Benchmarking sorted linked list"
-	go test -bench=. -benchmem github.com/comdiv/golang_course_comdiv/internal/sortedintlist/test
+	go test -bench=. -benchmem github.com/comdiv/golang_course_comdiv/internal/sortedintlist/...
 
 
 test: test_experiments test_sorted_linked_list

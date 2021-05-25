@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	repl := repl.NewLinkedListReplF(os.Stdin, os.Stdout)
+	repl := repl.NewSlicedListReplF(os.Stdin, os.Stdout)
 	repl.PrintHelp()
 	repl.Execute()
 }

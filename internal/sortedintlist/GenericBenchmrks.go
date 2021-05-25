@@ -1,12 +1,11 @@
-package test
+package sortedintlist
 
 import (
-	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"math/rand"
 	"testing"
 )
 
-func GenericBenchmarkSorted_InsertRandom(create func() sortedintlist.ISortedIntList, b *testing.B) {
+func GenericBenchmarkSorted_InsertRandom(create func() ISortedIntList, b *testing.B) {
 	var randomizer = rand.New(rand.NewSource(1234567890))
 	var values [10000]int
 	for i, _ := range values {
@@ -21,7 +20,7 @@ func GenericBenchmarkSorted_InsertRandom(create func() sortedintlist.ISortedIntL
 	}
 }
 
-func GenericBenchmarkSorted_InsertAscNoDups(create func() sortedintlist.ISortedIntList, b *testing.B) {
+func GenericBenchmarkSorted_InsertAscNoDups(create func() ISortedIntList, b *testing.B) {
 	var values [10000]int
 	for i, _ := range values {
 		values[i] = i
@@ -35,7 +34,7 @@ func GenericBenchmarkSorted_InsertAscNoDups(create func() sortedintlist.ISortedI
 	}
 }
 
-func GenericBenchmarkSorted_InsertDescNoDups(create func() sortedintlist.ISortedIntList, b *testing.B) {
+func GenericBenchmarkSorted_InsertDescNoDups(create func() ISortedIntList, b *testing.B) {
 	var values [10000]int
 	for i, _ := range values {
 		values[i] = 10000 - i
@@ -49,7 +48,7 @@ func GenericBenchmarkSorted_InsertDescNoDups(create func() sortedintlist.ISorted
 	}
 }
 
-func GenericBenchmarkSorted_InsertManyDups(create func() sortedintlist.ISortedIntList, b *testing.B) {
+func GenericBenchmarkSorted_InsertManyDups(create func() ISortedIntList, b *testing.B) {
 	var values [10000]int
 	for i, _ := range values {
 		values[i] = i % 20
@@ -63,7 +62,7 @@ func GenericBenchmarkSorted_InsertManyDups(create func() sortedintlist.ISortedIn
 	}
 }
 
-func GenericBenchmarkSorted_Delete(create func() sortedintlist.ISortedIntList, b *testing.B) {
+func GenericBenchmarkSorted_Delete(create func() ISortedIntList, b *testing.B) {
 	var randomizer = rand.New(rand.NewSource(1234567890))
 	var values [10000]int
 	for i, _ := range values {
@@ -83,7 +82,7 @@ func GenericBenchmarkSorted_Delete(create func() sortedintlist.ISortedIntList, b
 	}
 }
 
-func GenericBenchmarkSorted_GetAll(create func() sortedintlist.ISortedIntList, b *testing.B) *[]int {
+func GenericBenchmarkSorted_GetAll(create func() ISortedIntList, b *testing.B) *[]int {
 	var randomizer = rand.New(rand.NewSource(1234567890))
 	var values [10000]int
 	for i, _ := range values {
@@ -101,7 +100,7 @@ func GenericBenchmarkSorted_GetAll(create func() sortedintlist.ISortedIntList, b
 	return &catchResult
 }
 
-func GenericBenchmarkSorted_GetUnique(create func() sortedintlist.ISortedIntList, b *testing.B) *[]int {
+func GenericBenchmarkSorted_GetUnique(create func() ISortedIntList, b *testing.B) *[]int {
 	var randomizer = rand.New(rand.NewSource(1234567890))
 	var values [10000]int
 	for i, _ := range values {
