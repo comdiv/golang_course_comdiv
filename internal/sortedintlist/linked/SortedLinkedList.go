@@ -1,13 +1,27 @@
 package linked
 
-import "errors"
+import (
+	"errors"
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
+)
 
-// SortedLinkedList - объект, который содержит данные и управляет сортировкой
+// SortedLinkedList - изменяемый список чисел с поддержкой работы в режиме set на основе связанного списка
 type SortedLinkedList struct {
 	itemCount int
 	indexSize int
 	head      *SortedLinkedListItem
 	tail      *SortedLinkedListItem
+}
+
+var _ sortedintlist.IIntListMutable = new(SortedLinkedList)
+var _ sortedintlist.IIntSet = new(SortedLinkedList)
+var _ sortedintlist.IIntMinMax = new(SortedLinkedList)
+
+// New - конструктор для SortedLinkedList
+// isUnique - признак, что значения должны быть уникальными
+// lazySort - признак, что сортировка производится только в момент чтения
+func New() *SortedLinkedList {
+	return &SortedLinkedList{}
 }
 
 func (l *SortedLinkedList) IsIntRangeInitialized() bool {
@@ -26,13 +40,6 @@ func (l *SortedLinkedList) GetMax() (int, error) {
 		return 0, errors.New("list is not initialized")
 	}
 	return l.Tail().Value(), nil
-}
-
-// NewSortedLinkedList - конструктор для SortedLinkedList
-// isUnique - признак, что значения должны быть уникальными
-// lazySort - признак, что сортировка производится только в момент чтения
-func NewSortedLinkedList() *SortedLinkedList {
-	return &SortedLinkedList{}
 }
 
 // UniqueSize - количество узлов значений в индексе, по сути число уникальных элементов
@@ -57,7 +64,7 @@ func (l *SortedLinkedList) Tail() *SortedLinkedListItem {
 
 // GetUnique - получить срез только уникальных упорядоченных чисел из индекса
 func (l *SortedLinkedList) GetUnique() []int {
-	var result = make([]int, l.UniqueSize())
+	result := make([]int, l.UniqueSize())
 	if l.head != nil {
 		for i, current := 0, l.head; current != nil; i, current = i+1, current.next {
 			result[i] = current.Value()

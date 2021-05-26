@@ -3,52 +3,35 @@ package repl
 import (
 	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
-	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/slices"
 	"io"
-	"os"
 	"strconv"
 	"strings"
 )
 
 type SortedIntListRepl struct {
-	in     io.Reader
-	out    io.Writer
-	list   sortedintlist.IIntListMutable
-	set    sortedintlist.IIntSet
-	minmax sortedintlist.IIntMinMax
+	in   io.Reader
+	out  io.Writer
+	list sortedintlist.IIntListMutable
 }
 
-func NewLinkedListRepl() *SortedIntListRepl {
-	return NewLinkedListReplF(nil, nil) //default files
+func New(in io.Reader, out io.Writer) *SortedIntListRepl {
+	return NewCustom(in, out, slices.New())
 }
 
-func NewLinkedListReplF(in io.Reader, out io.Writer) *SortedIntListRepl {
-	return NewSortedListReplF(in, out, linked.NewSortedLinkedList())
-}
-
-func NewSlicedListReplF(in io.Reader, out io.Writer) *SortedIntListRepl {
-	return NewSortedListReplF(in, out, slices.NewSortedIntListSliced())
-}
-
-func NewSortedListRepl(list sortedintlist.IIntListMutable) *SortedIntListRepl {
-	return NewSortedListReplF(nil, nil, list)
-}
-
-func NewSortedListReplF(in io.Reader, out io.Writer, list sortedintlist.IIntListMutable) *SortedIntListRepl {
-	if in == nil {
-		in = os.Stdin
-	}
-	if out == nil {
-		out = os.Stdout
-	}
+func NewCustom(in io.Reader, out io.Writer, list sortedintlist.IIntListMutable) *SortedIntListRepl {
 	return &SortedIntListRepl{
-		list:   list,
-		in:     in,
-		out:    out,
-		set:    list.(sortedintlist.IIntSet),
-		minmax: list.(sortedintlist.IIntMinMax),
+		list: list,
+		in:   in,
+		out:  out,
 	}
+}
+
+func (r *SortedIntListRepl) asSet() sortedintlist.IIntSet {
+	return r.list.(sortedintlist.IIntSet)
+}
+func (r *SortedIntListRepl) asMinMax() sortedintlist.IIntMinMax {
+	return r.list.(sortedintlist.IIntMinMax)
 }
 
 func (r *SortedIntListRepl) PrintHelp() {
@@ -66,6 +49,9 @@ func (r *SortedIntListRepl) PrintHelp() {
 }
 
 func (r *SortedIntListRepl) Execute() {
+	if nil == r.in {
+		return
+	}
 	var cmd string
 	for {
 		fmt.Fscan(r.in, &cmd)
@@ -85,55 +71,61 @@ func (r *SortedIntListRepl) Execute() {
 }
 
 func (r *SortedIntListRepl) ExecuteCommand(cmd string) error {
+	print := func(format string, a ...interface{}) {
+		if nil != r.out {
+			fmt.Fprintf(r.out, format, a...)
+		}
+	}
 	switch cmd {
 	case "all":
-		fmt.Fprintf(r.out, "%v\n", r.list.GetAll())
+		print("%v\n", r.list.GetAll())
 	case "unique":
-		if nil == r.set {
-			fmt.Println("Not supported")
-		} else {
-			fmt.Fprintf(r.out, "%v\n", r.set.GetUnique())
+		if nil == r.asSet() {
+			print("Is not a set - `unique` - not supported\n")
+			break
 		}
+		print("%v\n", r.asSet().GetUnique())
 	case "count":
-		fmt.Fprintf(r.out, "%v\n", r.list.Size())
+		print("%v\n", r.list.Size())
 	case "size":
-		if nil == r.set {
-			fmt.Println("Not supported")
-		} else {
-			fmt.Fprintf(r.out, "%v\n", r.set.UniqueSize())
+		if nil == r.asSet() {
+			print("Is not a set - `size` - not supported\n")
+			break
 		}
+		print("%v\n", r.asSet().UniqueSize())
 	case "min":
-		if nil == r.minmax {
-			fmt.Println("Not supported")
-		} else {
-			min, err := r.minmax.GetMin()
-			if nil != err {
-				fmt.Printf("error: %v", err)
-			} else {
-				fmt.Fprintf(r.out, "%v\n", min)
-			}
+		if nil == r.asMinMax() {
+			print("Is not a IIntMinMax - `min` - not supported\n")
+			break
 		}
+		min, err := r.asMinMax().GetMin()
+		if nil != err {
+			print("error: %v\n", err)
+			break
+		}
+		print("%v\n", min)
 	case "max":
-		if nil == r.minmax {
-			fmt.Println("Not supported")
-		} else {
-			max, err := r.minmax.GetMax()
-			if nil != err {
-				fmt.Printf("error: %v", err)
-			} else {
-				fmt.Fprintf(r.out, "%v\n", max)
-			}
+		if nil == r.asMinMax() {
+			print("Is not a IIntMinMax - `max` - not supported\n")
+			break
 		}
+		max, err := r.asMinMax().GetMax()
+		if nil != err {
+			print("error: %v\n", err)
+			break
+		}
+		print("%v\n", max)
+
 	default:
-		var removeAll = false
-		var numberPart = cmd
+		removeAll := false
+		numberPart := cmd
 		if strings.HasPrefix(cmd, "--") {
 			removeAll = true
 			numberPart = cmd[1:]
 		}
 		ival, err := strconv.Atoi(numberPart)
 		if err != nil {
-			fmt.Fprintf(r.out, "Error command: %v (%v)\n", cmd, err)
+			print("Error command: %v (%v)\n", cmd, err)
 			return err
 		} else {
 			if ival >= 0 {

@@ -3,51 +3,52 @@ package linked_test
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlistgentest"
 	"testing"
 )
 
 func BenchmarkSortedLinkedList_InsertRandom(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertRandom(func() sortedintlist.IIntInsert {
-		return linked.NewSortedLinkedList()
+	sortedintlistgentest.GenericBenchmarkSorted_InsertRandom(func() sortedintlist.IIntInsert {
+		return linked.New()
 	}, b)
 }
 
 func BenchmarkSortedLinkedList_InsertAscNoDups(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.IIntInsert {
-		return linked.NewSortedLinkedList()
+	sortedintlistgentest.GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.IIntInsert {
+		return linked.New()
 	}, b)
 }
 
 func BenchmarkSortedLinkedList_InsertDescNoDups(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.IIntInsert {
-		return linked.NewSortedLinkedList()
+	sortedintlistgentest.GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.IIntInsert {
+		return linked.New()
 	}, b)
 }
 func BenchmarkSortedLinkedList_InsertManyDups(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.IIntInsert {
-		return linked.NewSortedLinkedList()
+	sortedintlistgentest.GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.IIntInsert {
+		return linked.New()
 	}, b)
 }
 
 func BenchmarkSortedLinkedList_Delete(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_Delete(func() sortedintlist.IIntCollectionMutable {
-		return linked.NewSortedLinkedList()
+	sortedintlistgentest.GenericBenchmarkSorted_Delete(func() sortedintlist.IIntCollectionMutable {
+		return linked.New()
 	}, b)
 }
 
 func BenchmarkSortedLinkedList_GetAll(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_GetAll(func() sortedintlist.IIntListMutable {
-		return linked.NewSortedLinkedList()
+	sortedintlistgentest.GenericBenchmarkSorted_GetAll(func() sortedintlist.IIntListMutable {
+		return linked.New()
 	}, b)
 }
 func BenchmarkSortedLinkedList_GetUnique(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_GetUnique(func() sortedintlist.IIntSetMutable {
-		return linked.NewSortedLinkedList()
+	sortedintlistgentest.GenericBenchmarkSorted_GetUnique(func() sortedintlist.IIntSetMutable {
+		return linked.New()
 	}, b)
 }
 
 func BenchmarkLinkedFind(b *testing.B) {
-	l := linked.NewSortedLinkedList()
+	l := linked.New()
 	for i := 0; i < 10000; i++ {
 		l.Insert(i)
 	}

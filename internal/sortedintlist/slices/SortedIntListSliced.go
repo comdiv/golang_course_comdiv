@@ -1,13 +1,24 @@
 package slices
 
-import "errors"
+import (
+	"errors"
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
+)
 
-// SortedIntListSliced - реализация ISortedIntReplProvider
+// SortedIntListSliced - изменяемый список чисел с поддержкой работы в режиме set на основе срезов и карт
 type SortedIntListSliced struct {
 	data       []int
 	dups       map[int]int
 	uniqueSize int
 	totalSize  int
+}
+
+var _ sortedintlist.IIntListMutable = new(SortedIntListSliced)
+var _ sortedintlist.IIntSet = new(SortedIntListSliced)
+var _ sortedintlist.IIntMinMax = new(SortedIntListSliced)
+
+func New() *SortedIntListSliced {
+	return NewSortedIntListSlicedWithData(nil)
 }
 
 func (s *SortedIntListSliced) IsIntRangeInitialized() bool {
@@ -26,10 +37,6 @@ func (s *SortedIntListSliced) GetMax() (int, error) {
 		return 0, errors.New("list is not initialized")
 	}
 	return s.data[len(s.data)-1], nil
-}
-
-func NewSortedIntListSliced() *SortedIntListSliced {
-	return NewSortedIntListSlicedWithData(nil)
 }
 
 func NewSortedIntListSlicedWithData(initialdata []int) *SortedIntListSliced {
@@ -77,7 +84,7 @@ func (s *SortedIntListSliced) Insert(value int) bool {
 func (s *SortedIntListSliced) Delete(value int, all bool) bool {
 	index, _ := LastIndexOf(s.data, value, true)
 	if index >= 0 {
-		var duplicates = s.dups[value]
+		duplicates := s.dups[value]
 		if all || duplicates == 0 { // число полностью уходит
 			s.uniqueSize--
 			copy(s.data[index:], s.data[index+1:])
@@ -128,9 +135,9 @@ func LastIndexOf(data []int, v int, isSorted bool) (int, int) { // index, and la
 	}
 
 	// sorted array search optimization
-	var lowerPoint = 0
-	var upperPoint = len(data) - 1
-	var currentPoint = upperPoint / 2
+	lowerPoint := 0
+	upperPoint := len(data) - 1
+	currentPoint := upperPoint / 2
 
 	for {
 		current := data[currentPoint]

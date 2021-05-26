@@ -1,53 +1,53 @@
 package slices
 
 import (
-	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlistgentest"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestSortedSliced_GetUnique(t *testing.T) {
-	sortedintlist.GenericTestSorted_GetUnique(NewSortedIntListSliced(), t)
+	sortedintlistgentest.GenericTestSorted_GetUnique(New(), t)
 }
 
 func TestSortedSliced_GetAll(t *testing.T) {
-	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_GetAll(l, t)
+	l := New()
+	sortedintlistgentest.GenericTestSorted_GetAll(l, t)
 }
 
 func TestSortedSliced_Size(t *testing.T) {
-	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_Size(l, t)
+	l := New()
+	sortedintlistgentest.GenericTestSorted_Size(l, t)
 }
 
 func TestSortedSliced_UniqueSize(t *testing.T) {
-	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_UniqueSize(l, t)
+	l := New()
+	sortedintlistgentest.GenericTestSorted_UniqueSize(l, t)
 }
 
 func TestSortedSliced_InsertList(t *testing.T) {
-	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_InsertList(l, t)
+	l := New()
+	sortedintlistgentest.GenericTestSorted_InsertList(l, t)
 }
 
 func TestSortedSliced_InsertSet(t *testing.T) {
-	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_InsertSet(l, t)
+	l := New()
+	sortedintlistgentest.GenericTestSorted_InsertSet(l, t)
 }
 
 func TestSortedSliced_DeleteList(t *testing.T) {
-	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_DeleteList(l, t)
+	l := New()
+	sortedintlistgentest.GenericTestSorted_DeleteList(l, t)
 }
 
 func TestSortedSliced_DeleteSet(t *testing.T) {
-	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_DeleteSet(l, t)
+	l := New()
+	sortedintlistgentest.GenericTestSorted_DeleteSet(l, t)
 }
 
 func TestSortedSliced_MinMax(t *testing.T) {
-	l := NewSortedIntListSliced()
-	sortedintlist.GenericTestSorted_MinMax(l, t)
+	l := New()
+	sortedintlistgentest.GenericTestSorted_MinMax(l, t)
 }
 
 func TestLastIndexOfSortedSlice(t *testing.T) {

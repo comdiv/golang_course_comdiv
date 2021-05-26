@@ -2,46 +2,47 @@ package slices
 
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlistgentest"
 	"testing"
 )
 
 func BenchmarkSortedSliced_InsertRandom(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertRandom(func() sortedintlist.IIntInsert {
-		return NewSortedIntListSliced()
+	sortedintlistgentest.GenericBenchmarkSorted_InsertRandom(func() sortedintlist.IIntInsert {
+		return New()
 	}, b)
 }
 
 func BenchmarkSortedSliced_InsertAscNoDups(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.IIntInsert {
-		return NewSortedIntListSliced()
+	sortedintlistgentest.GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.IIntInsert {
+		return New()
 	}, b)
 }
 
 func BenchmarkSortedSliced_InsertDescNoDups(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.IIntInsert {
-		return NewSortedIntListSliced()
+	sortedintlistgentest.GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.IIntInsert {
+		return New()
 	}, b)
 }
 func BenchmarkSortedSliced_InsertManyDups(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.IIntInsert {
-		return NewSortedIntListSliced()
+	sortedintlistgentest.GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.IIntInsert {
+		return New()
 	}, b)
 }
 
 func BenchmarkSortedSliced_Delete(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_Delete(func() sortedintlist.IIntCollectionMutable {
-		return NewSortedIntListSliced()
+	sortedintlistgentest.GenericBenchmarkSorted_Delete(func() sortedintlist.IIntCollectionMutable {
+		return New()
 	}, b)
 }
 
 func BenchmarkSortedSliced_GetAll(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_GetAll(func() sortedintlist.IIntListMutable {
-		return NewSortedIntListSliced()
+	sortedintlistgentest.GenericBenchmarkSorted_GetAll(func() sortedintlist.IIntListMutable {
+		return New()
 	}, b)
 }
 func BenchmarkSortedSliced_GetUnique(b *testing.B) {
-	sortedintlist.GenericBenchmarkSorted_GetUnique(func() sortedintlist.IIntSetMutable {
-		return NewSortedIntListSliced()
+	sortedintlistgentest.GenericBenchmarkSorted_GetUnique(func() sortedintlist.IIntSetMutable {
+		return New()
 	}, b)
 }
 

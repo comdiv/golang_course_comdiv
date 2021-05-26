@@ -1,37 +1,38 @@
-package sortedintlist
+package sortedintlistgentest
 
 import (
 	"fmt"
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"testing"
 )
 
-func GenericTestSorted_GetUnique(l IIntSetMutable, t *testing.T) {
-	InsertAllVar(l, 8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
+func GenericTestSorted_GetUnique(l sortedintlist.IIntSetMutable, t *testing.T) {
+	sortedintlist.InsertAllVar(l, 8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
 	unique := l.GetUnique()
 	expected := []int{1, 2, 4, 5, 6, 8}
 	assert.ElementsMatch(t, expected, unique)
 }
 
-func GenericTestSorted_GetAll(l IIntListMutable, t *testing.T) {
-	InsertAllVar(l, 8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
+func GenericTestSorted_GetAll(l sortedintlist.IIntListMutable, t *testing.T) {
+	sortedintlist.InsertAllVar(l, 8, 1, 2, 4, 5, 4, 4, 5, 6, 1)
 	all := l.GetAll()
 	expected := []int{1, 1, 2, 4, 4, 4, 5, 5, 6, 8}
 	assert.ElementsMatch(t, expected, all)
 }
 
-func GenericTestSorted_Size(l IIntListMutable, t *testing.T) {
-	InsertAllVar(l, 1, 2, 4, 4, 4)
+func GenericTestSorted_Size(l sortedintlist.IIntListMutable, t *testing.T) {
+	sortedintlist.InsertAllVar(l, 1, 2, 4, 4, 4)
 	assert.Equal(t, 5, l.Size())
 }
 
-func GenericTestSorted_UniqueSize(l IIntSetMutable, t *testing.T) {
-	InsertAllVar(l, 1, 2, 4, 4, 4)
+func GenericTestSorted_UniqueSize(l sortedintlist.IIntSetMutable, t *testing.T) {
+	sortedintlist.InsertAllVar(l, 1, 2, 4, 4, 4)
 	assert.Equal(t, 3, l.UniqueSize())
 }
 
-func GenericTestSorted_InsertList(l IIntListMutable, t *testing.T) {
+func GenericTestSorted_InsertList(l sortedintlist.IIntListMutable, t *testing.T) {
 	var inserted bool
 	inserted = l.Insert(1)
 	assert.True(t, inserted)
@@ -46,7 +47,7 @@ func GenericTestSorted_InsertList(l IIntListMutable, t *testing.T) {
 	assert.Equal(t, 3, l.Size())
 }
 
-func GenericTestSorted_InsertSet(l IIntSetMutable, t *testing.T) {
+func GenericTestSorted_InsertSet(l sortedintlist.IIntSetMutable, t *testing.T) {
 	var inserted bool
 	inserted = l.Insert(1)
 	assert.True(t, inserted)
@@ -61,7 +62,7 @@ func GenericTestSorted_InsertSet(l IIntSetMutable, t *testing.T) {
 	assert.Equal(t, 2, l.UniqueSize())
 }
 
-func GenericTestSorted_DeleteList(l IIntListMutable, t *testing.T) {
+func GenericTestSorted_DeleteList(l sortedintlist.IIntListMutable, t *testing.T) {
 	l.Insert(1)
 	l.Insert(10)
 	l.Insert(11)
@@ -89,7 +90,7 @@ func GenericTestSorted_DeleteList(l IIntListMutable, t *testing.T) {
 	assert.Equal(t, 2, l.Size())
 }
 
-func GenericTestSorted_DeleteSet(l IIntSetMutable, t *testing.T) {
+func GenericTestSorted_DeleteSet(l sortedintlist.IIntSetMutable, t *testing.T) {
 	l.Insert(1)
 	l.Insert(10)
 	l.Insert(11)
@@ -118,9 +119,9 @@ func GenericTestSorted_DeleteSet(l IIntSetMutable, t *testing.T) {
 
 }
 
-func GenericTestSorted_MinMax(minmax IIntMinMax, t *testing.T) {
+func GenericTestSorted_MinMax(minmax sortedintlist.IIntMinMax, t *testing.T) {
 
-	l, ok := minmax.(IIntListMutable)
+	l, ok := minmax.(sortedintlist.IIntListMutable)
 	if !ok {
 		panic(fmt.Sprintf("Not l list given for test! %v", minmax))
 	}

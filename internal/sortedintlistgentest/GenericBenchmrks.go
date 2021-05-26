@@ -1,6 +1,7 @@
-package sortedintlist
+package sortedintlistgentest
 
 import (
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"math/rand"
 	"testing"
 )
@@ -8,7 +9,7 @@ import (
 const DEFAULT_BENCH_DATA_SIZE int = 10000
 const DEFAULT_BENCH_DATA_SEED int64 = 1234567890
 
-func GenericBenchmarkSorted_InsertRandom(create func() IIntInsert, b *testing.B) {
+func GenericBenchmarkSorted_InsertRandom(create func() sortedintlist.IIntInsert, b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		list := create()
 		for _, v := range defaultRandomSet {
@@ -17,8 +18,8 @@ func GenericBenchmarkSorted_InsertRandom(create func() IIntInsert, b *testing.B)
 	}
 }
 
-func GenericBenchmarkSorted_InsertAscNoDups(create func() IIntInsert, b *testing.B) {
-	var values = generateData(b, func(i int) int {
+func GenericBenchmarkSorted_InsertAscNoDups(create func() sortedintlist.IIntInsert, b *testing.B) {
+	values := generateData(b, func(i int) int {
 		return i
 	})
 	for n := 0; n < b.N; n++ {
@@ -29,7 +30,7 @@ func GenericBenchmarkSorted_InsertAscNoDups(create func() IIntInsert, b *testing
 	}
 }
 
-func GenericBenchmarkSorted_InsertDescNoDups(create func() IIntInsert, b *testing.B) {
+func GenericBenchmarkSorted_InsertDescNoDups(create func() sortedintlist.IIntInsert, b *testing.B) {
 	var values = generateData(b, func(i int) int {
 		return DEFAULT_BENCH_DATA_SIZE - i
 	})
@@ -41,8 +42,8 @@ func GenericBenchmarkSorted_InsertDescNoDups(create func() IIntInsert, b *testin
 	}
 }
 
-func GenericBenchmarkSorted_InsertManyDups(create func() IIntInsert, b *testing.B) {
-	var values = generateData(b, func(i int) int {
+func GenericBenchmarkSorted_InsertManyDups(create func() sortedintlist.IIntInsert, b *testing.B) {
+	values := generateData(b, func(i int) int {
 		return i % 20
 	})
 	for n := 0; n < b.N; n++ {
@@ -53,7 +54,7 @@ func GenericBenchmarkSorted_InsertManyDups(create func() IIntInsert, b *testing.
 	}
 }
 
-func GenericBenchmarkSorted_Delete(create func() IIntCollectionMutable, b *testing.B) {
+func GenericBenchmarkSorted_Delete(create func() sortedintlist.IIntCollectionMutable, b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		b.StopTimer()
 		list := create()
@@ -67,7 +68,7 @@ func GenericBenchmarkSorted_Delete(create func() IIntCollectionMutable, b *testi
 	}
 }
 
-func GenericBenchmarkSorted_GetAll(create func() IIntListMutable, b *testing.B) *[]int {
+func GenericBenchmarkSorted_GetAll(create func() sortedintlist.IIntListMutable, b *testing.B) *[]int {
 	list := create()
 	for _, v := range defaultRandomSet {
 		list.Insert(v)
@@ -80,7 +81,7 @@ func GenericBenchmarkSorted_GetAll(create func() IIntListMutable, b *testing.B) 
 	return &catchResult
 }
 
-func GenericBenchmarkSorted_GetUnique(create func() IIntSetMutable, b *testing.B) *[]int {
+func GenericBenchmarkSorted_GetUnique(create func() sortedintlist.IIntSetMutable, b *testing.B) *[]int {
 	list := create()
 	for _, v := range defaultRandomSet {
 		list.Insert(v)
@@ -101,7 +102,7 @@ func generateDataSRSeed(b *testing.B, size int, generator func(i int, r *rand.Ra
 		}
 	}()
 	var randomizer = rand.New(rand.NewSource(seed))
-	var data = make([]int, size)
+	data := make([]int, size)
 	for i := 0; i < size; i++ {
 		data[i] = generator(i, randomizer)
 	}

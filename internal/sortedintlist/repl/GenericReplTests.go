@@ -25,7 +25,7 @@ func GenericTestForReplExecute(name string, impl sortedintlist.IIntListMutable, 
 		t.Fail()
 	}
 
-	repl := NewSortedListReplF(in, out, impl)
+	repl := NewCustom(in, out, impl)
 	repl.Execute()
 
 	result, err := os.ReadFile(out.Name())
@@ -45,7 +45,7 @@ func GenericTestForReplCommand(name string, impl sortedintlist.IIntListMutable, 
 	if err != nil {
 		t.Fail()
 	}
-	repl := NewSortedListReplF(nil, out, impl)
+	repl := NewCustom(nil, out, impl)
 	_ = repl.ExecuteCommand("1")
 	_ = repl.ExecuteCommand("2")
 	_ = repl.ExecuteCommand("2")

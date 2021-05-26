@@ -6,9 +6,9 @@ import (
 )
 
 func TestLinkedListRepl_ExecuteCommand(t *testing.T) {
-	GenericTestForReplCommand("repl_linked_command", linked.NewSortedLinkedList(), t)
+	GenericTestForReplCommand("repl_linked_command", linked.New(), t)
 }
 
 func TestLinkedListRepl_Execute(t *testing.T) {
-	GenericTestForReplExecute("repl_linked_execute", linked.NewSortedLinkedList(), t)
+	GenericTestForReplExecute("repl_linked_execute", linked.New(), t)
 }
