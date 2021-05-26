@@ -1,60 +1,59 @@
-package test
+package slices
 
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
-	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/slices"
 	"testing"
 )
 
 func BenchmarkSortedSliced_InsertRandom(b *testing.B) {
-	GenericBenchmarkSorted_InsertRandom(func() sortedintlist.ISortedIntList {
-		return slices.NewSortedIntListSliced()
+	sortedintlist.GenericBenchmarkSorted_InsertRandom(func() sortedintlist.IIntInsert {
+		return NewSortedIntListSliced()
 	}, b)
 }
 
 func BenchmarkSortedSliced_InsertAscNoDups(b *testing.B) {
-	GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.ISortedIntList {
-		return slices.NewSortedIntListSliced()
+	sortedintlist.GenericBenchmarkSorted_InsertAscNoDups(func() sortedintlist.IIntInsert {
+		return NewSortedIntListSliced()
 	}, b)
 }
 
 func BenchmarkSortedSliced_InsertDescNoDups(b *testing.B) {
-	GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.ISortedIntList {
-		return slices.NewSortedIntListSliced()
+	sortedintlist.GenericBenchmarkSorted_InsertDescNoDups(func() sortedintlist.IIntInsert {
+		return NewSortedIntListSliced()
 	}, b)
 }
 func BenchmarkSortedSliced_InsertManyDups(b *testing.B) {
-	GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.ISortedIntList {
-		return slices.NewSortedIntListSliced()
+	sortedintlist.GenericBenchmarkSorted_InsertManyDups(func() sortedintlist.IIntInsert {
+		return NewSortedIntListSliced()
 	}, b)
 }
 
 func BenchmarkSortedSliced_Delete(b *testing.B) {
-	GenericBenchmarkSorted_Delete(func() sortedintlist.ISortedIntList {
-		return slices.NewSortedIntListSliced()
+	sortedintlist.GenericBenchmarkSorted_Delete(func() sortedintlist.IIntCollectionMutable {
+		return NewSortedIntListSliced()
 	}, b)
 }
 
 func BenchmarkSortedSliced_GetAll(b *testing.B) {
-	GenericBenchmarkSorted_GetAll(func() sortedintlist.ISortedIntList {
-		return slices.NewSortedIntListSliced()
+	sortedintlist.GenericBenchmarkSorted_GetAll(func() sortedintlist.IIntListMutable {
+		return NewSortedIntListSliced()
 	}, b)
 }
 func BenchmarkSortedSliced_GetUnique(b *testing.B) {
-	GenericBenchmarkSorted_GetUnique(func() sortedintlist.ISortedIntList {
-		return slices.NewSortedIntListSliced()
+	sortedintlist.GenericBenchmarkSorted_GetUnique(func() sortedintlist.IIntSetMutable {
+		return NewSortedIntListSliced()
 	}, b)
 }
 
 func GenericLastIndexOfBenchmark(size int, sortedMode bool, b *testing.B) {
 	data := make([]int, size)
-	for i, _ := range data {
+	for i := range data {
 		data[i] = i
 	}
 	b.ResetTimer()
 	var result int
 	for i := 0; i < b.N; i++ {
-		result, _ = slices.LastIndexOf(data, data[1], sortedMode)
+		result, _ = LastIndexOf(data, data[1], sortedMode)
 	}
 	_ = result
 }

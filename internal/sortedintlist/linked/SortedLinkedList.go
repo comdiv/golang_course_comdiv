@@ -1,11 +1,31 @@
 package linked
 
+import "errors"
+
 // SortedLinkedList - объект, который содержит данные и управляет сортировкой
 type SortedLinkedList struct {
 	itemCount int
 	indexSize int
 	head      *SortedLinkedListItem
 	tail      *SortedLinkedListItem
+}
+
+func (l *SortedLinkedList) IsIntRangeInitialized() bool {
+	return l.Head() != nil
+}
+
+func (l *SortedLinkedList) GetMin() (int, error) {
+	if !l.IsIntRangeInitialized() {
+		return 0, errors.New("list is not initialized")
+	}
+	return l.Head().Value(), nil
+}
+
+func (l *SortedLinkedList) GetMax() (int, error) {
+	if !l.IsIntRangeInitialized() {
+		return 0, errors.New("list is not initialized")
+	}
+	return l.Tail().Value(), nil
 }
 
 // NewSortedLinkedList - конструктор для SortedLinkedList

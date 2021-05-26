@@ -4,37 +4,51 @@ import (
 	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"
+	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/slices"
+	"io"
 	"os"
 	"strconv"
 	"strings"
 )
 
 type SortedIntListRepl struct {
-	in   *os.File
-	out  *os.File
-	list sortedintlist.ISortedIntList
+	in     io.Reader
+	out    io.Writer
+	list   sortedintlist.IIntListMutable
+	set    sortedintlist.IIntSet
+	minmax sortedintlist.IIntMinMax
 }
 
 func NewLinkedListRepl() *SortedIntListRepl {
 	return NewLinkedListReplF(nil, nil) //default files
 }
 
-func NewLinkedListReplF(in *os.File, out *os.File) *SortedIntListRepl {
+func NewLinkedListReplF(in io.Reader, out io.Writer) *SortedIntListRepl {
 	return NewSortedListReplF(in, out, linked.NewSortedLinkedList())
 }
 
-func NewSortedListRepl(list sortedintlist.ISortedIntList) *SortedIntListRepl {
+func NewSlicedListReplF(in io.Reader, out io.Writer) *SortedIntListRepl {
+	return NewSortedListReplF(in, out, slices.NewSortedIntListSliced())
+}
+
+func NewSortedListRepl(list sortedintlist.IIntListMutable) *SortedIntListRepl {
 	return NewSortedListReplF(nil, nil, list)
 }
 
-func NewSortedListReplF(in *os.File, out *os.File, list sortedintlist.ISortedIntList) *SortedIntListRepl {
+func NewSortedListReplF(in io.Reader, out io.Writer, list sortedintlist.IIntListMutable) *SortedIntListRepl {
 	if in == nil {
 		in = os.Stdin
 	}
 	if out == nil {
 		out = os.Stdout
 	}
-	return &SortedIntListRepl{list: list, in: in, out: out}
+	return &SortedIntListRepl{
+		list:   list,
+		in:     in,
+		out:    out,
+		set:    list.(sortedintlist.IIntSet),
+		minmax: list.(sortedintlist.IIntMinMax),
+	}
 }
 
 func (r *SortedIntListRepl) PrintHelp() {
@@ -47,6 +61,8 @@ func (r *SortedIntListRepl) PrintHelp() {
 	fmt.Println("count - prints list size (all value count)")
 	fmt.Println("all - prints all values (with duplicates)")
 	fmt.Println("unique - prints only unique values")
+	fmt.Println("min - prints min value")
+	fmt.Println("max - prints max value")
 }
 
 func (r *SortedIntListRepl) Execute() {
@@ -63,7 +79,6 @@ func (r *SortedIntListRepl) Execute() {
 			r.ExecuteCommand(cmd)
 		}
 		if exit {
-			r.out.Sync()
 			break
 		}
 	}
@@ -74,14 +89,44 @@ func (r *SortedIntListRepl) ExecuteCommand(cmd string) error {
 	case "all":
 		fmt.Fprintf(r.out, "%v\n", r.list.GetAll())
 	case "unique":
-		fmt.Fprintf(r.out, "%v\n", r.list.GetUnique())
+		if nil == r.set {
+			fmt.Println("Not supported")
+		} else {
+			fmt.Fprintf(r.out, "%v\n", r.set.GetUnique())
+		}
 	case "count":
 		fmt.Fprintf(r.out, "%v\n", r.list.Size())
 	case "size":
-		fmt.Fprintf(r.out, "%v\n", r.list.UniqueSize())
+		if nil == r.set {
+			fmt.Println("Not supported")
+		} else {
+			fmt.Fprintf(r.out, "%v\n", r.set.UniqueSize())
+		}
+	case "min":
+		if nil == r.minmax {
+			fmt.Println("Not supported")
+		} else {
+			min, err := r.minmax.GetMin()
+			if nil != err {
+				fmt.Printf("error: %v", err)
+			} else {
+				fmt.Fprintf(r.out, "%v\n", min)
+			}
+		}
+	case "max":
+		if nil == r.minmax {
+			fmt.Println("Not supported")
+		} else {
+			max, err := r.minmax.GetMax()
+			if nil != err {
+				fmt.Printf("error: %v", err)
+			} else {
+				fmt.Fprintf(r.out, "%v\n", max)
+			}
+		}
 	default:
-		var removeAll bool = false
-		var numberPart string = cmd
+		var removeAll = false
+		var numberPart = cmd
 		if strings.HasPrefix(cmd, "--") {
 			removeAll = true
 			numberPart = cmd[1:]

@@ -1,4 +1,4 @@
-package test
+package repl
 
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist/linked"

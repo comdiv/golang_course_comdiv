@@ -1,10 +1,8 @@
 package slices
 
-import (
-	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
-)
+import "errors"
 
-// SortedIntListSliced - реализация ISortedIntList
+// SortedIntListSliced - реализация ISortedIntReplProvider
 type SortedIntListSliced struct {
 	data       []int
 	dups       map[int]int
@@ -12,9 +10,22 @@ type SortedIntListSliced struct {
 	totalSize  int
 }
 
-// hack to force implementation of interface in goland and check that it implements it
-func sortedintlistslicedImplements() sortedintlist.ISortedIntList {
-	return &SortedIntListSliced{}
+func (s *SortedIntListSliced) IsIntRangeInitialized() bool {
+	return s.totalSize > 0
+}
+
+func (s *SortedIntListSliced) GetMin() (int, error) {
+	if !s.IsIntRangeInitialized() {
+		return 0, errors.New("list is not initialized")
+	}
+	return s.data[0], nil
+}
+
+func (s *SortedIntListSliced) GetMax() (int, error) {
+	if !s.IsIntRangeInitialized() {
+		return 0, errors.New("list is not initialized")
+	}
+	return s.data[len(s.data)-1], nil
 }
 
 func NewSortedIntListSliced() *SortedIntListSliced {
