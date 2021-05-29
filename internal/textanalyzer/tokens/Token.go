@@ -1,4 +1,4 @@
-package tokenizer
+package tokens
 
 // Token токен - охватывает минимальный примитив из исходного текста
 type Token struct {
@@ -23,29 +23,35 @@ const (
 	TOKEN_DM TokenType = 4
 	// TOKEN_LC токен (без значения) для слитных участок текста, не разбирается
 	TOKEN_LC TokenType = 8
+	// TOKEN_EOF признак конца файла
+	TOKEN_EOF TokenType = 128
 )
 
-func NewToken(tp TokenType, si int, data string) *Token {
-	return &Token{tp: tp, si: si, ei: si + len(data) - 1, data: data}
+func EofToken(si int) Token {
+	return Token{tp: TOKEN_EOF, si: si, ei: si}
 }
 
-func NewLargeToken(si int, ei int) *Token {
-	return &Token{tp: TOKEN_LC, si: si, ei: ei}
+func NewToken(tp TokenType, si int, data string) Token {
+	return Token{tp: tp, si: si, ei: si + len(data) - 1, data: data}
 }
 
-func (t *Token) Type() TokenType {
+func NewLargeToken(si int, ei int) Token {
+	return Token{tp: TOKEN_LC, si: si, ei: ei}
+}
+
+func (t Token) Type() TokenType {
 	return t.tp
 }
 
-func (t *Token) Start() int {
+func (t Token) Start() int {
 	return t.si
 }
 
-func (t *Token) Finish() int {
+func (t Token) Finish() int {
 	return t.ei
 }
 
-func (t *Token) Length() int {
+func (t Token) Length() int {
 	if t.Type() == TOKEN_LC {
 		return t.Finish() - t.Start() + 1
 	} else {
@@ -53,6 +59,6 @@ func (t *Token) Length() int {
 	}
 }
 
-func (t *Token) Value() string {
+func (t Token) Value() string {
 	return string(t.data)
 }
