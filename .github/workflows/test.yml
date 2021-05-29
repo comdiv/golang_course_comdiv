@@ -1,11 +1,11 @@
-on: [push, pull_request]
+on: [ push, pull_request ]
 name: Test
 jobs:
   test:
     strategy:
       matrix:
-        go-version: [1.16.x]
-        os: [ubuntu-latest, windows-latest]
+        go-version: [ 1.16.x ]
+        os: [ ubuntu-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install Go
@@ -14,7 +14,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build and test
-      - run: |
-          go build ./internal/sortedintlist/...
-          go test ./internal/sortedintlist/...
+      - name: Build
+        run: go build ./internal/sortedintlist/...
+      - name: Test
+        run: go test ./internal/sortedintlist/...
