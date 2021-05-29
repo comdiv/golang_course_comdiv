@@ -1,8 +1,6 @@
 package main
 
-import "fmt"
-import "unicode"
-
+/*
 // типа более сложный пример для ToUpper с
 // использованием UTF-8 - сделал через указатели,
 // чтобы проще было подменять байты с рунами
@@ -19,3 +17,4 @@ func main() {
 	pathName.ToUpperUTF()
 	fmt.Printf("%s\n", pathName)
 }
+*/

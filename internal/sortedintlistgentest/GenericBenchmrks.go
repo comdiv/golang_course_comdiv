@@ -117,15 +117,8 @@ func generateData(b *testing.B, generator func(i int) int) []int {
 	return generateDataSRSeed(b, DEFAULT_BENCH_DATA_SIZE, func(i int, _ *rand.Rand) int { return generator(i) }, DEFAULT_BENCH_DATA_SEED)
 }
 
-func generateDataS(b *testing.B, size int, generator func(i int) int) []int {
-	return generateDataSRSeed(b, size, func(i int, _ *rand.Rand) int { return generator(i) }, DEFAULT_BENCH_DATA_SEED)
-}
-
 func generateDataR(b *testing.B, generator func(i int, r *rand.Rand) int) []int {
 	return generateDataSRSeed(b, DEFAULT_BENCH_DATA_SIZE, generator, 1234567890)
-}
-func generateDataSR(b *testing.B, size int, generator func(i int, r *rand.Rand) int) []int {
-	return generateDataSRSeed(b, size, generator, DEFAULT_BENCH_DATA_SEED)
 }
 
 var defaultRandomSet = generateDataR(nil, func(i int, r *rand.Rand) int {
