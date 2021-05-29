@@ -27,9 +27,7 @@ func (c *TermStatCollection) RebuildIndexes() {
 		return docorder[i].FirstIndex() < docorder[j].FirstIndex()
 	})
 	freqorder := make([]*TermStat, 0, len(c.terms))
-	for _, v := range docorder {
-		freqorder = append(freqorder, v)
-	}
+	freqorder = append(freqorder, docorder...)
 	sort.SliceStable(freqorder, func(i, j int) bool {
 		return freqorder[i].Count() > freqorder[j].Count()
 	})
