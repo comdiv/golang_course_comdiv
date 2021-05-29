@@ -1,6 +1,7 @@
 package repl
 
 import (
+	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/sortedintlist"
 	"io/fs"
 	"os"
@@ -8,7 +9,10 @@ import (
 )
 
 func GenericTestForReplExecute(name string, impl sortedintlist.IIntListMutable, t *testing.T) {
-	os.Mkdir("./tmp", fs.ModeDir)
+	err := os.Mkdir("./tmp", fs.ModeDir)
+	if err != nil {
+		panic(fmt.Errorf("error create tmp dir: %v", err))
+	}
 	out, err := os.Create("./tmp/" + name + ".out.txt")
 	if err != nil {
 		t.Fail()
@@ -17,7 +21,10 @@ func GenericTestForReplExecute(name string, impl sortedintlist.IIntListMutable, 
 	if err != nil {
 		t.Fail()
 	}
-	in.WriteString("1\n2\n2\n2\n3\n4\n-3\ncount\nsize\nall\nunique\nmin\nmax\nexit\n")
+	_, err = in.WriteString("1\n2\n2\n2\n3\n4\n-3\ncount\nsize\nall\nunique\nmin\nmax\nexit\n")
+	if err != nil {
+		panic(fmt.Errorf("cannot write command text file: %v", err))
+	}
 	in.Close()
 
 	in, err = os.Open(in.Name())
@@ -40,7 +47,10 @@ func GenericTestForReplExecute(name string, impl sortedintlist.IIntListMutable, 
 }
 
 func GenericTestForReplCommand(name string, impl sortedintlist.IIntListMutable, t *testing.T) {
-	os.Mkdir("./tmp", fs.ModeDir)
+	err := os.Mkdir("./tmp", fs.ModeDir)
+	if err != nil {
+		panic(fmt.Errorf("error create tmp dir: %v", err))
+	}
 	out, err := os.Create("./tmp/" + name + ".out.txt")
 	if err != nil {
 		t.Fail()

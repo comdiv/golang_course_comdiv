@@ -62,7 +62,11 @@ func (r *SortedIntListRepl) Execute() {
 		case "help":
 			r.PrintHelp()
 		default:
-			r.ExecuteCommand(cmd)
+			err := r.ExecuteCommand(cmd)
+			if err != nil {
+				fmt.Printf("Error in repl: %v\n", err)
+				break
+			}
 		}
 		if exit {
 			break
