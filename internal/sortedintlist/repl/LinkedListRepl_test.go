@@ -9,6 +9,6 @@ func Exclude_TestLinkedListRepl_ExecuteCommand(t *testing.T) {
 	GenericTestForReplCommand("repl_linked_command", linked.New(), t)
 }
 
-func TestLinkedListRepl_Execute(t *testing.T) {
+func Exclude_TestLinkedListRepl_Execute(t *testing.T) {
 	GenericTestForReplExecute("repl_linked_execute", linked.New(), t)
 }
