@@ -13,16 +13,18 @@ type Token struct {
 type TokenType byte
 
 const (
-	// TOKEN_UD токен неопределенного типа
+	// TOKEN_UD токен не определен
 	TOKEN_UD TokenType = 0
+	// TOKEN_UK токен неопределенного типа строки
+	TOKEN_UK TokenType = 1
 	// TOKEN_WD токен отдельного слова
-	TOKEN_WD TokenType = 1
+	TOKEN_WD TokenType = 2
 	// TOKEN_WS токен с пробельными символами
-	TOKEN_WS TokenType = 2
+	TOKEN_WS TokenType = 4
 	// TOKEN_DM токен с разделителями
-	TOKEN_DM TokenType = 4
+	TOKEN_DM TokenType = 8
 	// TOKEN_LC токен (без значения) для слитных участок текста, не разбирается
-	TOKEN_LC TokenType = 8
+	TOKEN_LC TokenType = 16
 	// TOKEN_EOF признак конца файла
 	TOKEN_EOF TokenType = 128
 )
@@ -61,4 +63,19 @@ func (t Token) Length() int {
 
 func (t Token) Value() string {
 	return string(t.data)
+}
+
+func (t Token) IsEof() bool {
+	return t.Type() == TOKEN_EOF
+}
+func (t Token) IsWord() bool {
+	return t.Type() == TOKEN_WD
+}
+
+func (t Token) IsUnknown() bool {
+	return t.Type() == TOKEN_UK
+}
+
+func (t Token) IsUndefined() bool {
+	return t.Type() == TOKEN_UD
 }

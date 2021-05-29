@@ -7,6 +7,16 @@ import (
 	"testing"
 )
 
+type TokenizeTextCase struct {
+	Text   string
+	Tokens []tokens.Token
+}
+
+func (tc TokenizeTextCase) Execute(t *testing.T) {
+	actualTokens := tokens.ReadTokenListS(tc.Text)
+	assert.Equal(t, tc.Tokens, actualTokens)
+}
+
 // просто проверяем что можем создать токенайзер
 func TestNew(t *testing.T) {
 	tokenizer := tokens.New(strings.NewReader("Такой текст"))
@@ -28,16 +38,6 @@ func Test_SingleWordText(t *testing.T) {
 	assert.Equal(t, "Привет", tokens[0].Value())
 	assert.Equal(t, 0, tokens[0].Start())
 	assert.Equal(t, 11, tokens[0].Finish())
-}
-
-type TokenizeTextCase struct {
-	Text   string
-	Tokens []tokens.Token
-}
-
-func (tc TokenizeTextCase) Execute(t *testing.T) {
-	actualTokens := tokens.ReadTokenListS(tc.Text)
-	assert.Equal(t, tc.Tokens, actualTokens)
 }
 
 func Test_SimpleSingleWord(t *testing.T) {
@@ -65,11 +65,11 @@ func Test_InvalidWords(t *testing.T) {
 	TokenizeTextCase{
 		"Mixрусскийeng 1.32 jkjkjkjkjdkfsdfsdkfjsdkfjksdfjksdfjsdkfjsdkfjsdkfjsdkfjsdkfjksdfjsdkfjsdkfjsdkfjsdkfjskdfjksdfjkdsfjkds",
 		[]tokens.Token{
-			tokens.NewToken(tokens.TOKEN_UD, 0, "Mixрусскийeng"),
+			tokens.NewToken(tokens.TOKEN_UK, 0, "Mixрусскийeng"),
 			tokens.NewToken(tokens.TOKEN_WS, 20, " "),
-			tokens.NewToken(tokens.TOKEN_UD, 21, "1"),
+			tokens.NewToken(tokens.TOKEN_UK, 21, "1"),
 			tokens.NewToken(tokens.TOKEN_DM, 22, "."),
-			tokens.NewToken(tokens.TOKEN_UD, 23, "32"),
+			tokens.NewToken(tokens.TOKEN_UK, 23, "32"),
 			tokens.NewToken(tokens.TOKEN_WS, 25, " "),
 			tokens.NewLargeToken(26, 129),
 		},
