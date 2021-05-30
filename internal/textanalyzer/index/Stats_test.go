@@ -3,6 +3,7 @@ package index_test
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -36,4 +37,36 @@ func TestCollectStats(t *testing.T) {
 	assert.Equal(t, "ОДИНАКОВЫХ", freqorder[4].Value())
 	assert.Equal(t, "И", freqorder[5].Value())
 
+}
+
+func TestTask_10_4_no_start_no_finish(t *testing.T) {
+	// испходные условия - слова только из середины фраз и длина не менее 4 символов
+	query := index.NewTermFilter(4, false, false, false)
+	f, e := os.Open("../main_test_text.txt")
+	if f == nil || e != nil {
+		t.Fatal(f, e)
+	}
+	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
+	stats := index.CollectStats(f, query)
+	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
+	result := stats.Find(10, query)
+
+	resultWords := make([]string, 0, len(result))
+
+	for _, s := range result {
+		resultWords = append(resultWords, s.Value())
+	}
+
+	assert.Equal(t, []string{
+		"YOUNG",
+		"LOOKED",
+		"WENT",
+		"UNTIL",
+		"INTO",
+		"WANTED",
+		"HEARD",
+		"LITTLE",
+		"HAVE",
+		"THAN",
+	}, resultWords)
 }
