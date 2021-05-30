@@ -1,7 +1,6 @@
 package index
 
 import (
-	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes"
 	"io"
 	"sort"
@@ -90,10 +89,7 @@ func (c *TermStatCollection) Find(size int, filter *TermFilter) []*TermStat {
 	if filter == nil {
 		filter = c.filter
 	}
-	if filter == nil || *filter == *c.filter {
-		result = append(result, freqs[:size]...)
-		return result
-	}
+
 	if filter.reverseFreq != c.filter.reverseFreq {
 		for i := len(freqs) - 1; i >= 0; i-- {
 			v := freqs[i]
@@ -109,7 +105,6 @@ func (c *TermStatCollection) Find(size int, filter *TermFilter) []*TermStat {
 			v := freqs[i]
 			if filter.Matches(v) {
 				result = append(result, v)
-				fmt.Println(len(result))
 				if len(result) == size {
 					break
 				}
