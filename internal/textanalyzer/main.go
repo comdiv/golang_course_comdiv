@@ -14,8 +14,9 @@ func main() {
 	var useLast = flag.Bool("last", false, "Include last words of statements")
 	var nonfreq = flag.Bool("nonfreq", false, "Less frequent, not more frequent")
 	flag.Parse()
-	stats := index.CollectStats(os.Stdin)
-	result := stats.Find(*size, *minlen, *useFirst, *useLast, *nonfreq)
+	filter := index.NewTermFilter(*minlen, *useFirst, *useLast, *nonfreq)
+	stats := index.CollectStats(os.Stdin, filter)
+	result := stats.Find(*size, nil)
 	for _, v := range result {
 		fmt.Printf("%v\n", *v)
 	}
