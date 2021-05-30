@@ -19,12 +19,16 @@ const (
 	TOKEN_UK TokenType = 1
 	// TOKEN_WD токен отдельного слова
 	TOKEN_WD TokenType = 2
-	// TOKEN_WS токен с пробельными символами
-	TOKEN_WS TokenType = 4
-	// TOKEN_DM токен с разделителями
-	TOKEN_DM TokenType = 8
+	// TOKEN_ES токен с пробельными символами
+	TOKEN_ES TokenType = 4
+	// TOKEN_WS токен с пробельными символами внутри предложения
+	TOKEN_WS TokenType = 8
+	// TOKEN_DM токен с разделителями внутри предложения помимо пробелов
+	TOKEN_DM TokenType = 16
 	// TOKEN_LC токен (без значения) для слитных участок текста, не разбирается
-	TOKEN_LC TokenType = 16
+	TOKEN_LC TokenType = 32
+	// TOKEN_NB нечто численное - требуется для корректной обработки точек и запятых
+	TOKEN_NB TokenType = 64
 	// TOKEN_EOF признак конца файла
 	TOKEN_EOF TokenType = 128
 )
@@ -70,6 +74,13 @@ func (t Token) IsEof() bool {
 }
 func (t Token) IsWord() bool {
 	return t.Type() == TOKEN_WD
+}
+func (t Token) IsNumber() bool {
+	return t.Type() == TOKEN_NB
+}
+
+func (t Token) IsEoS() bool {
+	return t.Type() == TOKEN_ES
 }
 
 func (t Token) IsUnknown() bool {

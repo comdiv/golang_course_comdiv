@@ -14,8 +14,10 @@ type tokenizerImpl struct {
 	next     byte
 
 	overlapLength int
-	wasDelimiters bool
+	wasDM         bool
+	wasES         bool
 	wasWS         bool
+	wasNB         bool
 	si            int
 }
 
@@ -41,8 +43,10 @@ func (t *tokenizerImpl) Next() Token {
 		t.si = t.si + 1
 	}
 	t.overlapLength = 0
-	t.wasDelimiters = false
+	t.wasDM = false
+	t.wasES = false
 	t.wasWS = false
+	t.wasNB = false
 
 	for {
 		var b byte
@@ -61,7 +65,23 @@ func (t *tokenizerImpl) Next() Token {
 			}
 			return t.BuildToken()
 		}
-		if b == ' ' || b == '\n' || b == '\r' || b == '\t' {
+
+		if b >= '0' && b <= '9' {
+			if len(t.buf) > 0 && !t.wasNB {
+				t.next = b
+				return t.BuildToken()
+			}
+			t.wasNB = true
+			t.add(b)
+			continue
+		}
+
+		if (b >= '.' || b == ',') && t.wasNB {
+			t.add(b)
+			continue
+		}
+
+		if b == ' ' || b == '\t' {
 			if len(t.buf) > 0 && !t.wasWS {
 				t.next = b
 				return t.BuildToken()
@@ -71,17 +91,27 @@ func (t *tokenizerImpl) Next() Token {
 			continue
 		}
 
-		if b == ',' || b == ':' || b == '.' || b == '-' || b == ';' || b == '!' || b == '?' {
-			if len(t.buf) > 0 && !t.wasDelimiters {
+		if b == '\n' || b == '\r' || b == '.' || b == '!' || b == '?' {
+			if len(t.buf) > 0 && !t.wasES {
 				t.next = b
 				return t.BuildToken()
 			}
-			t.wasDelimiters = true
+			t.wasES = true
 			t.add(b)
 			continue
 		}
 
-		if t.wasDelimiters || t.wasWS {
+		if b == ',' || b == ':' || b == '-' || b == ';' {
+			if len(t.buf) > 0 && !t.wasDM {
+				t.next = b
+				return t.BuildToken()
+			}
+			t.wasDM = true
+			t.add(b)
+			continue
+		}
+
+		if t.wasDM || t.wasES || t.wasWS {
 			t.next = b
 			return t.BuildToken()
 		}
@@ -95,10 +125,14 @@ func (t *tokenizerImpl) BuildToken() Token {
 	if t.overlapLength == 0 {
 		var tp TokenType
 		switch {
+		case t.wasES:
+			tp = TOKEN_ES
 		case t.wasWS:
 			tp = TOKEN_WS
-		case t.wasDelimiters:
+		case t.wasDM:
 			tp = TOKEN_DM
+		case t.wasNB:
+			tp = TOKEN_NB
 		default:
 			wasRus := false
 			wasLat := false

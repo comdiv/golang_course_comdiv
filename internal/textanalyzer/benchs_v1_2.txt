@@ -1,0 +1,25 @@
+?   	github.com/comdiv/golang_course_comdiv/internal/textanalyzer	[no test files]
+goos: windows
+goarch: amd64
+pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index
+cpu: AMD Ryzen 5 2600 Six-Core Processor            
+Benchmark_NonFilteredCollection-12    	     178	   6629774 ns/op	  370652 B/op	   32257 allocs/op
+Benchmark_NonFilteredSearch-12        	 1723705	       695.5 ns/op	     136 B/op	       3 allocs/op
+Benchmark_PreFilteredCollection-12    	     216	   5560240 ns/op	  217793 B/op	   30730 allocs/op
+Benchmark_PreFilteredSearch-12        	 2607564	       461.8 ns/op	     136 B/op	       3 allocs/op
+PASS
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index	7.269s
+goos: windows
+goarch: amd64
+pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes
+cpu: AMD Ryzen 5 2600 Six-Core Processor            
+BenchmarkLexer-12    	     232	   5143559 ns/op	  154840 B/op	   30655 allocs/op
+PASS
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes	1.797s
+goos: windows
+goarch: amd64
+pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens
+cpu: AMD Ryzen 5 2600 Six-Core Processor            
+BenchmarkTokenizer-12    	     374	   3245947 ns/op	   88769 B/op	   16139 allocs/op
+PASS
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens	1.619s

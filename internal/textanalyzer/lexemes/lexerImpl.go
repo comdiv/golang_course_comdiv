@@ -2,7 +2,6 @@ package lexemes
 
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens"
-	"strings"
 )
 
 type lexerImpl struct {
@@ -50,7 +49,7 @@ func (l *lexerImpl) Next() Lexeme {
 
 		// остались только варианты пробелов и знаков препинаний и если это конец предложения то надо
 		// особым образом обработать
-		if isStatementDelimiter(token) {
+		if token.IsEoS() {
 			l.statementIndex = -1
 			if !l.prepared.IsUndefined() {
 				l.prepared.isLast = true
@@ -60,8 +59,4 @@ func (l *lexerImpl) Next() Lexeme {
 		}
 
 	}
-}
-
-func isStatementDelimiter(t tokens.Token) bool {
-	return strings.ContainsAny(t.Value(), ".!?\n\r")
 }
