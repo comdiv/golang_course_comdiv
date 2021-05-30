@@ -21,6 +21,10 @@ func (l Lexeme) Value() string {
 	return l.value
 }
 
+func (l Lexeme) Len() int {
+	return len([]rune(l.value))
+}
+
 func (l Lexeme) StatementPosition() int {
 	return l.stPosition
 }

@@ -41,7 +41,7 @@ func NewTermStatCollection() *TermStatCollection {
 }
 func NewTermStatCollectionF(filter *TermFilter) *TermStatCollection {
 	if filter == nil {
-		filter = NewTermFilter(4, false, false, false)
+		filter = NewTermFilter(1, true, true, false)
 	}
 	return &TermStatCollection{
 		terms:  make(map[string]*TermStat, 1024),
@@ -50,6 +50,9 @@ func NewTermStatCollectionF(filter *TermFilter) *TermStatCollection {
 }
 
 func (c *TermStatCollection) Add(lexeme lexemes.Lexeme, idx int) {
+	if !c.filter.MatchesLexeme(&lexeme) {
+		return
+	}
 	// сбрасываем состояние индекса частот
 	c.freqOrderIndex = nil
 	s, ok := c.terms[lexeme.Value()]
@@ -59,10 +62,8 @@ func (c *TermStatCollection) Add(lexeme lexemes.Lexeme, idx int) {
 	}
 	s = NewLexemeStat(lexeme.Value())
 	s.Register(lexeme, idx)
-	if c.filter.Matches(s) {
-		c.docOrderIndex = append(c.docOrderIndex, s)
-		c.terms[lexeme.Value()] = s
-	}
+	c.docOrderIndex = append(c.docOrderIndex, s)
+	c.terms[lexeme.Value()] = s
 }
 func CollectStatsS(text string, filter *TermFilter) *TermStatCollection {
 	return CollectStats(strings.NewReader(text), filter)
@@ -93,7 +94,7 @@ func (c *TermStatCollection) Find(size int, filter *TermFilter) []*TermStat {
 	if filter.reverseFreq != c.filter.reverseFreq {
 		for i := len(freqs) - 1; i >= 0; i-- {
 			v := freqs[i]
-			if filter.Matches(v) {
+			if filter.MatchesStats(v) {
 				result = append(result, v)
 				if len(result) == size {
 					break
@@ -103,7 +104,7 @@ func (c *TermStatCollection) Find(size int, filter *TermFilter) []*TermStat {
 	} else {
 		for i := 0; i < len(freqs); i++ {
 			v := freqs[i]
-			if filter.Matches(v) {
+			if filter.MatchesStats(v) {
 				result = append(result, v)
 				if len(result) == size {
 					break

@@ -7,7 +7,7 @@ import (
 )
 
 func TestCollectStats(t *testing.T) {
-	stats := index.CollectStatsS("Тут несколько Одинаковых термов именно тут и именно Термов!")
+	stats := index.CollectStatsS("Тут несколько Одинаковых термов именно тут и именно Термов!", nil)
 	assert.Equal(t, 0, stats.Terms()["ТУТ"].FirstIndex())
 	assert.Equal(t, 2, stats.Terms()["ТУТ"].Count())
 	assert.Equal(t, 1, stats.Terms()["ТУТ"].FirstCount())

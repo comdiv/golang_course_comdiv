@@ -1,0 +1,27 @@
+# Бенчмарки первой очереди оптимизации - фильтрация длины лексем на входе
+
+?   	github.com/comdiv/golang_course_comdiv/internal/textanalyzer	[no test files]
+goos: windows
+goarch: amd64
+pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index
+cpu: AMD Ryzen 5 2600 Six-Core Processor            
+Benchmark_NonFilteredCollection-12    	     178	   6629265 ns/op	  371341 B/op	   32260 allocs/op
+Benchmark_NonFilteredSearch-12        	 1697238	       705.7 ns/op	     136 B/op	       3 allocs/op
+Benchmark_PreFilteredCollection-12    	     217	   5550397 ns/op	  218433 B/op	   30733 allocs/op
+Benchmark_PreFilteredSearch-12        	 2510041	       474.7 ns/op	     136 B/op	       3 allocs/op
+PASS
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index	7.277s
+goos: windows
+goarch: amd64
+pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes
+cpu: AMD Ryzen 5 2600 Six-Core Processor            
+BenchmarkLexer-12    	     235	   5105642 ns/op	  155480 B/op	   30658 allocs/op
+PASS
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes	1.798s
+goos: windows
+goarch: amd64
+pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens
+cpu: AMD Ryzen 5 2600 Six-Core Processor            
+BenchmarkTokenizer-12    	     399	   3020859 ns/op	   89197 B/op	   16142 allocs/op
+PASS
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens	1.592s

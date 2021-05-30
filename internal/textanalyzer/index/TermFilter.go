@@ -1,5 +1,7 @@
 package index
 
+import "github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes"
+
 type TermFilter struct {
 	minlen       int
 	includeFirst bool
@@ -27,6 +29,10 @@ func NewTermFilter(minlen int, includeFirst bool, includeLast bool, reverseFreq 
 	return &TermFilter{minlen: minlen, includeFirst: includeFirst, includeLast: includeLast, reverseFreq: reverseFreq}
 }
 
-func (filter *TermFilter) Matches(v *TermStat) bool {
+func (filter *TermFilter) MatchesStats(v *TermStat) bool {
 	return (filter.IncludeFirst() || v.FirstCount() == 0) && (filter.IncludeLast() || v.LastCount() == 0) && v.Len() >= filter.Minlen()
+}
+
+func (filter *TermFilter) MatchesLexeme(v *lexemes.Lexeme) bool {
+	return v.Len() >= filter.Minlen()
 }
