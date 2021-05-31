@@ -41,7 +41,7 @@ func NewTermStatCollection() *TermStatCollection {
 }
 func NewTermStatCollectionF(filter *TermFilter) *TermStatCollection {
 	if filter == nil {
-		filter = NewTermFilter(1, true, true, false)
+		filter = NewTermFilterArgs(1, true, true, false)
 	}
 	return &TermStatCollection{
 		terms:  make(map[string]*TermStat, 1024),

@@ -25,7 +25,24 @@ func (t *TermFilter) ReverseFreq() bool {
 	return t.reverseFreq
 }
 
-func NewTermFilter(minlen int, includeFirst bool, includeLast bool, reverseFreq bool) *TermFilter {
+type TermFilterOptions struct {
+	MinLen       int
+	IncludeFirst bool
+	IncludeLast  bool
+	ReverseFreq  bool
+}
+
+func NewTermFilter(opts TermFilterOptions) *TermFilter {
+	return &TermFilter{
+		minlen:       opts.MinLen,
+		includeFirst: opts.IncludeFirst,
+		includeLast:  opts.IncludeLast,
+		reverseFreq:  opts.ReverseFreq,
+	}
+}
+
+// Deprecated: NewTermFilterArgs
+func NewTermFilterArgs(minlen int, includeFirst bool, includeLast bool, reverseFreq bool) *TermFilter {
 	return &TermFilter{minlen: minlen, includeFirst: includeFirst, includeLast: includeLast, reverseFreq: reverseFreq}
 }
 

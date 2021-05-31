@@ -41,7 +41,7 @@ func TestCollectStats(t *testing.T) {
 
 func TestTask_10_4_no_start_no_finish(t *testing.T) {
 	// испходные условия - слова только из середины фраз и длина не менее 4 символов
-	query := index.NewTermFilter(4, false, false, false)
+	query := index.NewTermFilterArgs(4, false, false, false)
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
 	stats := index.CollectStats(testdata_test.TestDataReader(), query)
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
