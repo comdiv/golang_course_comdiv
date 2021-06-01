@@ -27,7 +27,8 @@ func TestNewLexeme(t *testing.T) {
 	assert.Equal(t, "ПРИВЕТ", lexeme.Value())
 	assert.Equal(t, 2, lexeme.StatementPosition())
 	assert.True(t, lexeme.IsLastInStatement())
-	assert.Equal(t, token, lexeme.Token())
+	assert.Equal(t, token.Start(), lexeme.Start())
+	assert.Equal(t, token.Finish(), lexeme.Finish())
 }
 
 func TestSingleStatement(t *testing.T) {

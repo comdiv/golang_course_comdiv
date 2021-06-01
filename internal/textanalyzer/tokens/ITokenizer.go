@@ -7,7 +7,7 @@ import (
 
 // ITokenizer - интерфейс получения токена
 type ITokenizer interface {
-	Next() Token
+	Next() *Token
 }
 
 func New(reader io.Reader) ITokenizer {
@@ -24,7 +24,7 @@ func ReadTokenListS(text string) []Token {
 func ReadTokenList(tokenizer ITokenizer) []Token {
 	result := make([]Token, 0)
 	for {
-		token := tokenizer.Next()
+		token := tokenizer.Next().Copy()
 		if token.IsEof() {
 			break
 		}

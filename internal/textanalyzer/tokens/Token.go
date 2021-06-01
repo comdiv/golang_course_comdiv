@@ -6,7 +6,18 @@ type Token struct {
 	tp   TokenType
 	si   int
 	ei   int
-	data string
+	data []byte
+}
+
+func (t *Token) Copy() Token {
+	d := make([]byte, len(t.data))
+	copy(d, t.data)
+	return Token{
+		tp:   t.tp,
+		si:   t.si,
+		ei:   t.ei,
+		data: d,
+	}
 }
 
 // TokenType перечисление для типов токена
@@ -38,11 +49,11 @@ func EofToken(si int) Token {
 }
 
 func NewToken(tp TokenType, si int, data string) Token {
-	return Token{tp: tp, si: si, ei: si + len(data) - 1, data: data}
+	return Token{tp: tp, si: si, ei: si + len(data) - 1, data: []byte(data)}
 }
 
 func NewLargeToken(si int, ei int) Token {
-	return Token{tp: TOKEN_LC, si: si, ei: ei}
+	return Token{tp: TOKEN_LC, si: si, ei: ei, data: make([]byte, 0)}
 }
 
 func (t Token) Type() TokenType {

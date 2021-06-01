@@ -12,9 +12,23 @@ type Lexeme struct {
 	// позиция в предложении
 	stPosition int
 	// признак последнего слова в предложении
-	isLast bool
-	// исходный токен
-	token tokens.Token
+	isLast    bool
+	isEof     bool
+	isDefined bool
+	start     int
+	finish    int
+}
+
+func (l Lexeme) IsUndefined() bool {
+	return !l.isDefined
+}
+
+func (l Lexeme) Start() int {
+	return l.start
+}
+
+func (l Lexeme) Finish() int {
+	return l.finish
 }
 
 func (l Lexeme) Value() string {
@@ -33,24 +47,20 @@ func (l Lexeme) IsLastInStatement() bool {
 	return l.isLast
 }
 
-func (l Lexeme) Token() tokens.Token {
-	return l.token
-}
-
 func (l Lexeme) IsEof() bool {
-	return l.token.Type() == tokens.TOKEN_EOF
-}
-func (l Lexeme) IsUndefined() bool {
-	return l.token.IsUndefined()
+	return l.isEof
 }
 
 var NullLexeme = Lexeme{}
 
-func NewLexeme(pos int, last bool, token tokens.Token) Lexeme {
+func NewLexeme(pos int, last bool, token *tokens.Token) Lexeme {
 	return Lexeme{
 		strings.Replace(strings.ToUpper(token.Value()), "Ё", "Е", -1),
 		pos,
 		last,
-		token,
+		token.IsEof(),
+		!token.IsUndefined(),
+		token.Start(),
+		token.Finish(),
 	}
 }
