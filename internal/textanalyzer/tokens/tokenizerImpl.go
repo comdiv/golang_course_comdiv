@@ -38,11 +38,7 @@ func newTokenizerImpl(in io.Reader) *tokenizerImpl {
 
 func (t *tokenizerImpl) Next() *Token {
 	if t.eof {
-		t.token.si = t.position
-		t.token.ei = t.position
-		t.token.tp = TOKEN_EOF
-		t.token.data = t.token.data[:0]
-		return t.token
+		return t.token.SetEoF(t.position)
 	}
 	t.buf = t.buf[:0]
 	t.si = t.position
@@ -68,12 +64,14 @@ func (t *tokenizerImpl) Next() *Token {
 		if err != nil {
 			t.eof = true
 			if len(t.buf) == 0 {
-				t.token.si = t.position
-				t.token.ei = t.position
-				t.token.tp = TOKEN_EOF
-				return t.token
+				return t.token.SetEoF(t.position)
 			}
 			return t.BuildToken()
+		}
+
+		// игнорируем простые апострофы
+		if b == '`' {
+			continue
 		}
 
 		if b >= '0' && b <= '9' {

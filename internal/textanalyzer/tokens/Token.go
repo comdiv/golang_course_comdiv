@@ -56,19 +56,19 @@ func NewLargeToken(si int, ei int) Token {
 	return Token{tp: TOKEN_LC, si: si, ei: ei, data: make([]byte, 0)}
 }
 
-func (t Token) Type() TokenType {
+func (t *Token) Type() TokenType {
 	return t.tp
 }
 
-func (t Token) Start() int {
+func (t *Token) Start() int {
 	return t.si
 }
 
-func (t Token) Finish() int {
+func (t *Token) Finish() int {
 	return t.ei
 }
 
-func (t Token) Length() int {
+func (t *Token) Length() int {
 	if t.Type() == TOKEN_LC {
 		return t.Finish() - t.Start() + 1
 	} else {
@@ -76,28 +76,36 @@ func (t Token) Length() int {
 	}
 }
 
-func (t Token) Value() string {
+func (t *Token) Value() string {
 	return string(t.data)
 }
 
-func (t Token) IsEof() bool {
+func (t *Token) IsEof() bool {
 	return t.Type() == TOKEN_EOF
 }
-func (t Token) IsWord() bool {
+func (t *Token) IsWord() bool {
 	return t.Type() == TOKEN_WD
 }
-func (t Token) IsNumber() bool {
+func (t *Token) IsNumber() bool {
 	return t.Type() == TOKEN_NB
 }
 
-func (t Token) IsEoS() bool {
+func (t *Token) IsEoS() bool {
 	return t.Type() == TOKEN_ES
 }
 
-func (t Token) IsUnknown() bool {
+func (t *Token) IsUnknown() bool {
 	return t.Type() == TOKEN_UK
 }
 
-func (t Token) IsUndefined() bool {
+func (t *Token) IsUndefined() bool {
 	return t.Type() == TOKEN_UD
+}
+
+func (t *Token) SetEoF(pos int) *Token {
+	t.si = pos
+	t.ei = pos
+	t.tp = TOKEN_EOF
+	t.data = t.data[:0]
+	return t
 }
