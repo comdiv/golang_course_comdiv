@@ -7,60 +7,70 @@ import (
 
 // Lexeme описатель лексемы в тексте
 type Lexeme struct {
-	// нормализованное значение лексемы
-	value string
 	// позиция в предложении
 	stPosition int
 	// признак последнего слова в предложении
-	isLast    bool
-	isEof     bool
-	isDefined bool
-	start     int
-	finish    int
+	isLast bool
+	token  *tokens.Token
 }
 
-func (l Lexeme) IsUndefined() bool {
-	return !l.isDefined
+func (l *Lexeme) IsUndefined() bool {
+	if l.token != nil {
+		return l.token.IsUndefined()
+	}
+	return true
 }
 
-func (l Lexeme) Start() int {
-	return l.start
+func (l *Lexeme) Copy() Lexeme {
+	newtoken := l.token.Copy()
+	return Lexeme{
+		l.stPosition,
+		l.isLast,
+		&newtoken,
+	}
 }
 
-func (l Lexeme) Finish() int {
-	return l.finish
+func (l *Lexeme) Start() int {
+	return l.token.Start()
 }
 
-func (l Lexeme) Value() string {
-	return l.value
+func (l *Lexeme) Finish() int {
+	return l.token.Finish()
 }
 
-func (l Lexeme) Len() int {
-	return len([]rune(l.value))
+func (l *Lexeme) Value() string {
+	return strings.Replace(strings.ToUpper(l.token.Value()), "Ё", "Е", -1)
 }
 
-func (l Lexeme) StatementPosition() int {
+func (l *Lexeme) Len() int {
+	return len([]rune(l.Value()))
+}
+
+func (l *Lexeme) StatementPosition() int {
 	return l.stPosition
 }
 
-func (l Lexeme) IsLastInStatement() bool {
+func (l *Lexeme) IsLastInStatement() bool {
 	return l.isLast
 }
 
-func (l Lexeme) IsEof() bool {
-	return l.isEof
+func (l *Lexeme) IsEof() bool {
+	return l.token.IsEof()
 }
 
 var NullLexeme = Lexeme{}
 
-func NewLexeme(pos int, last bool, token *tokens.Token) Lexeme {
-	return Lexeme{
-		strings.Replace(strings.ToUpper(token.Value()), "Ё", "Е", -1),
+func NewLexeme(pos int, last bool, token *tokens.Token) *Lexeme {
+	return &Lexeme{
 		pos,
 		last,
-		token.IsEof(),
-		!token.IsUndefined(),
-		token.Start(),
-		token.Finish(),
+		token,
 	}
+}
+
+func (l *Lexeme) Apply(pos int, last bool, token *tokens.Token) *Lexeme {
+	l.stPosition = pos
+	l.isLast = last
+	l.token = token
+	return l
 }

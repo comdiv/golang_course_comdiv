@@ -70,7 +70,7 @@ func (t *tokenizerImpl) Next() *Token {
 		}
 
 		// игнорируем простые апострофы
-		if b == '`' {
+		if b == '\'' {
 			continue
 		}
 
@@ -99,7 +99,7 @@ func (t *tokenizerImpl) Next() *Token {
 			continue
 		}
 
-		if b == '\n' || b == '\r' || b == '.' || b == '!' || b == '?' {
+		if b == '\n' || b == '\r' || b == '.' /* || b == '!' || b == '?' */ {
 			if len(t.buf) > 0 && !t.wasES {
 				t.next = b
 				return t.BuildToken()
@@ -109,7 +109,7 @@ func (t *tokenizerImpl) Next() *Token {
 			continue
 		}
 
-		if b == ',' || b == ':' || b == '-' || b == ';' {
+		if b == ',' || b == ':' || b == '-' || b == ';' || b == '!' || b == '?' {
 			if len(t.buf) > 0 && !t.wasDM {
 				t.next = b
 				return t.BuildToken()

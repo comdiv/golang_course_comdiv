@@ -4,23 +4,23 @@ goos: windows
 goarch: amd64
 pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index
 cpu: AMD Ryzen 5 2600 Six-Core Processor            
-Benchmark_NonFilteredCollection-12    	     188	   6123449 ns/op	  358556 B/op	   30395 allocs/op
-Benchmark_NonFilteredSearch-12        	 1615876	       741.7 ns/op	     136 B/op	       3 allocs/op
-Benchmark_PreFilteredCollection-12    	     237	   5044581 ns/op	  205849 B/op	   28869 allocs/op
-Benchmark_PreFilteredSearch-12        	 2622709	       452.7 ns/op	     136 B/op	       3 allocs/op
+Benchmark_NonFilteredCollection-12    	     129	   9156872 ns/op	 1407799 B/op	  101884 allocs/op
+Benchmark_NonFilteredSearch-12        	 1661540	       709.6 ns/op	     136 B/op	       3 allocs/op
+Benchmark_PreFilteredCollection-12    	     194	   6163623 ns/op	 1064581 B/op	   63236 allocs/op
+Benchmark_PreFilteredSearch-12        	 2782651	       426.3 ns/op	     136 B/op	       3 allocs/op
 PASS
-ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index	7.145s
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index	7.410s
 goos: windows
 goarch: amd64
 pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes
 cpu: AMD Ryzen 5 2600 Six-Core Processor            
-BenchmarkLexer-12    	     262	   4546635 ns/op	  142900 B/op	   28794 allocs/op
+BenchmarkLexer-12    	     300	   3977725 ns/op	  842108 B/op	   31629 allocs/op
 PASS
-ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes	1.732s
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes	1.679s
 goos: windows
 goarch: amd64
 pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens
 cpu: AMD Ryzen 5 2600 Six-Core Processor            
-BenchmarkTokenizer-12    	     507	   2347498 ns/op	    4432 B/op	       6 allocs/op
+BenchmarkTokenizer-12    	     542	   2188626 ns/op	    4432 B/op	       6 allocs/op
 PASS
-ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens	1.509s
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens	1.492s

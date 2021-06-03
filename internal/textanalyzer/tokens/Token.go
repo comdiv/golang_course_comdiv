@@ -44,16 +44,16 @@ const (
 	TOKEN_EOF TokenType = 128
 )
 
-func EofToken(si int) Token {
-	return Token{tp: TOKEN_EOF, si: si, ei: si}
+func EofToken(si int) *Token {
+	return &Token{tp: TOKEN_EOF, si: si, ei: si}
 }
 
-func NewToken(tp TokenType, si int, data string) Token {
-	return Token{tp: tp, si: si, ei: si + len(data) - 1, data: []byte(data)}
+func NewToken(tp TokenType, si int, data string) *Token {
+	return &Token{tp: tp, si: si, ei: si + len(data) - 1, data: []byte(data)}
 }
 
-func NewLargeToken(si int, ei int) Token {
-	return Token{tp: TOKEN_LC, si: si, ei: ei, data: make([]byte, 0)}
+func NewLargeToken(si int, ei int) *Token {
+	return &Token{tp: TOKEN_LC, si: si, ei: ei, data: make([]byte, 0)}
 }
 
 func (t *Token) Type() TokenType {
@@ -78,6 +78,10 @@ func (t *Token) Length() int {
 
 func (t *Token) Value() string {
 	return string(t.data)
+}
+
+func (t *Token) Data() []byte {
+	return t.data
 }
 
 func (t *Token) IsEof() bool {

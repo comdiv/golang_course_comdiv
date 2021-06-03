@@ -7,17 +7,22 @@ import (
 type lexerImpl struct {
 	tokenizer      tokens.ITokenizer
 	statementIndex int
-	prepared       Lexeme
+	lexeme         *Lexeme
+	prepared       *Lexeme
 }
 
 var _ ILexer = &lexerImpl{}
 
 func newLexerImpl(tokenizer tokens.ITokenizer) *lexerImpl {
-	return &lexerImpl{tokenizer: tokenizer, statementIndex: -1}
+	return &lexerImpl{
+		tokenizer:      tokenizer,
+		statementIndex: -1,
+		lexeme:         NewLexeme(0, false, nil),
+		prepared:       NewLexeme(0, false, nil),
+	}
 }
 
-func (l *lexerImpl) Next() Lexeme {
-	var result Lexeme
+func (l *lexerImpl) Next() *Lexeme {
 	for {
 		token := l.tokenizer.Next()
 
@@ -26,25 +31,33 @@ func (l *lexerImpl) Next() Lexeme {
 		}
 
 		if token.IsEof() {
-			eof := NewLexeme(0, false, token)
 			if !l.prepared.IsUndefined() {
-				l.prepared.isLast = true
-				result, l.prepared = l.prepared, eof
-				return result
+				l.lexeme, l.prepared = l.prepared, l.lexeme
+				l.prepared.token = token
+				l.prepared.stPosition = 0
+				l.lexeme.isLast = true
+				return l.lexeme
 			}
-			return eof
+			l.lexeme.token = token
+			l.lexeme.stPosition = 0
+			l.lexeme.isLast = false
+			return l.lexeme
 		}
 
 		if token.IsWord() {
 			l.statementIndex++
-			word := NewLexeme(l.statementIndex, false, token)
+			newt := token.Copy()
 			if !l.prepared.IsUndefined() {
-				result, l.prepared = l.prepared, word
-				return result
-			} else {
-				l.prepared = word
-				continue
+				l.lexeme, l.prepared = l.prepared, l.lexeme
+				l.prepared.token = &newt
+				l.prepared.stPosition = l.statementIndex
+				l.prepared.isLast = false
+				return l.lexeme
 			}
+			l.prepared.token = &newt
+			l.prepared.stPosition = l.statementIndex
+			l.prepared.isLast = false
+			continue
 		}
 
 		// остались только варианты пробелов и знаков препинаний и если это конец предложения то надо
@@ -53,10 +66,12 @@ func (l *lexerImpl) Next() Lexeme {
 			l.statementIndex = -1
 			if !l.prepared.IsUndefined() {
 				l.prepared.isLast = true
-				result, l.prepared = l.prepared, NullLexeme
-				return result
+				l.lexeme, l.prepared = l.prepared, l.lexeme
+				l.prepared.token = nil
+				l.prepared.isLast = false
+				l.prepared.stPosition = 0
+				return l.lexeme
 			}
 		}
-
 	}
 }

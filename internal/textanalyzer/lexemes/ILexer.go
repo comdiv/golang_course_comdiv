@@ -6,7 +6,7 @@ import (
 )
 
 type ILexer interface {
-	Next() Lexeme
+	Next() *Lexeme
 }
 
 func NewS(text string) ILexer {
@@ -32,7 +32,7 @@ func ReadLexemeList(lexer ILexer) []Lexeme {
 		if lexeme.IsEof() {
 			break
 		}
-		result = append(result, lexeme)
+		result = append(result, lexeme.Copy())
 	}
 	return result
 }

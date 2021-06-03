@@ -49,13 +49,14 @@ func NewTermStatCollectionF(filter *TermFilter) *TermStatCollection {
 	}
 }
 
-func (c *TermStatCollection) Add(lexeme lexemes.Lexeme, idx int) {
-	if !c.filter.MatchesLexeme(&lexeme) {
+func (c *TermStatCollection) Add(lexeme *lexemes.Lexeme, idx int) {
+	if !c.filter.MatchesLexeme(lexeme) {
 		return
 	}
 	// сбрасываем состояние индекса частот
 	c.freqOrderIndex = nil
-	s, ok := c.terms[lexeme.Value()]
+	value := lexeme.Value()
+	s, ok := c.terms[value]
 	if ok {
 		s.Register(lexeme, idx)
 		return
@@ -84,6 +85,9 @@ func CollectStats(reader io.Reader, filter *TermFilter) *TermStatCollection {
 	return stats
 }
 
+func (c *TermStatCollection) Get(word string) *TermStat {
+	return c.terms[word]
+}
 func (c *TermStatCollection) Find(size int, filter *TermFilter) []*TermStat {
 	result := make([]*TermStat, 0, size)
 	freqs := c.FreqOrderIndex()
