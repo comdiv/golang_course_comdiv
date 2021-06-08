@@ -69,8 +69,8 @@ func (t *tokenizerImpl) Next() *Token {
 			return t.BuildToken()
 		}
 
-		// игнорируем простые апострофы
-		if b == '\'' {
+		// игнорируем простые апострофы и кавычки
+		if b == '\'' || b == '"' {
 			continue
 		}
 

@@ -55,6 +55,6 @@ func TestTask_10_4_no_start_no_finish(t *testing.T) {
 	}
 
 	assert.Equal(t, []string{
-		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "COULDNT", "LOVE", "WANT", "INTO", "TOOK",
+		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
 	}, resultWords)
 }
