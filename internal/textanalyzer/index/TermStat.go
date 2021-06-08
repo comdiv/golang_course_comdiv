@@ -15,7 +15,7 @@ func NewLexemeStat(value string) *TermStat {
 	return &TermStat{term: value, len: len([]rune(value)), fstIndex: -1}
 }
 
-func (l *TermStat) Register(lexeme lexemes.Lexeme, idx int) {
+func (l *TermStat) Register(lexeme *lexemes.Lexeme, idx int) {
 	l.count++
 	if lexeme.StatementPosition() == 0 {
 		l.firstCount++

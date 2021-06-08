@@ -44,6 +44,7 @@ func TestTask_10_4_no_start_no_finish(t *testing.T) {
 	query := index.NewTermFilterArgs(4, false, false, false)
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
 	stats := index.CollectStats(testdata_test.TestDataReader(), query)
+
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
 	result := stats.Find(10, query)
 
@@ -54,15 +55,6 @@ func TestTask_10_4_no_start_no_finish(t *testing.T) {
 	}
 
 	assert.Equal(t, []string{
-		"YOUNG",
-		"LOOKED",
-		"WENT",
-		"UNTIL",
-		"INTO",
-		"WANTED",
-		"HEARD",
-		"LITTLE",
-		"HAVE",
-		"THAN",
+		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
 	}, resultWords)
 }

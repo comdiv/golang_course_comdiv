@@ -27,29 +27,30 @@ func TestNewLexeme(t *testing.T) {
 	assert.Equal(t, "ПРИВЕТ", lexeme.Value())
 	assert.Equal(t, 2, lexeme.StatementPosition())
 	assert.True(t, lexeme.IsLastInStatement())
-	assert.Equal(t, token, lexeme.Token())
+	assert.Equal(t, token.Start(), lexeme.Start())
+	assert.Equal(t, token.Finish(), lexeme.Finish())
 }
 
 func TestSingleStatement(t *testing.T) {
 	LexerTextCase{
 		"2 Привет мир #23 и здравствуй!",
 		[]lexemes.Lexeme{
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				0,
 				false,
 				tokens.NewToken(tokens.TOKEN_WD, 2, "Привет"),
 			),
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				1,
 				false,
 				tokens.NewToken(tokens.TOKEN_WD, 15, "мир"),
 			),
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				2,
 				false,
 				tokens.NewToken(tokens.TOKEN_WD, 26, "и"),
 			),
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				3,
 				true,
 				tokens.NewToken(tokens.TOKEN_WD, 29, "здравствуй"),
@@ -62,42 +63,42 @@ func TestMultiStatement(t *testing.T) {
 	LexerTextCase{
 		"2 Привет мир #23 и здравствуй! Ещё предложение. \n И еще.",
 		[]lexemes.Lexeme{
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				0,
 				false,
 				tokens.NewToken(tokens.TOKEN_WD, 2, "Привет"),
 			),
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				1,
 				false,
 				tokens.NewToken(tokens.TOKEN_WD, 15, "мир"),
 			),
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				2,
 				false,
 				tokens.NewToken(tokens.TOKEN_WD, 26, "и"),
 			),
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				3,
-				true,
+				false,
 				tokens.NewToken(tokens.TOKEN_WD, 29, "здравствуй"),
 			),
-			lexemes.NewLexeme(
-				0,
+			*lexemes.NewLexeme(
+				4,
 				false,
 				tokens.NewToken(tokens.TOKEN_WD, 51, "Ещё"),
 			),
-			lexemes.NewLexeme(
-				1,
+			*lexemes.NewLexeme(
+				5,
 				true,
 				tokens.NewToken(tokens.TOKEN_WD, 58, "предложение"),
 			),
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				0,
 				false,
 				tokens.NewToken(tokens.TOKEN_WD, 84, "И"),
 			),
-			lexemes.NewLexeme(
+			*lexemes.NewLexeme(
 				1,
 				true,
 				tokens.NewToken(tokens.TOKEN_WD, 87, "еще"),

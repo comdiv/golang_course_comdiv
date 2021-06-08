@@ -19,6 +19,8 @@ type tokenizerImpl struct {
 	wasWS         bool
 	wasNB         bool
 	si            int
+
+	token *Token
 }
 
 var _ ITokenizer = &tokenizerImpl{}
@@ -30,12 +32,13 @@ func newTokenizerImpl(in io.Reader) *tokenizerImpl {
 		reader:   bufio.NewReader(in),
 		position: -1,
 		buf:      make([]byte, 0, MAX_WORD_LENGTH),
+		token:    &Token{},
 	}
 }
 
-func (t *tokenizerImpl) Next() Token {
+func (t *tokenizerImpl) Next() *Token {
 	if t.eof {
-		return EofToken(t.position)
+		return t.token.SetEoF(t.position)
 	}
 	t.buf = t.buf[:0]
 	t.si = t.position
@@ -61,9 +64,14 @@ func (t *tokenizerImpl) Next() Token {
 		if err != nil {
 			t.eof = true
 			if len(t.buf) == 0 {
-				return EofToken(t.position)
+				return t.token.SetEoF(t.position)
 			}
 			return t.BuildToken()
+		}
+
+		// игнорируем простые апострофы и кавычки
+		if b == '\'' || b == '"' {
+			continue
 		}
 
 		if b >= '0' && b <= '9' {
@@ -91,7 +99,7 @@ func (t *tokenizerImpl) Next() Token {
 			continue
 		}
 
-		if b == '\n' || b == '\r' || b == '.' || b == '!' || b == '?' {
+		if b == '\n' || b == '\r' || b == '.' /* || b == '!' || b == '?' */ {
 			if len(t.buf) > 0 && !t.wasES {
 				t.next = b
 				return t.BuildToken()
@@ -101,7 +109,7 @@ func (t *tokenizerImpl) Next() Token {
 			continue
 		}
 
-		if b == ',' || b == ':' || b == '-' || b == ';' {
+		if b == ',' || b == ':' || b == '-' || b == ';' || b == '!' || b == '?' {
 			if len(t.buf) > 0 && !t.wasDM {
 				t.next = b
 				return t.BuildToken()
@@ -121,7 +129,8 @@ func (t *tokenizerImpl) Next() Token {
 	}
 }
 
-func (t *tokenizerImpl) BuildToken() Token {
+func (t *tokenizerImpl) BuildToken() *Token {
+	t.token.si = t.si
 	if t.overlapLength == 0 {
 		var tp TokenType
 		switch {
@@ -155,9 +164,15 @@ func (t *tokenizerImpl) BuildToken() Token {
 				tp = TOKEN_UK
 			}
 		}
-		return NewToken(tp, t.si, string(t.buf))
+		t.token.tp = tp
+		t.token.data = t.buf
+		t.token.ei = t.si + len(t.token.data) - 1
+		return t.token
 	}
-	return NewLargeToken(t.si, t.position)
+	t.token.ei = t.position
+	t.token.data = t.token.data[:0]
+	t.token.tp = TOKEN_LC
+	return t.token
 }
 
 func (t *tokenizerImpl) add(b byte) {

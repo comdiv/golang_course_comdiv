@@ -1,0 +1,26 @@
+?   	github.com/comdiv/golang_course_comdiv/internal/textanalyzer	[no test files]
+?   	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/app	[no test files]
+goos: windows
+goarch: amd64
+pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index
+cpu: AMD Ryzen 5 2600 Six-Core Processor            
+Benchmark_NonFilteredCollection-12    	     130	   9171022 ns/op	 1407562 B/op	  101883 allocs/op
+Benchmark_NonFilteredSearch-12        	 1665880	       710.3 ns/op	     136 B/op	       3 allocs/op
+Benchmark_PreFilteredCollection-12    	     194	   6157937 ns/op	 1064578 B/op	   63236 allocs/op
+Benchmark_PreFilteredSearch-12        	 2777905	       427.4 ns/op	     136 B/op	       3 allocs/op
+PASS
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index	7.454s
+goos: windows
+goarch: amd64
+pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes
+cpu: AMD Ryzen 5 2600 Six-Core Processor            
+BenchmarkLexer-12    	     298	   4018700 ns/op	  842110 B/op	   31629 allocs/op
+PASS
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes	1.685s
+goos: windows
+goarch: amd64
+pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens
+cpu: AMD Ryzen 5 2600 Six-Core Processor            
+BenchmarkTokenizer-12    	     547	   2185724 ns/op	    4432 B/op	       6 allocs/op
+PASS
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens	1.499s
