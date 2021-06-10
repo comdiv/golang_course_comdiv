@@ -18,6 +18,7 @@
 1. [Отчет по ООП улучшению сортировки)](./doc/fixed_sorted_oop_report.md)
 1. [Отчет по занятию №008 (степик)](./doc/lesson008_report.md)
 1. [Допзадача на построчное чтение с контролем длины строки](doc/scanlargefile.md)
+1. [Исследование пакетов JSON](./internal/investigatejson/README.md)
 
 
 
