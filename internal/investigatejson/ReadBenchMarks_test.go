@@ -18,7 +18,10 @@ func Benchmark_EncodingJson_Read_Bytes_ForSingle_Value(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		var items []StructToRead
-		json.Unmarshal(data, &items)
+		err = json.Unmarshal(data, &items)
+		if err != nil {
+			b.Fatal(err)
+		}
 		item1000 := items[999]
 		if item1000.Number != 1000 {
 			b.Fatal("Не тот номер", item1000.Number)
@@ -36,7 +39,10 @@ func Benchmark_JsonIter_Read_Bytes_ForSingle_Value(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		var items []StructToRead
-		json.Unmarshal(data, &items)
+		err = json.Unmarshal(data, &items)
+		if err != nil {
+			b.Fatal(err)
+		}
 		item1000 := items[999]
 		if item1000.Number != 1000 {
 			b.Fatal("Не тот номер", item1000.Number)
