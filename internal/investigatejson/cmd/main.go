@@ -1,9 +1,14 @@
 package main
 
 import (
-	"github.com/comdiv/golang_course_comdiv/internal/investigatejson"
+	"flag"
+	"github.com/comdiv/golang_course_comdiv/internal/investigatejson/tools"
 )
 
 func main() {
-	investigatejson.PrintIHaveDependencies()
+	generate := flag.Bool("generate", false, "Regenerate test file")
+	flag.Parse()
+	if *generate {
+		tools.GenerateTestJson()
+	}
 }
