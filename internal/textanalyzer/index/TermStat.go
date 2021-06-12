@@ -14,15 +14,43 @@ type TermStat struct {
 	lastCount  int
 }
 
+func (l *TermStat) SetValue(value string) {
+	l.value = value
+}
+
+func (l *TermStat) SetFirstPart(firstPart int) {
+	l.firstPart = firstPart
+}
+
+func (l *TermStat) SetFirstIndex(firstIndex int) {
+	l.firstIndex = firstIndex
+}
+
+func (l *TermStat) SetLen(len int) {
+	l.len = len
+}
+
+func (l *TermStat) SetCount(count int) {
+	l.count = count
+}
+
+func (l *TermStat) SetFirstCount(firstCount int) {
+	l.firstCount = firstCount
+}
+
+func (l *TermStat) SetLastCount(lastCount int) {
+	l.lastCount = lastCount
+}
 
 
-func NewLexemeStat(value string) *TermStat {
+
+func NewTermStat(value string) *TermStat {
 	return &TermStat{value: value, len: len([]rune(value)), firstIndex: -1, firstPart: -1}
 }
 
 func (l *TermStat) Merge(other *TermStat) *TermStat {
 	l.count += other.count
-	l.firstCount += other.count
+	l.firstCount += other.firstCount
 	l.lastCount += other.lastCount
 	if l.firstPart == -1 || l.firstPart > other.firstPart {
 		l.firstPart = other.firstPart

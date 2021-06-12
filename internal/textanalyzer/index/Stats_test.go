@@ -78,3 +78,60 @@ func TestTask_10_4_no_start_no_finish_json_json(t *testing.T) {
 		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
 	}, resultWords)
 }
+
+func TestTermStat_Merge(t *testing.T) {
+	t1 := index.NewTermStat("x")
+	t1.SetCount(10)
+	t1.SetFirstCount(2)
+	t1.SetLastCount(3)
+	t1.SetFirstPart(4)
+	t1.SetFirstIndex(45)
+
+	// этот перекроет индексы (так как глава меньше)
+	t2 := index.NewTermStat("x")
+	t2.SetCount(5)
+	t2.SetFirstCount(1)
+	t2.SetLastCount(1)
+	t2.SetFirstPart(3)
+	t2.SetFirstIndex(134)
+
+	// этот не перекроет индексы так как в более поздней главе
+	t3 := index.NewTermStat("x")
+	t3.SetCount(6)
+	t3.SetFirstCount(2)
+	t3.SetLastCount(2)
+	t3.SetFirstPart(5)
+	t3.SetFirstIndex(14)
+
+	// этот перекроет индекс так как более раннее определение
+	t4 := index.NewTermStat("x")
+	t4.SetCount(1)
+	t4.SetFirstCount(1)
+	t4.SetLastCount(1)
+	t4.SetFirstPart(3)
+	t4.SetFirstIndex(14)
+
+	// этот не перекроет индекс, в той же главе но индекс больше
+	t5 := index.NewTermStat("x")
+	t5.SetCount(1)
+	t5.SetFirstCount(1)
+	t5.SetLastCount(1)
+	t5.SetFirstPart(3)
+	t5.SetFirstIndex(33)
+
+	res := index.NewTermStat("x").Merge(t1).Merge(t2).Merge(t3).Merge(t4).Merge(t5)
+	assert.Equal(t, 3, res.FirstPart())
+	assert.Equal(t, 14, res.FirstIndex())
+	assert.Equal(t, 23, res.Count())
+	assert.Equal(t, 7, res.FirstCount())
+	assert.Equal(t, 8, res.LastCount())
+
+	col1 := index.NewTermStatCollection()
+	col1.Terms()["x"] = index.NewTermStat("x").Merge(t1).Merge(t2)
+	col2 := index.NewTermStatCollection()
+	col2.Terms()["x"] = index.NewTermStat("x").Merge(t3).Merge(t4).Merge(t5)
+
+	col1.Merge(col2)
+
+	assert.Equal(t, res, col1.Terms()["x"])
+}

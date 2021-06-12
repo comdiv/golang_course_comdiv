@@ -25,7 +25,7 @@ func (c *TermStatCollection) Merge(other *TermStatCollection) *TermStatCollectio
 	for _, v := range other.Terms() {
 		my, ok := c.Terms()[v.Value()]
 		if !ok {
-			my = NewLexemeStat(v.value)
+			my = NewTermStat(v.value)
 			c.Terms()[v.Value()] = my
 		}
 		my.Merge(v)
@@ -76,7 +76,7 @@ func (c *TermStatCollection) Add(lexeme *lexemes.Lexeme, part int, idx int) {
 		s.Register(lexeme, part, idx)
 		return
 	}
-	s = NewLexemeStat(lexeme.Value())
+	s = NewTermStat(lexeme.Value())
 	s.Register(lexeme, part, idx)
 	c.docOrderIndex = append(c.docOrderIndex, s)
 	c.terms[lexeme.Value()] = s
