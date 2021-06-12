@@ -22,7 +22,7 @@ func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
 		useFirst: flag.Bool("first", false, "Include first words of statements"),
 		useLast:  flag.Bool("last", false, "Include last words of statements"),
 		nonfreq:  flag.Bool("nonfreq", false, "Less frequent, not more frequent"),
-		json:     flag.Bool("json", false, "Less frequent, not more frequent"),
+		json:     flag.Bool("json", false, "Treat file as JSON with standard schema, not as plain"),
 	}
 }
 
