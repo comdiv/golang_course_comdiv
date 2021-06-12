@@ -8,7 +8,7 @@ import (
 )
 
 func TestCollectStats(t *testing.T) {
-	stats := index.CollectStatsS("Тут несколько Одинаковых термов именно тут и именно Термов!", nil)
+	stats := index.CollectStatsS("Тут несколько Одинаковых термов именно тут и именно Термов!", nil, 0)
 	assert.Equal(t, 0, stats.Terms()["ТУТ"].FirstIndex())
 	assert.Equal(t, 2, stats.Terms()["ТУТ"].Count())
 	assert.Equal(t, 1, stats.Terms()["ТУТ"].FirstCount())
@@ -43,7 +43,27 @@ func TestTask_10_4_no_start_no_finish(t *testing.T) {
 	// испходные условия - слова только из середины фраз и длина не менее 4 символов
 	query := index.NewTermFilterArgs(4, false, false, false)
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
-	stats := index.CollectStats(testdata_test.TestDataReader(), query)
+	stats := index.CollectStats(testdata_test.TestDataReader(), query, 0)
+
+	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
+	result := stats.Find(10, query)
+
+	resultWords := make([]string, 0, len(result))
+
+	for _, s := range result {
+		resultWords = append(resultWords, s.Value())
+	}
+
+	assert.Equal(t, []string{
+		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
+	}, resultWords)
+}
+
+func TestTask_10_4_no_start_no_finish_json_json(t *testing.T) {
+	// испходные условия - слова только из середины фраз и длина не менее 4 символов
+	query := index.NewTermFilterArgs(4, false, false, false)
+	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
+	stats := index.CollectStatsFromJson(testdata_test.TestDataJsonReader(), query)
 
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
 	result := stats.Find(10, query)

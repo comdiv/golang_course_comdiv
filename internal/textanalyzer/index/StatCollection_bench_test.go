@@ -9,7 +9,17 @@ import (
 func Benchmark_NonFilteredCollection(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats = index.CollectStats(testdata_test.TestDataReader(), nil)
+		stats = index.CollectStats(testdata_test.TestDataReader(), nil,0)
+		if stats == nil {
+			b.Fatal("null stats")
+		}
+	}
+}
+
+func Benchmark_NonFilteredCollectionJson(b *testing.B) {
+	var stats *index.TermStatCollection
+	for i := 0; i < b.N; i++ {
+		stats = index.CollectStatsFromJson(testdata_test.TestDataJsonReader(), nil)
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -17,7 +27,7 @@ func Benchmark_NonFilteredCollection(b *testing.B) {
 }
 
 func Benchmark_NonFilteredSearch(b *testing.B) {
-	stats := index.CollectStats(testdata_test.TestDataReader(), nil)
+	stats := index.CollectStats(testdata_test.TestDataReader(), nil, 0)
 	var result []*index.TermStat
 	query := index.NewTermFilterArgs(4, false, false, false)
 	for i := 0; i < b.N; i++ {
@@ -32,7 +42,7 @@ func Benchmark_PreFilteredCollection(b *testing.B) {
 	query := index.NewTermFilterArgs(10, false, false, false)
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats = index.CollectStats(testdata_test.TestDataReader(), query)
+		stats = index.CollectStats(testdata_test.TestDataReader(), query, 0)
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -41,7 +51,7 @@ func Benchmark_PreFilteredCollection(b *testing.B) {
 
 func Benchmark_PreFilteredSearch(b *testing.B) {
 	query := index.NewTermFilterArgs(10, false, false, false)
-	stats := index.CollectStats(testdata_test.TestDataReader(), query)
+	stats := index.CollectStats(testdata_test.TestDataReader(), query, 0)
 	var result []*index.TermStat
 
 	for i := 0; i < b.N; i++ {

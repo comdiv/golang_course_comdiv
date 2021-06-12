@@ -1,8 +1,11 @@
 package index
 
 import (
+	"fmt"
+	"github.com/buger/jsonparser"
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes"
 	"io"
+	"io/ioutil"
 	"sort"
 	"strings"
 )
@@ -16,6 +19,18 @@ type TermStatCollection struct {
 
 func (c *TermStatCollection) Terms() map[string]*TermStat {
 	return c.terms
+}
+
+func (c *TermStatCollection) Merge(other *TermStatCollection) *TermStatCollection {
+	for _, v := range other.Terms() {
+		my, ok := c.Terms()[v.Value()]
+		if !ok {
+			my = NewLexemeStat(v.value)
+			c.Terms()[v.Value()] = my
+		}
+		my.Merge(v)
+	}
+	return c
 }
 
 func (c *TermStatCollection) RebuildFrequencyIndex() {
@@ -49,7 +64,7 @@ func NewTermStatCollectionF(filter *TermFilter) *TermStatCollection {
 	}
 }
 
-func (c *TermStatCollection) Add(lexeme *lexemes.Lexeme, idx int) {
+func (c *TermStatCollection) Add(lexeme *lexemes.Lexeme, part int, idx int) {
 	if !c.filter.MatchesLexeme(lexeme) {
 		return
 	}
@@ -58,18 +73,59 @@ func (c *TermStatCollection) Add(lexeme *lexemes.Lexeme, idx int) {
 	value := lexeme.Value()
 	s, ok := c.terms[value]
 	if ok {
-		s.Register(lexeme, idx)
+		s.Register(lexeme, part, idx)
 		return
 	}
 	s = NewLexemeStat(lexeme.Value())
-	s.Register(lexeme, idx)
+	s.Register(lexeme, part, idx)
 	c.docOrderIndex = append(c.docOrderIndex, s)
 	c.terms[lexeme.Value()] = s
 }
-func CollectStatsS(text string, filter *TermFilter) *TermStatCollection {
-	return CollectStats(strings.NewReader(text), filter)
+func CollectStatsFromJsonS(text string, filter *TermFilter) *TermStatCollection {
+	return CollectStatsFromJson(strings.NewReader(text), filter)
 }
-func CollectStats(reader io.Reader, filter *TermFilter) *TermStatCollection {
+
+func CollectStatsFromJson(reader io.Reader, filter *TermFilter) *TermStatCollection {
+	result := NewTermStatCollectionF(filter)
+	data, err := ioutil.ReadAll(reader)
+	if err != nil {
+		panic(fmt.Errorf("cannot read bytes from reader %v", err))
+	}
+	_, err = jsonparser.ArrayEach(data, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
+		if err != nil {
+			panic(fmt.Errorf("error in json %v", err))
+		}
+		part, err := jsonparser.GetInt(value, "number")
+		if err != nil {
+			panic(fmt.Errorf("error get number from json %v", err))
+		}
+		text, err := jsonparser.GetString(value, "text")
+		if err != nil {
+			panic(fmt.Errorf("error get text from json %v", err))
+		}
+		lexer := lexemes.NewS(text)
+		idx := -1
+		for {
+			idx++
+			lexeme := lexer.Next()
+			if lexeme.IsEof() {
+				break
+			}
+			result.Add(lexeme, int(part), idx)
+		}
+	})
+	if err!=nil {
+		panic(fmt.Errorf("general error in json %v", err))
+	}
+	result.RebuildFrequencyIndex()
+	return result
+}
+
+func CollectStatsS(text string, filter *TermFilter, part int) *TermStatCollection {
+	return CollectStats(strings.NewReader(text), filter, part)
+}
+
+func CollectStats(reader io.Reader, filter *TermFilter , part int) *TermStatCollection {
 	stats := NewTermStatCollectionF(filter)
 	lexer := lexemes.NewR(reader)
 	idx := -1
@@ -79,7 +135,7 @@ func CollectStats(reader io.Reader, filter *TermFilter) *TermStatCollection {
 		if lexeme.IsEof() {
 			break
 		}
-		stats.Add(lexeme, idx)
+		stats.Add(lexeme, part, idx)
 	}
 	stats.RebuildFrequencyIndex()
 	return stats
@@ -117,7 +173,7 @@ func (c *TermStatCollection) Find(size int, filter *TermFilter) []*TermStat {
 		}
 	}
 
-	sort.Slice(result, func(i, j int) bool { return result[i].FirstIndex() < result[j].FirstIndex() })
+	sort.Slice(result, func(i, j int) bool { return result[i].FullIndex() < result[j].FullIndex() })
 
 	return result
 }

@@ -18,7 +18,12 @@ func main() {
 			ReverseFreq:  args.Nonfreq(),
 		},
 	)
-	stats := index.CollectStats(os.Stdin, filter)
+	var stats *index.TermStatCollection
+	if args.Json() {
+		stats = index.CollectStatsFromJson(os.Stdin, filter)
+	} else {
+		stats = index.CollectStats(os.Stdin, filter, 0)
+	}
 	result := stats.Find(args.Size(), filter)
 	for _, v := range result {
 		fmt.Printf("%v\n", *v)
