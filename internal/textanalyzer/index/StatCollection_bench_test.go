@@ -26,6 +26,16 @@ func Benchmark_NonFilteredCollectionJson(b *testing.B) {
 	}
 }
 
+func Benchmark_NonFilteredCollectionJsonParallel(b *testing.B) {
+	var stats *index.TermStatCollection
+	for i := 0; i < b.N; i++ {
+		stats = index.CollectFromReader(testdata_test.TestDataJsonReader(), nil, 0, index.MODE_PARALLEL_JSON)
+		if stats == nil {
+			b.Fatal("null stats")
+		}
+	}
+}
+
 func Benchmark_NonFilteredSearch(b *testing.B) {
 	stats := index.CollectFromReader(testdata_test.TestDataReader(), nil, 0, index.MODE_PLAIN)
 	var result []*index.TermStat

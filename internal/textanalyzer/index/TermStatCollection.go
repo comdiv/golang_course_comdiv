@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"sort"
 	"strings"
+	"sync"
 )
 
 type TermStatCollection struct {
@@ -20,8 +21,9 @@ type TermStatCollection struct {
 type ReadMode int
 
 const (
-	MODE_PLAIN = ReadMode(1)
-	MODE_JSON  = ReadMode(2)
+	MODE_PLAIN         = ReadMode(1)
+	MODE_JSON          = ReadMode(2)
+	MODE_PARALLEL_JSON = ReadMode(4)
 )
 
 func (c *TermStatCollection) Terms() map[string]*TermStat {
@@ -41,8 +43,18 @@ func (c *TermStatCollection) Merge(other *TermStatCollection) *TermStatCollectio
 }
 
 func (c *TermStatCollection) RebuildFrequencyIndex() {
-	c.freqOrderIndex = make([]*TermStat, 0, len(c.terms))
-	c.freqOrderIndex = append(c.freqOrderIndex, c.docOrderIndex...)
+
+	if len(c.docOrderIndex)==0 { // it will be not sorted after merge
+		c.freqOrderIndex = make([]*TermStat, len(c.terms))
+		idx := 0
+		for i := range c.terms {
+			c.freqOrderIndex[idx] = c.terms[i]
+			idx++
+		}
+	}else {
+		c.freqOrderIndex = make([]*TermStat, 0, len(c.terms))
+		c.freqOrderIndex = append(c.freqOrderIndex, c.docOrderIndex...)
+	}
 	sort.SliceStable(c.freqOrderIndex, func(i, j int) bool {
 		return c.freqOrderIndex[i].Count() > c.freqOrderIndex[j].Count()
 	})
@@ -89,16 +101,77 @@ func (c *TermStatCollection) Add(lexeme *lexemes.Lexeme, part int, idx int) {
 	c.terms[lexeme.Value()] = s
 }
 
-func CollectFromString(text string, filter *TermFilter, part int, mode ReadMode ) * TermStatCollection {
+func CollectFromString(text string, filter *TermFilter, part int, mode ReadMode) *TermStatCollection {
 	return CollectFromReader(strings.NewReader(text), filter, part, mode)
 }
 
 func CollectFromReader(reader io.Reader, filter *TermFilter, part int, mode ReadMode) *TermStatCollection {
-	if mode == MODE_PLAIN {
+	switch mode {
+	case MODE_PLAIN:
 		return collectStats(reader, filter, part)
-	}else{
+	case MODE_JSON:
 		return collectStatsFromJson(reader, filter)
+	case MODE_PARALLEL_JSON:
+		return collectStatsFromJsonAsync(reader, filter)
+	default:
+		return collectStats(reader, filter, part)
 	}
+}
+
+func collectStatsFromJsonAsync(reader io.Reader, filter *TermFilter) *TermStatCollection {
+	result := NewTermStatCollectionF(filter)
+	subCollections := make(chan *TermStatCollection, 20)
+	collected := make(chan struct{})
+	go func(){
+		defer close(collected)
+		for c := range subCollections {
+			result = result.Merge(c)
+		}
+		collected <- struct{}{}
+	}()
+
+	wg := new(sync.WaitGroup)
+	data, err := ioutil.ReadAll(reader)
+	if err != nil {
+		panic(fmt.Errorf("cannot read bytes from reader %v", err))
+	}
+	_, err = jsonparser.ArrayEach(data, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
+		if err != nil {
+			panic(fmt.Errorf("error in json %v", err))
+		}
+		part, err := jsonparser.GetInt(value, "number")
+		if err != nil {
+			panic(fmt.Errorf("error get number from json %v", err))
+		}
+		text, err := jsonparser.GetString(value, "text")
+		if err != nil {
+			panic(fmt.Errorf("error get text from json %v", err))
+		}
+		wg.Add(1)
+		go func(part int64, text string) {
+			defer wg.Done()
+			subResult:= NewTermStatCollectionF(filter)
+			lexer := lexemes.NewS(text)
+			idx := -1
+			for {
+				idx++
+				lexeme := lexer.Next()
+				if lexeme.IsEof() {
+					break
+				}
+				subResult.Add(lexeme, int(part), idx)
+			}
+			subCollections<-subResult
+		}(part, text)
+	})
+	wg.Wait()
+	close(subCollections)
+	<-collected
+	if err != nil {
+		panic(fmt.Errorf("general error in json %v", err))
+	}
+	result.RebuildFrequencyIndex()
+	return result
 }
 
 func collectStatsFromJson(reader io.Reader, filter *TermFilter) *TermStatCollection {
@@ -130,14 +203,14 @@ func collectStatsFromJson(reader io.Reader, filter *TermFilter) *TermStatCollect
 			result.Add(lexeme, int(part), idx)
 		}
 	})
-	if err!=nil {
+	if err != nil {
 		panic(fmt.Errorf("general error in json %v", err))
 	}
 	result.RebuildFrequencyIndex()
 	return result
 }
 
-func collectStats(reader io.Reader, filter *TermFilter , part int) *TermStatCollection {
+func collectStats(reader io.Reader, filter *TermFilter, part int) *TermStatCollection {
 	stats := NewTermStatCollectionF(filter)
 	lexer := lexemes.NewR(reader)
 	idx := -1

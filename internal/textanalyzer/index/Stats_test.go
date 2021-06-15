@@ -64,7 +64,7 @@ func TestTask_10_4_no_start_no_finish(t *testing.T) {
 	}, resultWords)
 }
 
-func TestTask_10_4_no_start_no_finish_json_json(t *testing.T) {
+func TestTask_10_4_no_start_no_finish_json_sync(t *testing.T) {
 	// испходные условия - слова только из середины фраз и длина не менее 4 символов
 	query := index.NewTermFilter(index.TermFilterOptions{
 		MinLen:       4,
@@ -74,6 +74,31 @@ func TestTask_10_4_no_start_no_finish_json_json(t *testing.T) {
 	})
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
 	stats := index.CollectFromReader(testdata_test.TestDataJsonReader(), query, 0, index.MODE_JSON)
+
+	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
+	result := stats.Find(10, query)
+
+	resultWords := make([]string, 0, len(result))
+
+	for _, s := range result {
+		resultWords = append(resultWords, s.Value())
+	}
+
+	assert.Equal(t, []string{
+		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
+	}, resultWords)
+}
+
+func TestTask_10_4_no_start_no_finish_json_async(t *testing.T) {
+	// испходные условия - слова только из середины фраз и длина не менее 4 символов
+	query := index.NewTermFilter(index.TermFilterOptions{
+		MinLen:       4,
+		IncludeFirst: false,
+		IncludeLast:  false,
+		ReverseFreq:  false,
+	})
+	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
+	stats := index.CollectFromReader(testdata_test.TestDataJsonReader(), query, 0, index.MODE_PARALLEL_JSON)
 
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
 	result := stats.Find(10, query)
