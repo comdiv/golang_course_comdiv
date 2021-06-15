@@ -9,7 +9,7 @@ import (
 func Benchmark_NonFilteredCollection(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats = index.CollectStats(testdata_test.TestDataReader(), nil,0)
+		stats = index.CollectFromReader(testdata_test.TestDataReader(), nil,0, index.MODE_PLAIN)
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -19,7 +19,7 @@ func Benchmark_NonFilteredCollection(b *testing.B) {
 func Benchmark_NonFilteredCollectionJson(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats = index.CollectStatsFromJson(testdata_test.TestDataJsonReader(), nil)
+		stats = index.CollectFromReader(testdata_test.TestDataJsonReader(), nil, 0, index.MODE_JSON)
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -27,9 +27,14 @@ func Benchmark_NonFilteredCollectionJson(b *testing.B) {
 }
 
 func Benchmark_NonFilteredSearch(b *testing.B) {
-	stats := index.CollectStats(testdata_test.TestDataReader(), nil, 0)
+	stats := index.CollectFromReader(testdata_test.TestDataReader(), nil, 0, index.MODE_PLAIN)
 	var result []*index.TermStat
-	query := index.NewTermFilterArgs(4, false, false, false)
+	query := index.NewTermFilter(index.TermFilterOptions{
+		MinLen:       4,
+		IncludeFirst: false,
+		IncludeLast:  false,
+		ReverseFreq:  false,
+	})
 	for i := 0; i < b.N; i++ {
 		result = stats.Find(10, query)
 		if len(result) != 10 {
@@ -39,10 +44,15 @@ func Benchmark_NonFilteredSearch(b *testing.B) {
 }
 
 func Benchmark_PreFilteredCollection(b *testing.B) {
-	query := index.NewTermFilterArgs(10, false, false, false)
+	query := index.NewTermFilter(index.TermFilterOptions{
+		MinLen:       10,
+		IncludeFirst: false,
+		IncludeLast:  false,
+		ReverseFreq:  false,
+	})
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats = index.CollectStats(testdata_test.TestDataReader(), query, 0)
+		stats = index.CollectFromReader(testdata_test.TestDataReader(), query, 0, index.MODE_PLAIN)
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -50,8 +60,13 @@ func Benchmark_PreFilteredCollection(b *testing.B) {
 }
 
 func Benchmark_PreFilteredSearch(b *testing.B) {
-	query := index.NewTermFilterArgs(10, false, false, false)
-	stats := index.CollectStats(testdata_test.TestDataReader(), query, 0)
+	query := index.NewTermFilter(index.TermFilterOptions{
+		MinLen:       10,
+		IncludeFirst: false,
+		IncludeLast:  false,
+		ReverseFreq:  false,
+	})
+	stats := index.CollectFromReader(testdata_test.TestDataReader(), query, 0, index.MODE_PLAIN)
 	var result []*index.TermStat
 
 	for i := 0; i < b.N; i++ {

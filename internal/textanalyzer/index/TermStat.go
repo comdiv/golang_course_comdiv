@@ -14,35 +14,28 @@ type TermStat struct {
 	lastCount  int
 }
 
-func (l *TermStat) SetValue(value string) {
-	l.value = value
-}
-
-func (l *TermStat) SetFirstPart(firstPart int) {
-	l.firstPart = firstPart
-}
-
-func (l *TermStat) SetFirstIndex(firstIndex int) {
-	l.firstIndex = firstIndex
-}
-
-func (l *TermStat) SetLen(len int) {
-	l.len = len
-}
-
-func (l *TermStat) SetCount(count int) {
-	l.count = count
-}
-
-func (l *TermStat) SetFirstCount(firstCount int) {
-	l.firstCount = firstCount
-}
-
-func (l *TermStat) SetLastCount(lastCount int) {
-	l.lastCount = lastCount
+type TermStatConfig struct {
+	Value string
+	FirstPart int
+	FirstIndex int
+	Count int
+	FirstCount int
+	LastCount int
 }
 
 
+func NewTermStatCustom(config TermStatConfig) *TermStat {
+	return &TermStat{
+		value : config.Value,
+		firstPart : config.FirstPart,
+		firstIndex : config.FirstIndex,
+		len :  len([]rune(config.Value)),
+		count : config.Count,
+		firstCount : config.FirstCount,
+		lastCount : config.LastCount,
+
+	}
+}
 
 func NewTermStat(value string) *TermStat {
 	return &TermStat{value: value, len: len([]rune(value)), firstIndex: -1, firstPart: -1}
@@ -105,6 +98,8 @@ func (l *TermStat) FirstPart() int {
 	return l.firstPart
 }
 
-func (l *TermStat) FullIndex() int64 {
+// GetSortIndex - формирует синтетический порядковый номер для сквозного упорядочения
+// число само по себе не является обозначение позиции
+func (l *TermStat) GetSortIndex() int64 {
 	return int64(l.firstPart) * 10000000000000 + int64(l.firstIndex)
 }

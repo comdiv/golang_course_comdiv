@@ -17,18 +17,25 @@ type TermStatCollection struct {
 	filter         *TermFilter ``
 }
 
+type ReadMode int
+
+const (
+	MODE_PLAIN = ReadMode(1)
+	MODE_JSON  = ReadMode(2)
+)
+
 func (c *TermStatCollection) Terms() map[string]*TermStat {
 	return c.terms
 }
 
 func (c *TermStatCollection) Merge(other *TermStatCollection) *TermStatCollection {
-	for _, v := range other.Terms() {
-		my, ok := c.Terms()[v.Value()]
+	for i := range other.Terms() {
+		my, ok := c.Terms()[i]
 		if !ok {
-			my = NewTermStat(v.value)
-			c.Terms()[v.Value()] = my
+			my = NewTermStat(i)
+			c.Terms()[i] = my
 		}
-		my.Merge(v)
+		my.Merge(other.Terms()[i])
 	}
 	return c
 }
@@ -81,11 +88,20 @@ func (c *TermStatCollection) Add(lexeme *lexemes.Lexeme, part int, idx int) {
 	c.docOrderIndex = append(c.docOrderIndex, s)
 	c.terms[lexeme.Value()] = s
 }
-func CollectStatsFromJsonS(text string, filter *TermFilter) *TermStatCollection {
-	return CollectStatsFromJson(strings.NewReader(text), filter)
+
+func CollectFromString(text string, filter *TermFilter, part int, mode ReadMode ) * TermStatCollection {
+	return CollectFromReader(strings.NewReader(text), filter, part, mode)
 }
 
-func CollectStatsFromJson(reader io.Reader, filter *TermFilter) *TermStatCollection {
+func CollectFromReader(reader io.Reader, filter *TermFilter, part int, mode ReadMode) *TermStatCollection {
+	if mode == MODE_PLAIN {
+		return collectStats(reader, filter, part)
+	}else{
+		return collectStatsFromJson(reader, filter)
+	}
+}
+
+func collectStatsFromJson(reader io.Reader, filter *TermFilter) *TermStatCollection {
 	result := NewTermStatCollectionF(filter)
 	data, err := ioutil.ReadAll(reader)
 	if err != nil {
@@ -121,11 +137,7 @@ func CollectStatsFromJson(reader io.Reader, filter *TermFilter) *TermStatCollect
 	return result
 }
 
-func CollectStatsS(text string, filter *TermFilter, part int) *TermStatCollection {
-	return CollectStats(strings.NewReader(text), filter, part)
-}
-
-func CollectStats(reader io.Reader, filter *TermFilter , part int) *TermStatCollection {
+func collectStats(reader io.Reader, filter *TermFilter , part int) *TermStatCollection {
 	stats := NewTermStatCollectionF(filter)
 	lexer := lexemes.NewR(reader)
 	idx := -1
@@ -173,7 +185,7 @@ func (c *TermStatCollection) Find(size int, filter *TermFilter) []*TermStat {
 		}
 	}
 
-	sort.Slice(result, func(i, j int) bool { return result[i].FullIndex() < result[j].FullIndex() })
+	sort.Slice(result, func(i, j int) bool { return result[i].GetSortIndex() < result[j].GetSortIndex() })
 
 	return result
 }
