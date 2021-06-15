@@ -22,7 +22,7 @@ func main() {
 	if args.Json() {
 		mode = index.MODE_JSON
 	} else {
-		mode = index.MODE_PLAIN
+		mode = index.MODE_PARALLEL_JSON
 	}
 	stats := index.CollectFromReader(os.Stdin, filter, 0, mode)
 	result := stats.Find(args.Size(), filter)
