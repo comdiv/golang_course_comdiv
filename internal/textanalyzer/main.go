@@ -24,7 +24,7 @@ func main() {
 	} else {
 		mode = index.MODE_PARALLEL_JSON
 	}
-	stats := index.CollectFromReader(os.Stdin, filter, 0, mode)
+	stats,_ := index.CollectFromReader(os.Stdin, index.CollectConfig{Filter:filter, Mode:mode})
 	result := stats.Find(args.Size(), filter)
 	for _, v := range result {
 		fmt.Printf("%v\n", *v)
