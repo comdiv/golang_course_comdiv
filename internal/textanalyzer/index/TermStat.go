@@ -1,21 +1,60 @@
 package index
 
-import "github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes"
+import (
+	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes"
+)
 
 type TermStat struct {
-	term       string
-	fstIndex   int
+	value      string
+	firstPart  int
+	firstIndex int
 	len        int
 	count      int
 	firstCount int
 	lastCount  int
 }
 
-func NewLexemeStat(value string) *TermStat {
-	return &TermStat{term: value, len: len([]rune(value)), fstIndex: -1}
+type TermStatConfig struct {
+	Value string
+	FirstPart int
+	FirstIndex int
+	Count int
+	FirstCount int
+	LastCount int
 }
 
-func (l *TermStat) Register(lexeme *lexemes.Lexeme, idx int) {
+
+func NewTermStatCustom(config TermStatConfig) *TermStat {
+	return &TermStat{
+		value : config.Value,
+		firstPart : config.FirstPart,
+		firstIndex : config.FirstIndex,
+		len :  len([]rune(config.Value)),
+		count : config.Count,
+		firstCount : config.FirstCount,
+		lastCount : config.LastCount,
+
+	}
+}
+
+func NewTermStat(value string) *TermStat {
+	return &TermStat{value: value, len: len([]rune(value)), firstIndex: -1, firstPart: -1}
+}
+
+func (l *TermStat) Merge(other *TermStat) *TermStat {
+	l.count += other.count
+	l.firstCount += other.firstCount
+	l.lastCount += other.lastCount
+	if l.firstPart == -1 || l.firstPart > other.firstPart {
+		l.firstPart = other.firstPart
+		l.firstIndex = other.firstIndex
+	} else if l.firstPart == other.firstPart && l.firstIndex > other.firstIndex {
+		l.firstIndex = other.firstIndex
+	}
+	return l
+}
+
+func (l *TermStat) Register(lexeme *lexemes.Lexeme, part int, idx int) {
 	l.count++
 	if lexeme.StatementPosition() == 0 {
 		l.firstCount++
@@ -23,17 +62,21 @@ func (l *TermStat) Register(lexeme *lexemes.Lexeme, idx int) {
 	if lexeme.IsLastInStatement() {
 		l.lastCount++
 	}
-	if l.fstIndex == -1 {
-		l.fstIndex = idx
+	// готовимся к мержингу коллекций - выставляем наилучший первый индекс
+	if l.firstPart == -1 || l.firstPart > part {
+		l.firstPart = part
+		l.firstIndex = idx
+	} else if l.firstPart == part && l.firstIndex > idx {
+		l.firstIndex = idx
 	}
 }
 
 func (l *TermStat) Value() string {
-	return l.term
+	return l.value
 }
 
 func (l *TermStat) FirstIndex() int {
-	return l.fstIndex
+	return l.firstIndex
 }
 
 func (l *TermStat) Len() int {
@@ -50,4 +93,13 @@ func (l *TermStat) FirstCount() int {
 
 func (l *TermStat) LastCount() int {
 	return l.lastCount
+}
+func (l *TermStat) FirstPart() int {
+	return l.firstPart
+}
+
+// GetSortIndex - формирует синтетический порядковый номер для сквозного упорядочения
+// число само по себе не является обозначение позиции
+func (l *TermStat) GetSortIndex() int64 {
+	return int64(l.firstPart) * 10000000000000 + int64(l.firstIndex)
 }

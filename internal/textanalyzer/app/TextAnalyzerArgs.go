@@ -8,6 +8,11 @@ type TextAnalyzerArgs struct {
 	useFirst *bool
 	useLast  *bool
 	nonfreq  *bool
+	json     *bool
+}
+
+func (t *TextAnalyzerArgs) Json() bool {
+	return *t.json
 }
 
 func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
@@ -17,6 +22,7 @@ func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
 		useFirst: flag.Bool("first", false, "Include first words of statements"),
 		useLast:  flag.Bool("last", false, "Include last words of statements"),
 		nonfreq:  flag.Bool("nonfreq", false, "Less frequent, not more frequent"),
+		json:     flag.Bool("json", false, "Treat file as JSON with standard schema, not as plain"),
 	}
 }
 
