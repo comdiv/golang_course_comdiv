@@ -26,25 +26,6 @@ func Benchmark_NonFilteredCollectionJson(b *testing.B) {
 	}
 }
 
-func Benchmark_NonFilteredCollectionJsonParallel_8(b *testing.B) {
-	var stats *index.TermStatCollection
-	for i := 0; i < b.N; i++ {
-		stats, _  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON})
-		if stats == nil {
-			b.Fatal("null stats")
-		}
-	}
-}
-func Benchmark_NonFilteredCollectionJsonParallel_4(b *testing.B) {
-	var stats *index.TermStatCollection
-	for i := 0; i < b.N; i++ {
-		stats, _  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 4})
-		if stats == nil {
-			b.Fatal("null stats")
-		}
-	}
-}
-
 func Benchmark_NonFilteredCollectionJsonParallel_2(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
@@ -55,10 +36,52 @@ func Benchmark_NonFilteredCollectionJsonParallel_2(b *testing.B) {
 	}
 }
 
+func Benchmark_NonFilteredCollectionJsonParallel_4(b *testing.B) {
+	var stats *index.TermStatCollection
+	for i := 0; i < b.N; i++ {
+		stats, _  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 4})
+		if stats == nil {
+			b.Fatal("null stats")
+		}
+	}
+}
+
+
+func Benchmark_NonFilteredCollectionJsonParallel_8(b *testing.B) {
+	var stats *index.TermStatCollection
+	for i := 0; i < b.N; i++ {
+		stats, _  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON})
+		if stats == nil {
+			b.Fatal("null stats")
+		}
+	}
+}
+
 func Benchmark_NonFilteredCollectionJsonParallel_16(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
 		stats, _  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 16})
+		if stats == nil {
+			b.Fatal("null stats")
+		}
+	}
+}
+
+
+func Benchmark_NonFilteredCollectionJsonParallel_8_large(b *testing.B) {
+	var stats *index.TermStatCollection
+	for i := 0; i < b.N; i++ {
+		stats, _  = index.CollectFromReader(testdata_test.TestDataLargeJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON})
+		if stats == nil {
+			b.Fatal("null stats")
+		}
+	}
+}
+
+func Benchmark_NonFilteredCollectionJsonParallel_16_large(b *testing.B) {
+	var stats *index.TermStatCollection
+	for i := 0; i < b.N; i++ {
+		stats, _  = index.CollectFromReader(testdata_test.TestDataLargeJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 16})
 		if stats == nil {
 			b.Fatal("null stats")
 		}

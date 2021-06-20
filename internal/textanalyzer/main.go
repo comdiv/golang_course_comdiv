@@ -20,9 +20,9 @@ func main() {
 	)
 	var mode index.ReadMode
 	if args.Json() {
-		mode = index.MODE_JSON
-	} else {
 		mode = index.MODE_PARALLEL_JSON
+	} else {
+		mode = index.MODE_PLAIN
 	}
 	stats,_ := index.CollectFromReader(os.Stdin, index.CollectConfig{Filter:filter, Mode:mode})
 	result := stats.Find(args.Size(), filter)

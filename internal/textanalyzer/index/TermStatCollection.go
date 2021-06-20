@@ -211,6 +211,9 @@ func collectStatsFromJsonAsync(
 	routinePoolController := make(chan struct{}, workers)
 	defer close(routinePoolController)
 	for e := range input {
+		if processError != nil {
+			break
+		}
 		routinePoolController <- struct{}{}
 		wg.Add(1)
 		go func(jtp *JsonTextPart) {
