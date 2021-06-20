@@ -4,30 +4,30 @@ goos: windows
 goarch: amd64
 pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index
 cpu: AMD Ryzen 5 2600 Six-Core Processor            
-Benchmark_NonFilteredCollection-12                         	     199	   5943799 ns/op	 1412903 B/op	   51751 allocs/op
-Benchmark_NonFilteredCollectionJson-12                     	     207	   5804306 ns/op	 1363279 B/op	   49247 allocs/op
-Benchmark_NonFilteredCollectionJsonParallel_2-12           	     259	   4638409 ns/op	 2784009 B/op	   57458 allocs/op
-Benchmark_NonFilteredCollectionJsonParallel_4-12           	     351	   3372329 ns/op	 2784186 B/op	   57459 allocs/op
-Benchmark_NonFilteredCollectionJsonParallel_8-12           	     388	   3066521 ns/op	 2784111 B/op	   57459 allocs/op
-Benchmark_NonFilteredCollectionJsonParallel_16-12          	     384	   3147141 ns/op	 2784044 B/op	   57459 allocs/op
-Benchmark_NonFilteredCollectionJsonParallel_8_large-12     	      30	  40766660 ns/op	51365618 B/op	 1111766 allocs/op
-Benchmark_NonFilteredCollectionJsonParallel_16_large-12    	      31	  39040784 ns/op	51365490 B/op	 1111765 allocs/op
-Benchmark_NonFilteredSearch-12                             	 1749566	       679.4 ns/op	     136 B/op	       3 allocs/op
-Benchmark_PreFilteredCollection-12                         	     256	   4689832 ns/op	 1253523 B/op	   50129 allocs/op
-Benchmark_PreFilteredSearch-12                             	 2490196	       478.6 ns/op	     136 B/op	       3 allocs/op
+Benchmark_NonFilteredCollection-12                         	     228	   5233784 ns/op	  422931 B/op	   54995 allocs/op
+Benchmark_NonFilteredCollectionJson-12                     	     231	   5134733 ns/op	  419820 B/op	   53078 allocs/op
+Benchmark_NonFilteredCollectionJsonParallel_2-12           	     297	   4032981 ns/op	 1795193 B/op	   60689 allocs/op
+Benchmark_NonFilteredCollectionJsonParallel_4-12           	     405	   2928052 ns/op	 1795049 B/op	   60688 allocs/op
+Benchmark_NonFilteredCollectionJsonParallel_8-12           	     440	   2765496 ns/op	 1795177 B/op	   60688 allocs/op
+Benchmark_NonFilteredCollectionJsonParallel_16-12          	     433	   2743647 ns/op	 1795139 B/op	   60688 allocs/op
+Benchmark_NonFilteredCollectionJsonParallel_8_large-12     	      36	  33944575 ns/op	31678108 B/op	 1176081 allocs/op
+Benchmark_NonFilteredCollectionJsonParallel_16_large-12    	      36	  32472272 ns/op	31677953 B/op	 1176082 allocs/op
+Benchmark_NonFilteredSearch-12                             	 1749508	       679.4 ns/op	     136 B/op	       3 allocs/op
+Benchmark_PreFilteredCollection-12                         	     300	   4009226 ns/op	  263676 B/op	   53374 allocs/op
+Benchmark_PreFilteredSearch-12                             	 2512471	       473.0 ns/op	     136 B/op	       3 allocs/op
 PASS
-ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index	18.549s
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index	17.969s
 goos: windows
 goarch: amd64
 pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes
 cpu: AMD Ryzen 5 2600 Six-Core Processor            
-BenchmarkLexer-12    	     342	   3474461 ns/op	 1095586 B/op	   31643 allocs/op
+BenchmarkLexer-12    	     424	   2840138 ns/op	  108271 B/op	   34888 allocs/op
 PASS
-ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes	1.628s
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes	1.578s
 goos: windows
 goarch: amd64
 pkg: github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens
 cpu: AMD Ryzen 5 2600 Six-Core Processor            
-BenchmarkTokenizer-12    	     700	   1713204 ns/op	    4448 B/op	       6 allocs/op
+BenchmarkTokenizer-12    	     699	   1718856 ns/op	    4448 B/op	       6 allocs/op
 PASS
-ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens	1.472s
+ok  	github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens	1.464s

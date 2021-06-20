@@ -137,6 +137,8 @@ func (t *Token) IsUndefined() bool {
 	return t.Type() == TOKEN_UD
 }
 
+var UNDEFINED_TOKEN = Token{tp:TOKEN_UD}
+
 func (t *Token) SetEoF(pos int) *Token {
 	t.si = pos
 	t.ei = pos

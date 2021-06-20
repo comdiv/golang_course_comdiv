@@ -10,7 +10,7 @@ type Lexeme struct {
 	stPosition int
 	// признак последнего слова в предложении
 	isLast bool
-	token  *tokens.Token
+	token  tokens.Token
 	cachedValue string
 }
 
@@ -19,18 +19,14 @@ func (l *Lexeme)  prepareValue() {
 }
 
 func (l *Lexeme) IsUndefined() bool {
-	if l.token != nil {
-		return l.token.IsUndefined()
-	}
-	return true
+	return l.token.IsUndefined()
 }
 
 func (l *Lexeme) Copy() Lexeme {
-	newtoken := l.token.Copy()
 	return Lexeme{
 		l.stPosition,
 		l.isLast,
-		&newtoken,
+		l.token,
 		"",
 	}
 }
@@ -68,7 +64,7 @@ func (l *Lexeme) IsEof() bool {
 
 var NullLexeme = Lexeme{}
 
-func NewLexeme(pos int, last bool, token *tokens.Token) *Lexeme {
+func NewLexeme(pos int, last bool, token tokens.Token) *Lexeme {
 	return &Lexeme{
 		pos,
 		last,
@@ -77,7 +73,7 @@ func NewLexeme(pos int, last bool, token *tokens.Token) *Lexeme {
 	}
 }
 
-func (l *Lexeme) Apply(pos int, last bool, token *tokens.Token) *Lexeme {
+func (l *Lexeme) Apply(pos int, last bool, token tokens.Token) *Lexeme {
 	l.stPosition = pos
 	l.isLast = last
 	l.token = token
