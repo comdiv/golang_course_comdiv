@@ -166,27 +166,25 @@ func readJsonChan(reader io.Reader) <-chan *JsonTextPart {
 	return result
 }
 
-func processParts(config *CollectConfig, input <-chan *JsonTextPart, out chan<- *TermStatCollection, err *error) {
-	for block := range input {
-		// только один последний в обработке блок может быть ошибочным (по принципу организации входного канала
-		// если потом много файлов будет надо будет чуть по другому, скажем канал ошибок
-		if block.Error != nil {
-			*err = block.Error
+func processPart(block *JsonTextPart, config *CollectConfig, out chan<- *TermStatCollection, err *error) {
+	// только один последний в обработке блок может быть ошибочным (по принципу организации входного канала
+	// если потом много файлов будет надо будет чуть по другому, скажем канал ошибок
+	if block.Error != nil {
+		*err = block.Error
+		return
+	}
+	subResult := NewTermStatCollectionF(config.Filter)
+	lexer := lexemes.NewS(block.Text)
+	idx := -1
+	for {
+		idx++
+		lexeme := lexer.Next()
+		if lexeme.IsEof() {
 			break
 		}
-		subResult := NewTermStatCollectionF(config.Filter)
-		lexer := lexemes.NewS(block.Text)
-		idx := -1
-		for {
-			idx++
-			lexeme := lexer.Next()
-			if lexeme.IsEof() {
-				break
-			}
-			subResult.Add(lexeme, block.Number, idx)
-		}
-		out <- subResult
+		subResult.Add(lexeme, block.Number, idx)
 	}
+	out <- subResult
 }
 
 func collectStatsFromJsonAsync(
@@ -210,12 +208,18 @@ func collectStatsFromJsonAsync(
 	var processError error
 	wg := new(sync.WaitGroup)
 	input := readJsonChan(reader)
-	for i := 0; i < workers; i++ {
+	routinePoolController := make(chan struct{}, workers)
+	defer close(routinePoolController)
+	for e := range input {
+		routinePoolController <- struct{}{}
 		wg.Add(1)
-		go func() {
+		go func(jtp *JsonTextPart) {
 			defer wg.Done()
-			processParts(&config, input, subCollections, &processError)
-		}()
+			defer func() {
+				<-routinePoolController
+			}()
+			processPart(jtp, &config, subCollections, &processError)
+		}(e)
 	}
 	wg.Wait()
 	close(subCollections)
