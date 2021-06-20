@@ -104,9 +104,7 @@ func (t *Token) NormalValue() string {
 	result := t.Value()
 	if !t.isAscii || t.hasUpper {
 		result = strings.ToLower(result)
-		if strings.Contains(result,"ё") {
-			result = strings.Replace(result, "ё", "е", -1)
-		}
+		result = strings.Replace(result, "ё", "е", -1)
 	}
 	return result
 }
