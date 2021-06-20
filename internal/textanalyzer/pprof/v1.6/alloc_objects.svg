@@ -293,565 +293,596 @@ function handleMouseUp(evt) {
 		state = '';
 	}
 }
-]]></script><g id="viewport" transform="scale(0.5,0.5) translate(0,0)"><g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1471)">
+]]></script><g id="viewport" transform="scale(0.5,0.5) translate(0,0)"><g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1185)">
 <title>unnamed</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-1471 619.5,-1471 619.5,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-1185 916,-1185 916,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster_L</title>
-<polygon fill="none" stroke="black" points="8,-1326 8,-1459 444,-1459 444,-1326 8,-1326"/>
+<polygon fill="none" stroke="black" points="8,-1040 8,-1173 444,-1173 444,-1040 8,-1040"/>
 </g>
 <!-- Type: alloc_objects -->
 <g id="node1" class="node">
 <title>Type: alloc_objects</title>
-<polygon fill="#f8f8f8" stroke="black" points="435.5,-1451 16.5,-1451 16.5,-1334 435.5,-1334 435.5,-1451"/>
-<text text-anchor="start" x="24.5" y="-1434.2" font-family="Times New Roman,serif" font-size="16.00">Type: alloc_objects</text>
-<text text-anchor="start" x="24.5" y="-1416.2" font-family="Times New Roman,serif" font-size="16.00">Time: Jun 20, 2021 at 10:59pm (+05)</text>
-<text text-anchor="start" x="24.5" y="-1398.2" font-family="Times New Roman,serif" font-size="16.00">Showing nodes accounting for 541591, 99.87% of 542322 total</text>
-<text text-anchor="start" x="24.5" y="-1380.2" font-family="Times New Roman,serif" font-size="16.00">Dropped 13 nodes (cum &lt;= 2711)</text>
-<text text-anchor="start" x="24.5" y="-1343.2" font-family="Times New Roman,serif" font-size="16.00">See https://git.io/JfYMW for how to read the graph</text>
+<polygon fill="#f8f8f8" stroke="black" points="435.5,-1165 16.5,-1165 16.5,-1048 435.5,-1048 435.5,-1165"/>
+<text text-anchor="start" x="24.5" y="-1148.2" font-family="Times New Roman,serif" font-size="16.00">Type: alloc_objects</text>
+<text text-anchor="start" x="24.5" y="-1130.2" font-family="Times New Roman,serif" font-size="16.00">Time: Jun 20, 2021 at 11:50pm (+05)</text>
+<text text-anchor="start" x="24.5" y="-1112.2" font-family="Times New Roman,serif" font-size="16.00">Showing nodes accounting for 265139, 99.73% of 265848 total</text>
+<text text-anchor="start" x="24.5" y="-1094.2" font-family="Times New Roman,serif" font-size="16.00">Dropped 13 nodes (cum &lt;= 1329)</text>
+<text text-anchor="start" x="24.5" y="-1057.2" font-family="Times New Roman,serif" font-size="16.00">See https://git.io/JfYMW for how to read the graph</text>
 </g>
 <!-- N1 -->
 <g id="node1" class="node">
 <title>N1</title>
-<g id="a_node1"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next (401427)">
-<polygon fill="#edd7d5" stroke="#b20f00" points="615.5,-1188 404.5,-1188 404.5,-1050 615.5,-1050 615.5,-1188"/>
-<text text-anchor="middle" x="510" y="-1164.8" font-family="Times New Roman,serif" font-size="24.00">lexemes</text>
-<text text-anchor="middle" x="510" y="-1138.8" font-family="Times New Roman,serif" font-size="24.00">(*lexerImpl)</text>
-<text text-anchor="middle" x="510" y="-1112.8" font-family="Times New Roman,serif" font-size="24.00">Next</text>
-<text text-anchor="middle" x="510" y="-1086.8" font-family="Times New Roman,serif" font-size="24.00">303122 (55.89%)</text>
-<text text-anchor="middle" x="510" y="-1060.8" font-family="Times New Roman,serif" font-size="24.00">of 401427 (74.02%)</text>
+<g id="a_node1"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (131074)">
+<polygon fill="#edd9d5" stroke="#b22200" points="602.5,-199 417.5,-199 417.5,-87 602.5,-87 602.5,-199"/>
+<text text-anchor="middle" x="510" y="-175.8" font-family="Times New Roman,serif" font-size="24.00">tokens</text>
+<text text-anchor="middle" x="510" y="-149.8" font-family="Times New Roman,serif" font-size="24.00">(*Token)</text>
+<text text-anchor="middle" x="510" y="-123.8" font-family="Times New Roman,serif" font-size="24.00">Value</text>
+<text text-anchor="middle" x="510" y="-97.8" font-family="Times New Roman,serif" font-size="24.00">131074 (49.30%)</text>
 </a>
 </g>
 </g>
 <!-- NN1_0 -->
 <g id="NN1_0" class="node">
 <title>NN1_0</title>
-<g id="a_NN1_0"><a xlink:title="303122">
-<polygon fill="#f8f8f8" stroke="black" points="537,-975.5 487,-975.5 483,-971.5 483,-939.5 533,-939.5 537,-943.5 537,-975.5"/>
-<polyline fill="none" stroke="black" points="533,-971.5 483,-971.5 "/>
-<polyline fill="none" stroke="black" points="533,-971.5 533,-939.5 "/>
-<polyline fill="none" stroke="black" points="533,-971.5 537,-975.5 "/>
-<text text-anchor="middle" x="510" y="-955.6" font-family="Times New Roman,serif" font-size="8.00">64B</text>
+<g id="a_NN1_0"><a xlink:title="131074">
+<polygon fill="#f8f8f8" stroke="black" points="537,-36 487,-36 483,-32 483,0 533,0 537,-4 537,-36"/>
+<polyline fill="none" stroke="black" points="533,-32 483,-32 "/>
+<polyline fill="none" stroke="black" points="533,-32 533,0 "/>
+<polyline fill="none" stroke="black" points="533,-32 537,-36 "/>
+<text text-anchor="middle" x="510" y="-16.1" font-family="Times New Roman,serif" font-size="8.00">16B</text>
 </a>
 </g>
 </g>
 <!-- N1&#45;&gt;NN1_0 -->
 <g id="edge1" class="edge">
 <title>N1&#45;&gt;NN1_0</title>
-<g id="a_edge1"><a xlink:title="303122">
-<path fill="none" stroke="black" d="M510,-1049.89C510,-1027.32 510,-1003.47 510,-985.79"/>
-<polygon fill="black" stroke="black" points="513.5,-985.65 510,-975.65 506.5,-985.65 513.5,-985.65"/>
+<g id="a_edge1"><a xlink:title="131074">
+<path fill="none" stroke="black" d="M510,-86.98C510,-72.87 510,-58.31 510,-46.3"/>
+<polygon fill="black" stroke="black" points="513.5,-46.07 510,-36.07 506.5,-46.07 513.5,-46.07"/>
 </a>
 </g>
-<g id="a_edge1&#45;label"><a xlink:title="303122">
-<text text-anchor="middle" x="532.5" y="-1013.3" font-family="Times New Roman,serif" font-size="14.00"> 303122</text>
-</a>
-</g>
-</g>
-<!-- N4 -->
-<g id="node4" class="node">
-<title>N4</title>
-<g id="a_node4"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (98305)">
-<polygon fill="#ede0d7" stroke="#b25110" points="519,-880 385,-880 385,-792 519,-792 519,-880"/>
-<text text-anchor="middle" x="452" y="-861.6" font-family="Times New Roman,serif" font-size="18.00">tokens</text>
-<text text-anchor="middle" x="452" y="-841.6" font-family="Times New Roman,serif" font-size="18.00">(*Token)</text>
-<text text-anchor="middle" x="452" y="-821.6" font-family="Times New Roman,serif" font-size="18.00">Copy</text>
-<text text-anchor="middle" x="452" y="-801.6" font-family="Times New Roman,serif" font-size="18.00">98305 (18.13%)</text>
-</a>
-</g>
-</g>
-<!-- N1&#45;&gt;N4 -->
-<g id="edge14" class="edge">
-<title>N1&#45;&gt;N4</title>
-<g id="a_edge14"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (98305)">
-<path fill="none" stroke="#b25110" d="M461.08,-1049.82C449.19,-1029.59 438.14,-1006.74 432,-984 423.72,-953.3 428.07,-918.03 434.8,-889.73"/>
-<polygon fill="#b25110" stroke="#b25110" points="438.2,-890.59 437.27,-880.03 431.41,-888.86 438.2,-890.59"/>
-</a>
-</g>
-<g id="a_edge14&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (98305)">
-<text text-anchor="middle" x="453" y="-961.3" font-family="Times New Roman,serif" font-size="14.00"> 98305</text>
-<text text-anchor="middle" x="453" y="-946.3" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+<g id="a_edge1&#45;label"><a xlink:title="131074">
+<text text-anchor="middle" x="532.5" y="-57.8" font-family="Times New Roman,serif" font-size="14.00"> 131074</text>
 </a>
 </g>
 </g>
 <!-- N2 -->
 <g id="node2" class="node">
 <title>N2</title>
-<g id="a_node2"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2 (533768)">
-<polygon fill="#edd5d5" stroke="#b20000" points="566,-1414.5 454,-1414.5 454,-1370.5 566,-1370.5 566,-1414.5"/>
-<text text-anchor="middle" x="510" y="-1404.1" font-family="Times New Roman,serif" font-size="8.00">index</text>
-<text text-anchor="middle" x="510" y="-1395.1" font-family="Times New Roman,serif" font-size="8.00">collectStatsFromJsonAsync</text>
-<text text-anchor="middle" x="510" y="-1386.1" font-family="Times New Roman,serif" font-size="8.00">func2</text>
-<text text-anchor="middle" x="510" y="-1377.1" font-family="Times New Roman,serif" font-size="8.00">0 of 533768 (98.42%)</text>
+<g id="a_node2"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2 (254675)">
+<polygon fill="#edd5d5" stroke="#b20200" points="566,-1128.5 454,-1128.5 454,-1084.5 566,-1084.5 566,-1128.5"/>
+<text text-anchor="middle" x="510" y="-1118.1" font-family="Times New Roman,serif" font-size="8.00">index</text>
+<text text-anchor="middle" x="510" y="-1109.1" font-family="Times New Roman,serif" font-size="8.00">collectStatsFromJsonAsync</text>
+<text text-anchor="middle" x="510" y="-1100.1" font-family="Times New Roman,serif" font-size="8.00">func2</text>
+<text text-anchor="middle" x="510" y="-1091.1" font-family="Times New Roman,serif" font-size="8.00">0 of 254675 (95.80%)</text>
+</a>
+</g>
+</g>
+<!-- N4 -->
+<g id="node4" class="node">
+<title>N4</title>
+<g id="a_node4"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart (254675)">
+<polygon fill="#edd5d5" stroke="#b20200" points="557.5,-997 462.5,-997 462.5,-961 557.5,-961 557.5,-997"/>
+<text text-anchor="middle" x="510" y="-986.1" font-family="Times New Roman,serif" font-size="8.00">index</text>
+<text text-anchor="middle" x="510" y="-977.1" font-family="Times New Roman,serif" font-size="8.00">processPart</text>
+<text text-anchor="middle" x="510" y="-968.1" font-family="Times New Roman,serif" font-size="8.00">0 of 254675 (95.80%)</text>
+</a>
+</g>
+</g>
+<!-- N2&#45;&gt;N4 -->
+<g id="edge6" class="edge">
+<title>N2&#45;&gt;N4</title>
+<g id="a_edge6"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2 &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart (254675)">
+<path fill="none" stroke="#b20200" stroke-width="5" d="M510,-1084.49C510,-1063.29 510,-1030.45 510,-1007.25"/>
+<polygon fill="#b20200" stroke="#b20200" stroke-width="5" points="514.38,-1007.04 510,-997.04 505.63,-1007.04 514.38,-1007.04"/>
+</a>
+</g>
+<g id="a_edge6&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2 &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart (254675)">
+<text text-anchor="middle" x="532.5" y="-1018.8" font-family="Times New Roman,serif" font-size="14.00"> 254675</text>
 </a>
 </g>
 </g>
 <!-- N3 -->
 <g id="node3" class="node">
 <title>N3</title>
-<g id="a_node3"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart (533768)">
-<polygon fill="#edd5d5" stroke="#b20000" points="557.5,-1279 462.5,-1279 462.5,-1243 557.5,-1243 557.5,-1279"/>
-<text text-anchor="middle" x="510" y="-1268.1" font-family="Times New Roman,serif" font-size="8.00">index</text>
-<text text-anchor="middle" x="510" y="-1259.1" font-family="Times New Roman,serif" font-size="8.00">processPart</text>
-<text text-anchor="middle" x="510" y="-1250.1" font-family="Times New Roman,serif" font-size="8.00">0 of 533768 (98.42%)</text>
-</a>
-</g>
-</g>
-<!-- N2&#45;&gt;N3 -->
-<g id="edge6" class="edge">
-<title>N2&#45;&gt;N3</title>
-<g id="a_edge6"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2 &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart (533768)">
-<path fill="none" stroke="#b20000" stroke-width="5" d="M510,-1370.41C510,-1348.4 510,-1313.81 510,-1289.64"/>
-<polygon fill="#b20000" stroke="#b20000" stroke-width="5" points="514.38,-1289.35 510,-1279.35 505.63,-1289.35 514.38,-1289.35"/>
-</a>
-</g>
-<g id="a_edge6&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2 &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart (533768)">
-<text text-anchor="middle" x="532.5" y="-1304.8" font-family="Times New Roman,serif" font-size="14.00"> 533768</text>
-</a>
-</g>
-</g>
-<!-- N3&#45;&gt;N1 -->
-<g id="edge7" class="edge">
-<title>N3&#45;&gt;N1</title>
-<g id="a_edge7"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next (401427)">
-<path fill="none" stroke="#b20f00" stroke-width="4" d="M510,-1242.83C510,-1231.34 510,-1215.32 510,-1198.62"/>
-<polygon fill="#b20f00" stroke="#b20f00" stroke-width="4" points="513.5,-1198.18 510,-1188.18 506.5,-1198.18 513.5,-1198.18"/>
-</a>
-</g>
-<g id="a_edge7&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next (401427)">
-<text text-anchor="middle" x="532.5" y="-1209.8" font-family="Times New Roman,serif" font-size="14.00"> 401427</text>
-</a>
-</g>
-</g>
-<!-- N6 -->
-<g id="node6" class="node">
-<title>N6</title>
-<g id="a_node6"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add (131972)">
-<polygon fill="#edddd5" stroke="#b23d00" points="386,-1148 288,-1148 288,-1090 386,-1090 386,-1148"/>
-<text text-anchor="middle" x="337" y="-1136.8" font-family="Times New Roman,serif" font-size="9.00">index</text>
-<text text-anchor="middle" x="337" y="-1126.8" font-family="Times New Roman,serif" font-size="9.00">(*TermStatCollection)</text>
-<text text-anchor="middle" x="337" y="-1116.8" font-family="Times New Roman,serif" font-size="9.00">Add</text>
-<text text-anchor="middle" x="337" y="-1106.8" font-family="Times New Roman,serif" font-size="9.00">897 (0.17%)</text>
-<text text-anchor="middle" x="337" y="-1096.8" font-family="Times New Roman,serif" font-size="9.00">of 131972 (24.33%)</text>
-</a>
-</g>
-</g>
-<!-- N3&#45;&gt;N6 -->
-<g id="edge8" class="edge">
-<title>N3&#45;&gt;N6</title>
-<g id="a_edge8"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add (131972)">
-<path fill="none" stroke="#b23d00" stroke-width="2" d="M476.96,-1242.88C452.94,-1229.62 420.32,-1209.85 395,-1188 384.03,-1178.54 373.35,-1166.93 364.21,-1156.01"/>
-<polygon fill="#b23d00" stroke="#b23d00" stroke-width="2" points="366.88,-1153.74 357.84,-1148.22 361.46,-1158.17 366.88,-1153.74"/>
-</a>
-</g>
-<g id="a_edge8&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add (131972)">
-<text text-anchor="middle" x="462.5" y="-1209.8" font-family="Times New Roman,serif" font-size="14.00"> 131972</text>
-</a>
-</g>
-</g>
-<!-- NN4_0 -->
-<g id="NN4_0" class="node">
-<title>NN4_0</title>
-<g id="a_NN4_0"><a xlink:title="98305">
-<polygon fill="#f8f8f8" stroke="black" points="479,-722 429,-722 425,-718 425,-686 475,-686 479,-690 479,-722"/>
-<polyline fill="none" stroke="black" points="475,-718 425,-718 "/>
-<polyline fill="none" stroke="black" points="475,-718 475,-686 "/>
-<polyline fill="none" stroke="black" points="475,-718 479,-722 "/>
-<text text-anchor="middle" x="452" y="-702.1" font-family="Times New Roman,serif" font-size="8.00">16B</text>
-</a>
-</g>
-</g>
-<!-- N4&#45;&gt;NN4_0 -->
-<g id="edge2" class="edge">
-<title>N4&#45;&gt;NN4_0</title>
-<g id="a_edge2"><a xlink:title="98305">
-<path fill="none" stroke="black" d="M452,-791.71C452,-772.2 452,-749.74 452,-732.57"/>
-<polygon fill="black" stroke="black" points="455.5,-732.14 452,-722.14 448.5,-732.14 455.5,-732.14"/>
-</a>
-</g>
-<g id="a_edge2&#45;label"><a xlink:title="98305">
-<text text-anchor="middle" x="471" y="-755.3" font-family="Times New Roman,serif" font-size="14.00"> 98305</text>
+<g id="a_node3"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add (213256)">
+<polygon fill="#edd6d5" stroke="#b20b00" points="559,-910 461,-910 461,-852 559,-852 559,-910"/>
+<text text-anchor="middle" x="510" y="-898.8" font-family="Times New Roman,serif" font-size="9.00">index</text>
+<text text-anchor="middle" x="510" y="-888.8" font-family="Times New Roman,serif" font-size="9.00">(*TermStatCollection)</text>
+<text text-anchor="middle" x="510" y="-878.8" font-family="Times New Roman,serif" font-size="9.00">Add</text>
+<text text-anchor="middle" x="510" y="-868.8" font-family="Times New Roman,serif" font-size="9.00">257 (0.097%)</text>
+<text text-anchor="middle" x="510" y="-858.8" font-family="Times New Roman,serif" font-size="9.00">of 213256 (80.22%)</text>
 </a>
 </g>
 </g>
 <!-- N5 -->
 <g id="node5" class="node">
 <title>N5</title>
-<g id="a_node5"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (65537)">
-<polygon fill="#ede5de" stroke="#b27946" points="382,-411 260,-411 260,-331 382,-331 382,-411"/>
-<text text-anchor="middle" x="321" y="-394.2" font-family="Times New Roman,serif" font-size="16.00">tokens</text>
-<text text-anchor="middle" x="321" y="-376.2" font-family="Times New Roman,serif" font-size="16.00">(*Token)</text>
-<text text-anchor="middle" x="321" y="-358.2" font-family="Times New Roman,serif" font-size="16.00">Value</text>
-<text text-anchor="middle" x="321" y="-340.2" font-family="Times New Roman,serif" font-size="16.00">65537 (12.08%)</text>
+<g id="a_node5"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (81925)">
+<polygon fill="#eddcd5" stroke="#b23500" points="444,-784.5 292,-784.5 292,-707.5 444,-707.5 444,-784.5"/>
+<text text-anchor="middle" x="368" y="-763.7" font-family="Times New Roman,serif" font-size="21.00">index</text>
+<text text-anchor="middle" x="368" y="-740.7" font-family="Times New Roman,serif" font-size="21.00">NewTermStat</text>
+<text text-anchor="middle" x="368" y="-717.7" font-family="Times New Roman,serif" font-size="21.00">81925 (30.82%)</text>
 </a>
 </g>
 </g>
-<!-- NN5_0 -->
-<g id="NN5_0" class="node">
-<title>NN5_0</title>
-<g id="a_NN5_0"><a xlink:title="65537">
-<polygon fill="#f8f8f8" stroke="black" points="348,-261 298,-261 294,-257 294,-225 344,-225 348,-229 348,-261"/>
-<polyline fill="none" stroke="black" points="344,-257 294,-257 "/>
-<polyline fill="none" stroke="black" points="344,-257 344,-225 "/>
-<polyline fill="none" stroke="black" points="344,-257 348,-261 "/>
-<text text-anchor="middle" x="321" y="-241.1" font-family="Times New Roman,serif" font-size="8.00">16B</text>
+<!-- N3&#45;&gt;N5 -->
+<g id="edge14" class="edge">
+<title>N3&#45;&gt;N5</title>
+<g id="a_edge14"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (81925)">
+<path fill="none" stroke="#b23500" stroke-width="2" d="M479.89,-851.79C461.17,-834.26 436.7,-811.35 415.42,-791.42"/>
+<polygon fill="#b23500" stroke="#b23500" stroke-width="2" points="417.74,-788.79 408.05,-784.51 412.95,-793.9 417.74,-788.79"/>
 </a>
 </g>
-</g>
-<!-- N5&#45;&gt;NN5_0 -->
-<g id="edge3" class="edge">
-<title>N5&#45;&gt;NN5_0</title>
-<g id="a_edge3"><a xlink:title="65537">
-<path fill="none" stroke="black" d="M321,-330.82C321,-311.44 321,-288.53 321,-271.11"/>
-<polygon fill="black" stroke="black" points="324.5,-271.05 321,-261.05 317.5,-271.05 324.5,-271.05"/>
-</a>
-</g>
-<g id="a_edge3&#45;label"><a xlink:title="65537">
-<text text-anchor="middle" x="340" y="-294.3" font-family="Times New Roman,serif" font-size="14.00"> 65537</text>
-</a>
-</g>
-</g>
-<!-- N7 -->
-<g id="node7" class="node">
-<title>N7</title>
-<g id="a_node7"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (40962)">
-<polygon fill="#ede9e4" stroke="#b2936f" points="273.5,-984 174.5,-984 174.5,-931 273.5,-931 273.5,-984"/>
-<text text-anchor="middle" x="224" y="-968.8" font-family="Times New Roman,serif" font-size="14.00">index</text>
-<text text-anchor="middle" x="224" y="-953.8" font-family="Times New Roman,serif" font-size="14.00">NewTermStat</text>
-<text text-anchor="middle" x="224" y="-938.8" font-family="Times New Roman,serif" font-size="14.00">40962 (7.55%)</text>
-</a>
-</g>
-</g>
-<!-- N6&#45;&gt;N7 -->
-<g id="edge16" class="edge">
-<title>N6&#45;&gt;N7</title>
-<g id="a_edge16"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (32770)">
-<path fill="none" stroke="#b29b7c" d="M317.06,-1089.85C297.8,-1062.67 268.6,-1021.46 248.06,-992.46"/>
-<polygon fill="#b29b7c" stroke="#b29b7c" points="250.89,-990.39 242.25,-984.26 245.17,-994.44 250.89,-990.39"/>
-</a>
-</g>
-<g id="a_edge16&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (32770)">
-<text text-anchor="middle" x="295" y="-1020.8" font-family="Times New Roman,serif" font-size="14.00"> 32770</text>
-<text text-anchor="middle" x="295" y="-1005.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
-</a>
-</g>
-</g>
-<!-- N11 -->
-<g id="node11" class="node">
-<title>N11</title>
-<g id="a_node11"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (98305)">
-<polygon fill="#ede0d7" stroke="#b25110" points="382.5,-979.5 291.5,-979.5 291.5,-935.5 382.5,-935.5 382.5,-979.5"/>
-<text text-anchor="middle" x="337" y="-969.1" font-family="Times New Roman,serif" font-size="8.00">index</text>
-<text text-anchor="middle" x="337" y="-960.1" font-family="Times New Roman,serif" font-size="8.00">(*TermFilter)</text>
-<text text-anchor="middle" x="337" y="-951.1" font-family="Times New Roman,serif" font-size="8.00">MatchesLexeme</text>
-<text text-anchor="middle" x="337" y="-942.1" font-family="Times New Roman,serif" font-size="8.00">0 of 98305 (18.13%)</text>
-</a>
-</g>
-</g>
-<!-- N6&#45;&gt;N11 -->
-<g id="edge10" class="edge">
-<title>N6&#45;&gt;N11</title>
-<g id="a_edge10"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (98305)">
-<path fill="none" stroke="#b25110" d="M337,-1089.85C337,-1061.81 337,-1018.87 337,-989.78"/>
-<polygon fill="#b25110" stroke="#b25110" points="340.5,-989.74 337,-979.74 333.5,-989.74 340.5,-989.74"/>
-</a>
-</g>
-<g id="a_edge10&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (98305)">
-<text text-anchor="middle" x="358" y="-1020.8" font-family="Times New Roman,serif" font-size="14.00"> 98305</text>
-<text text-anchor="middle" x="358" y="-1005.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
-</a>
-</g>
-</g>
-<!-- NN7_0 -->
-<g id="NN7_0" class="node">
-<title>NN7_0</title>
-<g id="a_NN7_0"><a xlink:title="40962">
-<polygon fill="#f8f8f8" stroke="black" points="251,-854 201,-854 197,-850 197,-818 247,-818 251,-822 251,-854"/>
-<polyline fill="none" stroke="black" points="247,-850 197,-850 "/>
-<polyline fill="none" stroke="black" points="247,-850 247,-818 "/>
-<polyline fill="none" stroke="black" points="247,-850 251,-854 "/>
-<text text-anchor="middle" x="224" y="-834.1" font-family="Times New Roman,serif" font-size="8.00">64B</text>
-</a>
-</g>
-</g>
-<!-- N7&#45;&gt;NN7_0 -->
-<g id="edge4" class="edge">
-<title>N7&#45;&gt;NN7_0</title>
-<g id="a_edge4"><a xlink:title="40962">
-<path fill="none" stroke="black" d="M224,-930.86C224,-911.22 224,-884.16 224,-864.15"/>
-<polygon fill="black" stroke="black" points="227.5,-864.12 224,-854.12 220.5,-864.12 227.5,-864.12"/>
-</a>
-</g>
-<g id="a_edge4&#45;label"><a xlink:title="40962">
-<text text-anchor="middle" x="243" y="-901.8" font-family="Times New Roman,serif" font-size="14.00"> 40962</text>
-</a>
-</g>
-</g>
-<!-- N8 -->
-<g id="node8" class="node">
-<title>N8</title>
-<g id="a_node8"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue (98305)">
-<polygon fill="#ede0d7" stroke="#b25110" points="366.5,-521 275.5,-521 275.5,-477 366.5,-477 366.5,-521"/>
-<text text-anchor="middle" x="321" y="-510.6" font-family="Times New Roman,serif" font-size="8.00">tokens</text>
-<text text-anchor="middle" x="321" y="-501.6" font-family="Times New Roman,serif" font-size="8.00">(*Token)</text>
-<text text-anchor="middle" x="321" y="-492.6" font-family="Times New Roman,serif" font-size="8.00">NormalValue</text>
-<text text-anchor="middle" x="321" y="-483.6" font-family="Times New Roman,serif" font-size="8.00">0 of 98305 (18.13%)</text>
-</a>
-</g>
-</g>
-<!-- N8&#45;&gt;N5 -->
-<g id="edge15" class="edge">
-<title>N8&#45;&gt;N5</title>
-<g id="a_edge15"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (65537)">
-<path fill="none" stroke="#b27946" d="M321,-476.91C321,-461.71 321,-440.55 321,-421.21"/>
-<polygon fill="#b27946" stroke="#b27946" points="324.5,-421 321,-411 317.5,-421 324.5,-421"/>
-</a>
-</g>
-<g id="a_edge15&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (65537)">
-<text text-anchor="middle" x="342" y="-447.8" font-family="Times New Roman,serif" font-size="14.00"> 65537</text>
-<text text-anchor="middle" x="342" y="-432.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
-</a>
-</g>
-</g>
-<!-- N17 -->
-<g id="node17" class="node">
-<title>N17</title>
-<g id="a_node17"><a xlink:title="strings.ToLower (32768)">
-<polygon fill="#edeae5" stroke="#b29b7c" points="486,-389 400,-389 400,-353 486,-353 486,-389"/>
-<text text-anchor="middle" x="443" y="-378.1" font-family="Times New Roman,serif" font-size="8.00">strings</text>
-<text text-anchor="middle" x="443" y="-369.1" font-family="Times New Roman,serif" font-size="8.00">ToLower</text>
-<text text-anchor="middle" x="443" y="-360.1" font-family="Times New Roman,serif" font-size="8.00">0 of 32768 (6.04%)</text>
-</a>
-</g>
-</g>
-<!-- N8&#45;&gt;N17 -->
-<g id="edge17" class="edge">
-<title>N8&#45;&gt;N17</title>
-<g id="a_edge17"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue &#45;&gt; strings.ToLower (32768)">
-<path fill="none" stroke="#b29b7c" d="M347.39,-476.79C353.97,-471.19 360.88,-465.03 367,-459 387.01,-439.28 407.88,-415.09 422.67,-397.23"/>
-<polygon fill="#b29b7c" stroke="#b29b7c" points="425.78,-398.97 429.42,-389.02 420.37,-394.53 425.78,-398.97"/>
-</a>
-</g>
-<g id="a_edge17&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue &#45;&gt; strings.ToLower (32768)">
-<text text-anchor="middle" x="415" y="-440.3" font-family="Times New Roman,serif" font-size="14.00"> 32768</text>
-</a>
-</g>
-</g>
-<!-- N9 -->
-<g id="node9" class="node">
-<title>N9</title>
-<g id="a_node9"><a xlink:title="strings.(*Builder).grow (32768)">
-<polygon fill="#edeae5" stroke="#b29b7c" points="492.5,-155 393.5,-155 393.5,-87 492.5,-87 492.5,-155"/>
-<text text-anchor="middle" x="443" y="-139.8" font-family="Times New Roman,serif" font-size="14.00">strings</text>
-<text text-anchor="middle" x="443" y="-124.8" font-family="Times New Roman,serif" font-size="14.00">(*Builder)</text>
-<text text-anchor="middle" x="443" y="-109.8" font-family="Times New Roman,serif" font-size="14.00">grow</text>
-<text text-anchor="middle" x="443" y="-94.8" font-family="Times New Roman,serif" font-size="14.00">32768 (6.04%)</text>
-</a>
-</g>
-</g>
-<!-- NN9_0 -->
-<g id="NN9_0" class="node">
-<title>NN9_0</title>
-<g id="a_NN9_0"><a xlink:title="32768">
-<polygon fill="#f8f8f8" stroke="black" points="470,-36 420,-36 416,-32 416,0 466,0 470,-4 470,-36"/>
-<polyline fill="none" stroke="black" points="466,-32 416,-32 "/>
-<polyline fill="none" stroke="black" points="466,-32 466,0 "/>
-<polyline fill="none" stroke="black" points="466,-32 470,-36 "/>
-<text text-anchor="middle" x="443" y="-16.1" font-family="Times New Roman,serif" font-size="8.00">16B</text>
-</a>
-</g>
-</g>
-<!-- N9&#45;&gt;NN9_0 -->
-<g id="edge5" class="edge">
-<title>N9&#45;&gt;NN9_0</title>
-<g id="a_edge5"><a xlink:title="32768">
-<path fill="none" stroke="black" d="M443,-86.93C443,-73.85 443,-58.99 443,-46.51"/>
-<polygon fill="black" stroke="black" points="446.5,-46.26 443,-36.26 439.5,-46.26 446.5,-46.26"/>
-</a>
-</g>
-<g id="a_edge5&#45;label"><a xlink:title="32768">
-<text text-anchor="middle" x="462" y="-57.8" font-family="Times New Roman,serif" font-size="14.00"> 32768</text>
+<g id="a_edge14&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (81925)">
+<text text-anchor="middle" x="482" y="-822.8" font-family="Times New Roman,serif" font-size="14.00"> 81925</text>
+<text text-anchor="middle" x="482" y="-807.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
 </a>
 </g>
 </g>
 <!-- N10 -->
 <g id="node10" class="node">
 <title>N10</title>
-<g id="a_node10"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func1 (8192)">
-<polygon fill="#edeceb" stroke="#b2aea5" points="263,-1283 151,-1283 151,-1239 263,-1239 263,-1283"/>
-<text text-anchor="middle" x="207" y="-1272.6" font-family="Times New Roman,serif" font-size="8.00">index</text>
-<text text-anchor="middle" x="207" y="-1263.6" font-family="Times New Roman,serif" font-size="8.00">collectStatsFromJsonAsync</text>
-<text text-anchor="middle" x="207" y="-1254.6" font-family="Times New Roman,serif" font-size="8.00">func1</text>
-<text text-anchor="middle" x="207" y="-1245.6" font-family="Times New Roman,serif" font-size="8.00">0 of 8192 (1.51%)</text>
+<g id="a_node10"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (131074)">
+<polygon fill="#edd9d5" stroke="#b22200" points="557.5,-768 462.5,-768 462.5,-724 557.5,-724 557.5,-768"/>
+<text text-anchor="middle" x="510" y="-757.6" font-family="Times New Roman,serif" font-size="8.00">index</text>
+<text text-anchor="middle" x="510" y="-748.6" font-family="Times New Roman,serif" font-size="8.00">(*TermFilter)</text>
+<text text-anchor="middle" x="510" y="-739.6" font-family="Times New Roman,serif" font-size="8.00">MatchesLexeme</text>
+<text text-anchor="middle" x="510" y="-730.6" font-family="Times New Roman,serif" font-size="8.00">0 of 131074 (49.30%)</text>
 </a>
 </g>
 </g>
-<!-- N12 -->
-<g id="node12" class="node">
-<title>N12</title>
-<g id="a_node12"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Merge (8192)">
-<polygon fill="#edeceb" stroke="#b2aea5" points="255,-1141 159,-1141 159,-1097 255,-1097 255,-1141"/>
-<text text-anchor="middle" x="207" y="-1130.6" font-family="Times New Roman,serif" font-size="8.00">index</text>
-<text text-anchor="middle" x="207" y="-1121.6" font-family="Times New Roman,serif" font-size="8.00">(*TermStatCollection)</text>
-<text text-anchor="middle" x="207" y="-1112.6" font-family="Times New Roman,serif" font-size="8.00">Merge</text>
-<text text-anchor="middle" x="207" y="-1103.6" font-family="Times New Roman,serif" font-size="8.00">0 of 8192 (1.51%)</text>
-</a>
-</g>
-</g>
-<!-- N10&#45;&gt;N12 -->
-<g id="edge21" class="edge">
-<title>N10&#45;&gt;N12</title>
-<g id="a_edge21"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func1 &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Merge (8192)">
-<path fill="none" stroke="#b2aea5" d="M207,-1238.74C207,-1215.48 207,-1177.96 207,-1151.33"/>
-<polygon fill="#b2aea5" stroke="#b2aea5" points="210.5,-1151 207,-1141 203.5,-1151 210.5,-1151"/>
-</a>
-</g>
-<g id="a_edge21&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func1 &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Merge (8192)">
-<text text-anchor="middle" x="222.5" y="-1209.8" font-family="Times New Roman,serif" font-size="14.00"> 8192</text>
-</a>
-</g>
-</g>
-<!-- N13 -->
-<g id="node13" class="node">
-<title>N13</title>
-<g id="a_node13"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len (98305)">
-<polygon fill="#ede0d7" stroke="#b25110" points="366.5,-858 275.5,-858 275.5,-814 366.5,-814 366.5,-858"/>
-<text text-anchor="middle" x="321" y="-847.6" font-family="Times New Roman,serif" font-size="8.00">lexemes</text>
-<text text-anchor="middle" x="321" y="-838.6" font-family="Times New Roman,serif" font-size="8.00">(*Lexeme)</text>
-<text text-anchor="middle" x="321" y="-829.6" font-family="Times New Roman,serif" font-size="8.00">Len</text>
-<text text-anchor="middle" x="321" y="-820.6" font-family="Times New Roman,serif" font-size="8.00">0 of 98305 (18.13%)</text>
-</a>
-</g>
-</g>
-<!-- N11&#45;&gt;N13 -->
+<!-- N3&#45;&gt;N10 -->
 <g id="edge9" class="edge">
-<title>N11&#45;&gt;N13</title>
-<g id="a_edge9"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len (98305)">
-<path fill="none" stroke="#b25110" d="M334.18,-935.41C331.69,-916.84 328.03,-889.53 325.2,-868.4"/>
-<polygon fill="#b25110" stroke="#b25110" points="328.65,-867.73 323.85,-858.28 321.71,-868.66 328.65,-867.73"/>
+<title>N3&#45;&gt;N10</title>
+<g id="a_edge9"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (131074)">
+<path fill="none" stroke="#b22200" stroke-width="3" d="M510,-851.79C510,-830.3 510,-800.71 510,-778.45"/>
+<polygon fill="#b22200" stroke="#b22200" stroke-width="3" points="513.5,-778.18 510,-768.18 506.5,-778.18 513.5,-778.18"/>
 </a>
 </g>
-<g id="a_edge9&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len (98305)">
-<text text-anchor="middle" x="350" y="-901.8" font-family="Times New Roman,serif" font-size="14.00"> 98305</text>
+<g id="a_edge9&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (131074)">
+<text text-anchor="middle" x="532.5" y="-822.8" font-family="Times New Roman,serif" font-size="14.00"> 131074</text>
+<text text-anchor="middle" x="532.5" y="-807.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
 </a>
 </g>
 </g>
-<!-- N12&#45;&gt;N7 -->
-<g id="edge20" class="edge">
-<title>N12&#45;&gt;N7</title>
-<g id="a_edge20"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Merge &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (8192)">
-<path fill="none" stroke="#b2aea5" d="M205.03,-1096.84C203.34,-1073.43 202.03,-1034.69 208,-1002 208.48,-999.35 209.12,-996.64 209.85,-993.94"/>
-<polygon fill="#b2aea5" stroke="#b2aea5" points="213.22,-994.9 212.86,-984.31 206.53,-992.82 213.22,-994.9"/>
+<!-- N4&#45;&gt;N3 -->
+<g id="edge7" class="edge">
+<title>N4&#45;&gt;N3</title>
+<g id="a_edge7"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add (213256)">
+<path fill="none" stroke="#b20b00" stroke-width="5" d="M510,-960.84C510,-949.66 510,-934.62 510,-920.68"/>
+<polygon fill="#b20b00" stroke="#b20b00" stroke-width="5" points="514.38,-920.3 510,-910.3 505.63,-920.3 514.38,-920.3"/>
 </a>
 </g>
-<g id="a_edge20&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Merge &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (8192)">
-<text text-anchor="middle" x="229" y="-1020.8" font-family="Times New Roman,serif" font-size="14.00"> 8192</text>
-<text text-anchor="middle" x="229" y="-1005.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+<g id="a_edge7&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add (213256)">
+<text text-anchor="middle" x="532.5" y="-931.8" font-family="Times New Roman,serif" font-size="14.00"> 213256</text>
 </a>
 </g>
 </g>
 <!-- N14 -->
 <g id="node14" class="node">
 <title>N14</title>
-<g id="a_node14"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value (98305)">
-<polygon fill="#ede0d7" stroke="#b25110" points="366.5,-726 275.5,-726 275.5,-682 366.5,-682 366.5,-726"/>
-<text text-anchor="middle" x="321" y="-715.6" font-family="Times New Roman,serif" font-size="8.00">lexemes</text>
-<text text-anchor="middle" x="321" y="-706.6" font-family="Times New Roman,serif" font-size="8.00">(*Lexeme)</text>
-<text text-anchor="middle" x="321" y="-697.6" font-family="Times New Roman,serif" font-size="8.00">Value</text>
-<text text-anchor="middle" x="321" y="-688.6" font-family="Times New Roman,serif" font-size="8.00">0 of 98305 (18.13%)</text>
+<g id="a_node14"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next (32768)">
+<polygon fill="#ede5de" stroke="#b27744" points="672.5,-903 581.5,-903 581.5,-859 672.5,-859 672.5,-903"/>
+<text text-anchor="middle" x="627" y="-892.6" font-family="Times New Roman,serif" font-size="8.00">lexemes</text>
+<text text-anchor="middle" x="627" y="-883.6" font-family="Times New Roman,serif" font-size="8.00">(*lexerImpl)</text>
+<text text-anchor="middle" x="627" y="-874.6" font-family="Times New Roman,serif" font-size="8.00">Next</text>
+<text text-anchor="middle" x="627" y="-865.6" font-family="Times New Roman,serif" font-size="8.00">0 of 32768 (12.33%)</text>
 </a>
 </g>
 </g>
-<!-- N13&#45;&gt;N14 -->
-<g id="edge11" class="edge">
-<title>N13&#45;&gt;N14</title>
-<g id="a_edge11"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value (98305)">
-<path fill="none" stroke="#b25110" d="M321,-813.82C321,-792.77 321,-760.22 321,-736.2"/>
-<polygon fill="#b25110" stroke="#b25110" points="324.5,-736.17 321,-726.17 317.5,-736.17 324.5,-736.17"/>
+<!-- N4&#45;&gt;N14 -->
+<g id="edge15" class="edge">
+<title>N4&#45;&gt;N14</title>
+<g id="a_edge15"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next (32768)">
+<path fill="none" stroke="#b27744" d="M535.07,-960.9C542.87,-955.36 551.41,-949.08 559,-943 571.77,-932.76 585.29,-920.87 596.89,-910.32"/>
+<polygon fill="#b27744" stroke="#b27744" points="599.57,-912.6 604.57,-903.26 594.84,-907.44 599.57,-912.6"/>
 </a>
 </g>
-<g id="a_edge11&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value (98305)">
-<text text-anchor="middle" x="342" y="-762.8" font-family="Times New Roman,serif" font-size="14.00"> 98305</text>
-<text text-anchor="middle" x="342" y="-747.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+<g id="a_edge15&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next (32768)">
+<text text-anchor="middle" x="596" y="-931.8" font-family="Times New Roman,serif" font-size="14.00"> 32768</text>
 </a>
 </g>
 </g>
 <!-- N15 -->
 <g id="node15" class="node">
 <title>N15</title>
-<g id="a_node15"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue (98305)">
-<polygon fill="#ede0d7" stroke="#b25110" points="366.5,-616 275.5,-616 275.5,-572 366.5,-572 366.5,-616"/>
-<text text-anchor="middle" x="321" y="-605.6" font-family="Times New Roman,serif" font-size="8.00">lexemes</text>
-<text text-anchor="middle" x="321" y="-596.6" font-family="Times New Roman,serif" font-size="8.00">(*Lexeme)</text>
-<text text-anchor="middle" x="321" y="-587.6" font-family="Times New Roman,serif" font-size="8.00">prepareValue</text>
-<text text-anchor="middle" x="321" y="-578.6" font-family="Times New Roman,serif" font-size="8.00">0 of 98305 (18.13%)</text>
+<g id="a_node15"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.NewS (8449)">
+<polygon fill="#edebe9" stroke="#b2a896" points="780,-899 698,-899 698,-863 780,-863 780,-899"/>
+<text text-anchor="middle" x="739" y="-888.1" font-family="Times New Roman,serif" font-size="8.00">lexemes</text>
+<text text-anchor="middle" x="739" y="-879.1" font-family="Times New Roman,serif" font-size="8.00">NewS</text>
+<text text-anchor="middle" x="739" y="-870.1" font-family="Times New Roman,serif" font-size="8.00">0 of 8449 (3.18%)</text>
 </a>
 </g>
 </g>
-<!-- N14&#45;&gt;N15 -->
-<g id="edge12" class="edge">
-<title>N14&#45;&gt;N15</title>
-<g id="a_edge12"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue (98305)">
-<path fill="none" stroke="#b25110" d="M321,-681.92C321,-666.09 321,-644.15 321,-626.27"/>
-<polygon fill="#b25110" stroke="#b25110" points="324.5,-626.03 321,-616.03 317.5,-626.03 324.5,-626.03"/>
+<!-- N4&#45;&gt;N15 -->
+<g id="edge20" class="edge">
+<title>N4&#45;&gt;N15</title>
+<g id="a_edge20"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.NewS (8449)">
+<path fill="none" stroke="#b2a896" d="M557.54,-964.54C576.86,-958.61 599.24,-951.13 619,-943 646.66,-931.61 676.67,-916.36 699.75,-903.96"/>
+<polygon fill="#b2a896" stroke="#b2a896" points="701.43,-907.03 708.56,-899.18 698.1,-900.87 701.43,-907.03"/>
 </a>
 </g>
-<g id="a_edge12&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue (98305)">
-<text text-anchor="middle" x="342" y="-652.8" font-family="Times New Roman,serif" font-size="14.00"> 98305</text>
-<text text-anchor="middle" x="342" y="-637.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+<g id="a_edge20&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.NewS (8449)">
+<text text-anchor="middle" x="664.5" y="-931.8" font-family="Times New Roman,serif" font-size="14.00"> 8449</text>
 </a>
 </g>
 </g>
-<!-- N15&#45;&gt;N8 -->
-<g id="edge13" class="edge">
-<title>N15&#45;&gt;N8</title>
-<g id="a_edge13"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue (98305)">
-<path fill="none" stroke="#b25110" d="M321,-571.9C321,-559.89 321,-544.62 321,-531.24"/>
-<polygon fill="#b25110" stroke="#b25110" points="324.5,-531.02 321,-521.02 317.5,-531.02 324.5,-531.02"/>
+<!-- NN5_0 -->
+<g id="NN5_0" class="node">
+<title>NN5_0</title>
+<g id="a_NN5_0"><a xlink:title="81925">
+<polygon fill="#f8f8f8" stroke="black" points="395,-628 345,-628 341,-624 341,-592 391,-592 395,-596 395,-628"/>
+<polyline fill="none" stroke="black" points="391,-624 341,-624 "/>
+<polyline fill="none" stroke="black" points="391,-624 391,-592 "/>
+<polyline fill="none" stroke="black" points="391,-624 395,-628 "/>
+<text text-anchor="middle" x="368" y="-608.1" font-family="Times New Roman,serif" font-size="8.00">64B</text>
 </a>
 </g>
-<g id="a_edge13&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue (98305)">
-<text text-anchor="middle" x="340" y="-542.8" font-family="Times New Roman,serif" font-size="14.00"> 98305</text>
+</g>
+<!-- N5&#45;&gt;NN5_0 -->
+<g id="edge2" class="edge">
+<title>N5&#45;&gt;NN5_0</title>
+<g id="a_edge2"><a xlink:title="81925">
+<path fill="none" stroke="black" d="M368,-707.32C368,-685.37 368,-658.2 368,-638.32"/>
+<polygon fill="black" stroke="black" points="371.5,-638.1 368,-628.1 364.5,-638.1 371.5,-638.1"/>
+</a>
+</g>
+<g id="a_edge2&#45;label"><a xlink:title="81925">
+<text text-anchor="middle" x="387" y="-669.3" font-family="Times New Roman,serif" font-size="14.00"> 81925</text>
+</a>
+</g>
+</g>
+<!-- N6 -->
+<g id="node6" class="node">
+<title>N6</title>
+<g id="a_node6"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (32768)">
+<polygon fill="#ede5de" stroke="#b27744" points="698,-786 576,-786 576,-706 698,-706 698,-786"/>
+<text text-anchor="middle" x="637" y="-769.2" font-family="Times New Roman,serif" font-size="16.00">tokens</text>
+<text text-anchor="middle" x="637" y="-751.2" font-family="Times New Roman,serif" font-size="16.00">(*Token)</text>
+<text text-anchor="middle" x="637" y="-733.2" font-family="Times New Roman,serif" font-size="16.00">Copy</text>
+<text text-anchor="middle" x="637" y="-715.2" font-family="Times New Roman,serif" font-size="16.00">32768 (12.33%)</text>
+</a>
+</g>
+</g>
+<!-- NN6_0 -->
+<g id="NN6_0" class="node">
+<title>NN6_0</title>
+<g id="a_NN6_0"><a xlink:title="32768">
+<polygon fill="#f8f8f8" stroke="black" points="664,-628 614,-628 610,-624 610,-592 660,-592 664,-596 664,-628"/>
+<polyline fill="none" stroke="black" points="660,-624 610,-624 "/>
+<polyline fill="none" stroke="black" points="660,-624 660,-592 "/>
+<polyline fill="none" stroke="black" points="660,-624 664,-628 "/>
+<text text-anchor="middle" x="637" y="-608.1" font-family="Times New Roman,serif" font-size="8.00">16B</text>
+</a>
+</g>
+</g>
+<!-- N6&#45;&gt;NN6_0 -->
+<g id="edge3" class="edge">
+<title>N6&#45;&gt;NN6_0</title>
+<g id="a_edge3"><a xlink:title="32768">
+<path fill="none" stroke="black" d="M637,-705.88C637,-684.11 637,-657.56 637,-638.09"/>
+<polygon fill="black" stroke="black" points="640.5,-638.07 637,-628.07 633.5,-638.07 640.5,-638.07"/>
+</a>
+</g>
+<g id="a_edge3&#45;label"><a xlink:title="32768">
+<text text-anchor="middle" x="656" y="-669.3" font-family="Times New Roman,serif" font-size="14.00"> 32768</text>
+</a>
+</g>
+</g>
+<!-- N7 -->
+<g id="node7" class="node">
+<title>N7</title>
+<g id="a_node7"><a xlink:title="syscall.(*LazyDLL).NewProc (10923)">
+<polygon fill="#edebe8" stroke="#b2a48d" points="912,-778 816,-778 816,-714 912,-714 912,-778"/>
+<text text-anchor="middle" x="864" y="-763.6" font-family="Times New Roman,serif" font-size="13.00">syscall</text>
+<text text-anchor="middle" x="864" y="-749.6" font-family="Times New Roman,serif" font-size="13.00">(*LazyDLL)</text>
+<text text-anchor="middle" x="864" y="-735.6" font-family="Times New Roman,serif" font-size="13.00">NewProc</text>
+<text text-anchor="middle" x="864" y="-721.6" font-family="Times New Roman,serif" font-size="13.00">10923 (4.11%)</text>
+</a>
+</g>
+</g>
+<!-- NN7_0 -->
+<g id="NN7_0" class="node">
+<title>NN7_0</title>
+<g id="a_NN7_0"><a xlink:title="10923">
+<polygon fill="#f8f8f8" stroke="black" points="891,-628 841,-628 837,-624 837,-592 887,-592 891,-596 891,-628"/>
+<polyline fill="none" stroke="black" points="887,-624 837,-624 "/>
+<polyline fill="none" stroke="black" points="887,-624 887,-592 "/>
+<polyline fill="none" stroke="black" points="887,-624 891,-628 "/>
+<text text-anchor="middle" x="864" y="-608.1" font-family="Times New Roman,serif" font-size="8.00">48B</text>
+</a>
+</g>
+</g>
+<!-- N7&#45;&gt;NN7_0 -->
+<g id="edge4" class="edge">
+<title>N7&#45;&gt;NN7_0</title>
+<g id="a_edge4"><a xlink:title="10923">
+<path fill="none" stroke="black" d="M864,-713.92C864,-691.04 864,-660.21 864,-638.28"/>
+<polygon fill="black" stroke="black" points="867.5,-638.01 864,-628.01 860.5,-638.01 867.5,-638.01"/>
+</a>
+</g>
+<g id="a_edge4&#45;label"><a xlink:title="10923">
+<text text-anchor="middle" x="883" y="-669.3" font-family="Times New Roman,serif" font-size="14.00"> 10923</text>
+</a>
+</g>
+</g>
+<!-- N8 -->
+<g id="node8" class="node">
+<title>N8</title>
+<g id="a_node8"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.newTokenizerImpl (8449)">
+<polygon fill="#edebe9" stroke="#b2a896" points="807.5,-640 706.5,-640 706.5,-580 807.5,-580 807.5,-640"/>
+<text text-anchor="middle" x="757" y="-626.4" font-family="Times New Roman,serif" font-size="12.00">tokens</text>
+<text text-anchor="middle" x="757" y="-613.4" font-family="Times New Roman,serif" font-size="12.00">newTokenizerImpl</text>
+<text text-anchor="middle" x="757" y="-600.4" font-family="Times New Roman,serif" font-size="12.00">8192 (3.08%)</text>
+<text text-anchor="middle" x="757" y="-587.4" font-family="Times New Roman,serif" font-size="12.00">of 8449 (3.18%)</text>
+</a>
+</g>
+</g>
+<!-- NN8_0 -->
+<g id="NN8_0" class="node">
+<title>NN8_0</title>
+<g id="a_NN8_0"><a xlink:title="8192">
+<polygon fill="#f8f8f8" stroke="black" points="784,-510 734,-510 730,-506 730,-474 780,-474 784,-478 784,-510"/>
+<polyline fill="none" stroke="black" points="780,-506 730,-506 "/>
+<polyline fill="none" stroke="black" points="780,-506 780,-474 "/>
+<polyline fill="none" stroke="black" points="780,-506 784,-510 "/>
+<text text-anchor="middle" x="757" y="-490.1" font-family="Times New Roman,serif" font-size="8.00">64B</text>
+</a>
+</g>
+</g>
+<!-- N8&#45;&gt;NN8_0 -->
+<g id="edge5" class="edge">
+<title>N8&#45;&gt;NN8_0</title>
+<g id="a_edge5"><a xlink:title="8192">
+<path fill="none" stroke="black" d="M757,-579.73C757,-561.41 757,-537.98 757,-520.09"/>
+<polygon fill="black" stroke="black" points="760.5,-520.02 757,-510.02 753.5,-520.02 760.5,-520.02"/>
+</a>
+</g>
+<g id="a_edge5&#45;label"><a xlink:title="8192">
+<text text-anchor="middle" x="772.5" y="-543.3" font-family="Times New Roman,serif" font-size="14.00"> 8192</text>
+</a>
+</g>
+</g>
+<!-- N9 -->
+<g id="node9" class="node">
+<title>N9</title>
+<g id="a_node9"><a xlink:title="runtime.main (10965)">
+<polygon fill="#edebe8" stroke="#b2a48d" points="907,-1124.5 821,-1124.5 821,-1088.5 907,-1088.5 907,-1124.5"/>
+<text text-anchor="middle" x="864" y="-1113.6" font-family="Times New Roman,serif" font-size="8.00">runtime</text>
+<text text-anchor="middle" x="864" y="-1104.6" font-family="Times New Roman,serif" font-size="8.00">main</text>
+<text text-anchor="middle" x="864" y="-1095.6" font-family="Times New Roman,serif" font-size="8.00">0 of 10965 (4.12%)</text>
+</a>
+</g>
+</g>
+<!-- N18 -->
+<g id="node18" class="node">
+<title>N18</title>
+<g id="a_node18"><a xlink:title="runtime.doInit (10960)">
+<polygon fill="#edebe8" stroke="#b2a48d" points="907,-997 821,-997 821,-961 907,-961 907,-997"/>
+<text text-anchor="middle" x="864" y="-986.1" font-family="Times New Roman,serif" font-size="8.00">runtime</text>
+<text text-anchor="middle" x="864" y="-977.1" font-family="Times New Roman,serif" font-size="8.00">doInit</text>
+<text text-anchor="middle" x="864" y="-968.1" font-family="Times New Roman,serif" font-size="8.00">0 of 10960 (4.12%)</text>
+</a>
+</g>
+</g>
+<!-- N9&#45;&gt;N18 -->
+<g id="edge17" class="edge">
+<title>N9&#45;&gt;N18</title>
+<g id="a_edge17"><a xlink:title="runtime.main &#45;&gt; runtime.doInit (10960)">
+<path fill="none" stroke="#b2a48d" d="M864,-1088.31C864,-1067.49 864,-1032.16 864,-1007.53"/>
+<polygon fill="#b2a48d" stroke="#b2a48d" points="867.5,-1007.38 864,-997.38 860.5,-1007.38 867.5,-1007.38"/>
+</a>
+</g>
+<g id="a_edge17&#45;label"><a xlink:title="runtime.main &#45;&gt; runtime.doInit (10960)">
+<text text-anchor="middle" x="883" y="-1018.8" font-family="Times New Roman,serif" font-size="14.00"> 10960</text>
+</a>
+</g>
+</g>
+<!-- N11 -->
+<g id="node11" class="node">
+<title>N11</title>
+<g id="a_node11"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len (131074)">
+<polygon fill="#edd9d5" stroke="#b22200" points="557.5,-632 462.5,-632 462.5,-588 557.5,-588 557.5,-632"/>
+<text text-anchor="middle" x="510" y="-621.6" font-family="Times New Roman,serif" font-size="8.00">lexemes</text>
+<text text-anchor="middle" x="510" y="-612.6" font-family="Times New Roman,serif" font-size="8.00">(*Lexeme)</text>
+<text text-anchor="middle" x="510" y="-603.6" font-family="Times New Roman,serif" font-size="8.00">Len</text>
+<text text-anchor="middle" x="510" y="-594.6" font-family="Times New Roman,serif" font-size="8.00">0 of 131074 (49.30%)</text>
+</a>
+</g>
+</g>
+<!-- N10&#45;&gt;N11 -->
+<g id="edge8" class="edge">
+<title>N10&#45;&gt;N11</title>
+<g id="a_edge8"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len (131074)">
+<path fill="none" stroke="#b22200" stroke-width="3" d="M510,-723.77C510,-701.81 510,-667.3 510,-642.23"/>
+<polygon fill="#b22200" stroke="#b22200" stroke-width="3" points="513.5,-642.13 510,-632.13 506.5,-642.13 513.5,-642.13"/>
+</a>
+</g>
+<g id="a_edge8&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len (131074)">
+<text text-anchor="middle" x="532.5" y="-669.3" font-family="Times New Roman,serif" font-size="14.00"> 131074</text>
+</a>
+</g>
+</g>
+<!-- N12 -->
+<g id="node12" class="node">
+<title>N12</title>
+<g id="a_node12"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value (131074)">
+<polygon fill="#edd9d5" stroke="#b22200" points="557.5,-514 462.5,-514 462.5,-470 557.5,-470 557.5,-514"/>
+<text text-anchor="middle" x="510" y="-503.6" font-family="Times New Roman,serif" font-size="8.00">lexemes</text>
+<text text-anchor="middle" x="510" y="-494.6" font-family="Times New Roman,serif" font-size="8.00">(*Lexeme)</text>
+<text text-anchor="middle" x="510" y="-485.6" font-family="Times New Roman,serif" font-size="8.00">Value</text>
+<text text-anchor="middle" x="510" y="-476.6" font-family="Times New Roman,serif" font-size="8.00">0 of 131074 (49.30%)</text>
+</a>
+</g>
+</g>
+<!-- N11&#45;&gt;N12 -->
+<g id="edge10" class="edge">
+<title>N11&#45;&gt;N12</title>
+<g id="a_edge10"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value (131074)">
+<path fill="none" stroke="#b22200" stroke-width="3" d="M510,-587.99C510,-570.28 510,-544.68 510,-524.51"/>
+<polygon fill="#b22200" stroke="#b22200" stroke-width="3" points="513.5,-524.24 510,-514.24 506.5,-524.24 513.5,-524.24"/>
+</a>
+</g>
+<g id="a_edge10&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value (131074)">
+<text text-anchor="middle" x="532.5" y="-550.8" font-family="Times New Roman,serif" font-size="14.00"> 131074</text>
+<text text-anchor="middle" x="532.5" y="-535.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+</a>
+</g>
+</g>
+<!-- N13 -->
+<g id="node13" class="node">
+<title>N13</title>
+<g id="a_node13"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue (131074)">
+<polygon fill="#edd9d5" stroke="#b22200" points="557.5,-404 462.5,-404 462.5,-360 557.5,-360 557.5,-404"/>
+<text text-anchor="middle" x="510" y="-393.6" font-family="Times New Roman,serif" font-size="8.00">lexemes</text>
+<text text-anchor="middle" x="510" y="-384.6" font-family="Times New Roman,serif" font-size="8.00">(*Lexeme)</text>
+<text text-anchor="middle" x="510" y="-375.6" font-family="Times New Roman,serif" font-size="8.00">prepareValue</text>
+<text text-anchor="middle" x="510" y="-366.6" font-family="Times New Roman,serif" font-size="8.00">0 of 131074 (49.30%)</text>
+</a>
+</g>
+</g>
+<!-- N12&#45;&gt;N13 -->
+<g id="edge11" class="edge">
+<title>N12&#45;&gt;N13</title>
+<g id="a_edge11"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue (131074)">
+<path fill="none" stroke="#b22200" stroke-width="3" d="M510,-469.92C510,-454.09 510,-432.15 510,-414.27"/>
+<polygon fill="#b22200" stroke="#b22200" stroke-width="3" points="513.5,-414.03 510,-404.03 506.5,-414.03 513.5,-414.03"/>
+</a>
+</g>
+<g id="a_edge11&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue (131074)">
+<text text-anchor="middle" x="532.5" y="-440.8" font-family="Times New Roman,serif" font-size="14.00"> 131074</text>
+<text text-anchor="middle" x="532.5" y="-425.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
 </a>
 </g>
 </g>
 <!-- N16 -->
 <g id="node16" class="node">
 <title>N16</title>
-<g id="a_node16"><a xlink:title="strings.(*Builder).Grow (32768)">
-<polygon fill="#edeae5" stroke="#b29b7c" points="486,-265 400,-265 400,-221 486,-221 486,-265"/>
-<text text-anchor="middle" x="443" y="-254.6" font-family="Times New Roman,serif" font-size="8.00">strings</text>
-<text text-anchor="middle" x="443" y="-245.6" font-family="Times New Roman,serif" font-size="8.00">(*Builder)</text>
-<text text-anchor="middle" x="443" y="-236.6" font-family="Times New Roman,serif" font-size="8.00">Grow</text>
-<text text-anchor="middle" x="443" y="-227.6" font-family="Times New Roman,serif" font-size="8.00">0 of 32768 (6.04%)</text>
+<g id="a_node16"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue (131074)">
+<polygon fill="#edd9d5" stroke="#b22200" points="557.5,-309 462.5,-309 462.5,-265 557.5,-265 557.5,-309"/>
+<text text-anchor="middle" x="510" y="-298.6" font-family="Times New Roman,serif" font-size="8.00">tokens</text>
+<text text-anchor="middle" x="510" y="-289.6" font-family="Times New Roman,serif" font-size="8.00">(*Token)</text>
+<text text-anchor="middle" x="510" y="-280.6" font-family="Times New Roman,serif" font-size="8.00">NormalValue</text>
+<text text-anchor="middle" x="510" y="-271.6" font-family="Times New Roman,serif" font-size="8.00">0 of 131074 (49.30%)</text>
 </a>
 </g>
 </g>
-<!-- N16&#45;&gt;N9 -->
+<!-- N13&#45;&gt;N16 -->
+<g id="edge12" class="edge">
+<title>N13&#45;&gt;N16</title>
+<g id="a_edge12"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue (131074)">
+<path fill="none" stroke="#b22200" stroke-width="3" d="M510,-359.9C510,-347.89 510,-332.62 510,-319.24"/>
+<polygon fill="#b22200" stroke="#b22200" stroke-width="3" points="513.5,-319.02 510,-309.02 506.5,-319.02 513.5,-319.02"/>
+</a>
+</g>
+<g id="a_edge12&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue (131074)">
+<text text-anchor="middle" x="532.5" y="-330.8" font-family="Times New Roman,serif" font-size="14.00"> 131074</text>
+</a>
+</g>
+</g>
+<!-- N14&#45;&gt;N6 -->
+<g id="edge16" class="edge">
+<title>N14&#45;&gt;N6</title>
+<g id="a_edge16"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (32768)">
+<path fill="none" stroke="#b27744" d="M628.58,-858.93C629.85,-842.11 631.67,-817.86 633.3,-796.23"/>
+<polygon fill="#b27744" stroke="#b27744" points="636.79,-796.43 634.05,-786.19 629.81,-795.9 636.79,-796.43"/>
+</a>
+</g>
+<g id="a_edge16&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (32768)">
+<text text-anchor="middle" x="653" y="-822.8" font-family="Times New Roman,serif" font-size="14.00"> 32768</text>
+<text text-anchor="middle" x="653" y="-807.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+</a>
+</g>
+</g>
+<!-- N17 -->
+<g id="node17" class="node">
+<title>N17</title>
+<g id="a_node17"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.NewS (8449)">
+<polygon fill="#edebe9" stroke="#b2a896" points="798,-764 716,-764 716,-728 798,-728 798,-764"/>
+<text text-anchor="middle" x="757" y="-753.1" font-family="Times New Roman,serif" font-size="8.00">tokens</text>
+<text text-anchor="middle" x="757" y="-744.1" font-family="Times New Roman,serif" font-size="8.00">NewS</text>
+<text text-anchor="middle" x="757" y="-735.1" font-family="Times New Roman,serif" font-size="8.00">0 of 8449 (3.18%)</text>
+</a>
+</g>
+</g>
+<!-- N15&#45;&gt;N17 -->
+<g id="edge21" class="edge">
+<title>N15&#45;&gt;N17</title>
+<g id="a_edge21"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.NewS &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.NewS (8449)">
+<path fill="none" stroke="#b2a896" d="M741.32,-862.88C744.35,-840.44 749.72,-800.8 753.32,-774.21"/>
+<polygon fill="#b2a896" stroke="#b2a896" points="756.82,-774.43 754.69,-764.05 749.88,-773.49 756.82,-774.43"/>
+</a>
+</g>
+<g id="a_edge21&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.NewS &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.NewS (8449)">
+<text text-anchor="middle" x="764.5" y="-815.3" font-family="Times New Roman,serif" font-size="14.00"> 8449</text>
+</a>
+</g>
+</g>
+<!-- N16&#45;&gt;N1 -->
+<g id="edge13" class="edge">
+<title>N16&#45;&gt;N1</title>
+<g id="a_edge13"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (131074)">
+<path fill="none" stroke="#b22200" stroke-width="3" d="M510,-264.74C510,-249.92 510,-229.27 510,-209.25"/>
+<polygon fill="#b22200" stroke="#b22200" stroke-width="3" points="513.5,-209.18 510,-199.18 506.5,-209.18 513.5,-209.18"/>
+</a>
+</g>
+<g id="a_edge13&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (131074)">
+<text text-anchor="middle" x="532.5" y="-235.8" font-family="Times New Roman,serif" font-size="14.00"> 131074</text>
+<text text-anchor="middle" x="532.5" y="-220.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+</a>
+</g>
+</g>
+<!-- N17&#45;&gt;N8 -->
+<g id="edge22" class="edge">
+<title>N17&#45;&gt;N8</title>
+<g id="a_edge22"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.NewS &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.newTokenizerImpl (8449)">
+<path fill="none" stroke="#b2a896" d="M757,-727.76C757,-708.31 757,-676.05 757,-650.37"/>
+<polygon fill="#b2a896" stroke="#b2a896" points="760.5,-650.18 757,-640.18 753.5,-650.18 760.5,-650.18"/>
+</a>
+</g>
+<g id="a_edge22&#45;label"><a xlink:title="github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.NewS &#45;&gt; github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.newTokenizerImpl (8449)">
+<text text-anchor="middle" x="778" y="-676.8" font-family="Times New Roman,serif" font-size="14.00"> 8449</text>
+<text text-anchor="middle" x="778" y="-661.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+</a>
+</g>
+</g>
+<!-- N19 -->
+<g id="node19" class="node">
+<title>N19</title>
+<g id="a_node19"><a xlink:title="syscall.init (10923)">
+<polygon fill="#edebe8" stroke="#b2a48d" points="907,-899 821,-899 821,-863 907,-863 907,-899"/>
+<text text-anchor="middle" x="864" y="-888.1" font-family="Times New Roman,serif" font-size="8.00">syscall</text>
+<text text-anchor="middle" x="864" y="-879.1" font-family="Times New Roman,serif" font-size="8.00">init</text>
+<text text-anchor="middle" x="864" y="-870.1" font-family="Times New Roman,serif" font-size="8.00">0 of 10923 (4.11%)</text>
+</a>
+</g>
+</g>
+<!-- N18&#45;&gt;N19 -->
 <g id="edge18" class="edge">
-<title>N16&#45;&gt;N9</title>
-<g id="a_edge18"><a xlink:title="strings.(*Builder).Grow &#45;&gt; strings.(*Builder).grow (32768)">
-<path fill="none" stroke="#b29b7c" d="M443,-220.82C443,-205.49 443,-184.24 443,-165.37"/>
-<polygon fill="#b29b7c" stroke="#b29b7c" points="446.5,-165.19 443,-155.19 439.5,-165.19 446.5,-165.19"/>
+<title>N18&#45;&gt;N19</title>
+<g id="a_edge18"><a xlink:title="runtime.doInit &#45;&gt; syscall.init (10923)">
+<path fill="none" stroke="#b2a48d" d="M864,-960.84C864,-946.5 864,-925.81 864,-909.22"/>
+<polygon fill="#b2a48d" stroke="#b2a48d" points="867.5,-909.01 864,-899.01 860.5,-909.01 867.5,-909.01"/>
 </a>
 </g>
-<g id="a_edge18&#45;label"><a xlink:title="strings.(*Builder).Grow &#45;&gt; strings.(*Builder).grow (32768)">
-<text text-anchor="middle" x="464" y="-191.8" font-family="Times New Roman,serif" font-size="14.00"> 32768</text>
-<text text-anchor="middle" x="464" y="-176.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+<g id="a_edge18&#45;label"><a xlink:title="runtime.doInit &#45;&gt; syscall.init (10923)">
+<text text-anchor="middle" x="883" y="-931.8" font-family="Times New Roman,serif" font-size="14.00"> 10923</text>
 </a>
 </g>
 </g>
-<!-- N17&#45;&gt;N16 -->
+<!-- N19&#45;&gt;N7 -->
 <g id="edge19" class="edge">
-<title>N17&#45;&gt;N16</title>
-<g id="a_edge19"><a xlink:title="strings.ToLower &#45;&gt; strings.(*Builder).Grow (32768)">
-<path fill="none" stroke="#b29b7c" d="M443,-352.74C443,-332.9 443,-299.92 443,-275.47"/>
-<polygon fill="#b29b7c" stroke="#b29b7c" points="446.5,-275.25 443,-265.25 439.5,-275.25 446.5,-275.25"/>
+<title>N19&#45;&gt;N7</title>
+<g id="a_edge19"><a xlink:title="syscall.init &#45;&gt; syscall.(*LazyDLL).NewProc (10923)">
+<path fill="none" stroke="#b2a48d" d="M864,-862.88C864,-844.08 864,-813.2 864,-788.04"/>
+<polygon fill="#b2a48d" stroke="#b2a48d" points="867.5,-788.02 864,-778.02 860.5,-788.02 867.5,-788.02"/>
 </a>
 </g>
-<g id="a_edge19&#45;label"><a xlink:title="strings.ToLower &#45;&gt; strings.(*Builder).Grow (32768)">
-<text text-anchor="middle" x="464" y="-301.8" font-family="Times New Roman,serif" font-size="14.00"> 32768</text>
-<text text-anchor="middle" x="464" y="-286.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
+<g id="a_edge19&#45;label"><a xlink:title="syscall.init &#45;&gt; syscall.(*LazyDLL).NewProc (10923)">
+<text text-anchor="middle" x="885" y="-822.8" font-family="Times New Roman,serif" font-size="14.00"> 10923</text>
+<text text-anchor="middle" x="885" y="-807.8" font-family="Times New Roman,serif" font-size="14.00"> (inline)</text>
 </a>
 </g>
 </g>
