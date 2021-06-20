@@ -102,10 +102,10 @@ func TestJsonAsyncRaceCheck(t *testing.T) {
 				defer wg.Done()
 				stats, err := index.CollectFromReader(testdata_test.TestDataLargeJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 32})
 				if err != nil {
-					t.Fatal(err)
+					panic(err)
 				}
 				if len(stats.Terms()) < 100 {
-					t.Fatal("Too small result")
+					panic("Too small result")
 				}
 			}()
 		}
