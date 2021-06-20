@@ -10,33 +10,33 @@ import (
 
 func TestCollectStats(t *testing.T) {
 	stats,_ := index.CollectFromString("Тут несколько Одинаковых термов именно тут и именно Термов!", index.CollectConfig{Mode: index.MODE_PLAIN})
-	assert.Equal(t, 0, stats.Terms()["ТУТ"].FirstIndex())
-	assert.Equal(t, 2, stats.Terms()["ТУТ"].Count())
-	assert.Equal(t, 1, stats.Terms()["ТУТ"].FirstCount())
-	assert.Equal(t, 0, stats.Terms()["ТУТ"].LastCount())
-	assert.Equal(t, 3, stats.Terms()["ТУТ"].Len())
+	assert.Equal(t, 0, stats.Terms()["тут"].FirstIndex())
+	assert.Equal(t, 2, stats.Terms()["тут"].Count())
+	assert.Equal(t, 1, stats.Terms()["тут"].FirstCount())
+	assert.Equal(t, 0, stats.Terms()["тут"].LastCount())
+	assert.Equal(t, 3, stats.Terms()["тут"].Len())
 
-	assert.Equal(t, 3, stats.Terms()["ТЕРМОВ"].FirstIndex())
-	assert.Equal(t, 2, stats.Terms()["ТЕРМОВ"].Count())
-	assert.Equal(t, 0, stats.Terms()["ТЕРМОВ"].FirstCount())
-	assert.Equal(t, 1, stats.Terms()["ТЕРМОВ"].LastCount())
-	assert.Equal(t, 6, stats.Terms()["ТЕРМОВ"].Len())
+	assert.Equal(t, 3, stats.Terms()["термов"].FirstIndex())
+	assert.Equal(t, 2, stats.Terms()["термов"].Count())
+	assert.Equal(t, 0, stats.Terms()["термов"].FirstCount())
+	assert.Equal(t, 1, stats.Terms()["термов"].LastCount())
+	assert.Equal(t, 6, stats.Terms()["термов"].Len())
 
 	docorder := stats.DocOrderIndex()
-	assert.Equal(t, "ТУТ", docorder[0].Value())
-	assert.Equal(t, "НЕСКОЛЬКО", docorder[1].Value())
-	assert.Equal(t, "ОДИНАКОВЫХ", docorder[2].Value())
-	assert.Equal(t, "ТЕРМОВ", docorder[3].Value())
-	assert.Equal(t, "ИМЕННО", docorder[4].Value())
-	assert.Equal(t, "И", docorder[5].Value())
+	assert.Equal(t, "тут", docorder[0].Value())
+	assert.Equal(t, "несколько", docorder[1].Value())
+	assert.Equal(t, "одинаковых", docorder[2].Value())
+	assert.Equal(t, "термов", docorder[3].Value())
+	assert.Equal(t, "именно", docorder[4].Value())
+	assert.Equal(t, "и", docorder[5].Value())
 
 	freqorder := stats.FreqOrderIndex()
-	assert.Equal(t, "ТУТ", freqorder[0].Value())
-	assert.Equal(t, "ТЕРМОВ", freqorder[1].Value())
-	assert.Equal(t, "ИМЕННО", freqorder[2].Value())
-	assert.Equal(t, "НЕСКОЛЬКО", freqorder[3].Value())
-	assert.Equal(t, "ОДИНАКОВЫХ", freqorder[4].Value())
-	assert.Equal(t, "И", freqorder[5].Value())
+	assert.Equal(t, "тут", freqorder[0].Value())
+	assert.Equal(t, "термов", freqorder[1].Value())
+	assert.Equal(t, "именно", freqorder[2].Value())
+	assert.Equal(t, "несколько", freqorder[3].Value())
+	assert.Equal(t, "одинаковых", freqorder[4].Value())
+	assert.Equal(t, "и", freqorder[5].Value())
 
 }
 
@@ -61,7 +61,7 @@ func TestTask_10_4_no_start_no_finish(t *testing.T) {
 	}
 
 	assert.Equal(t, []string{
-		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
+		"like", "told", "looked", "marry", "went", "love", "want", "into", "took", "cant",
 	}, resultWords)
 }
 
@@ -86,7 +86,7 @@ func TestTask_10_4_no_start_no_finish_json_sync(t *testing.T) {
 	}
 
 	assert.Equal(t, []string{
-		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
+		"like", "told", "looked", "marry", "went", "love", "want", "into", "took", "cant",
 	}, resultWords)
 }
 
@@ -138,7 +138,7 @@ func TestTask_10_4_no_start_no_finish_json_async(t *testing.T) {
 	}
 
 	assert.Equal(t, []string{
-		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
+		"like", "told", "looked", "marry", "went", "love", "want", "into", "took", "cant",
 	}, resultWords)
 }
 

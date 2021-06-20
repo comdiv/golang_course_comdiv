@@ -36,11 +36,13 @@ func (l *lexerImpl) Next() *Lexeme {
 				l.prepared.token = token
 				l.prepared.stPosition = 0
 				l.lexeme.isLast = true
+				l.lexeme.cachedValue = ""
 				return l.lexeme
 			}
 			l.lexeme.token = token
 			l.lexeme.stPosition = 0
 			l.lexeme.isLast = false
+			l.lexeme.cachedValue = ""
 			return l.lexeme
 		}
 
@@ -52,6 +54,7 @@ func (l *lexerImpl) Next() *Lexeme {
 				l.prepared.token = &newt
 				l.prepared.stPosition = l.statementIndex
 				l.prepared.isLast = false
+				l.lexeme.cachedValue = ""
 				return l.lexeme
 			}
 			l.prepared.token = &newt
@@ -70,6 +73,8 @@ func (l *lexerImpl) Next() *Lexeme {
 				l.prepared.token = nil
 				l.prepared.isLast = false
 				l.prepared.stPosition = 0
+				l.prepared.cachedValue = ""
+				l.lexeme.cachedValue = ""
 				return l.lexeme
 			}
 		}

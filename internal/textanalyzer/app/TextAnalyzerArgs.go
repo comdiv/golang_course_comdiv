@@ -9,7 +9,11 @@ type TextAnalyzerArgs struct {
 	useLast  *bool
 	nonfreq  *bool
 	json     *bool
+	cpuprof  *string
+	memprof  *string
 }
+
+
 
 func (t *TextAnalyzerArgs) Json() bool {
 	return *t.json
@@ -23,6 +27,8 @@ func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
 		useLast:  flag.Bool("last", false, "Include last words of statements"),
 		nonfreq:  flag.Bool("nonfreq", false, "Less frequent, not more frequent"),
 		json:     flag.Bool("json", false, "Treat file as JSON with standard schema, not as plain"),
+		cpuprof:  flag.String("cpuprof", "", "File for storing CPU profiler info"),
+		memprof:  flag.String("memprof", "", "File for storing Mem profiler info"),
 	}
 }
 
@@ -48,4 +54,12 @@ func (t TextAnalyzerArgs) UseLast() bool {
 
 func (t TextAnalyzerArgs) Nonfreq() bool {
 	return *t.nonfreq
+}
+
+func (t *TextAnalyzerArgs) Cpuprof() string {
+	return *t.cpuprof
+}
+
+func (t *TextAnalyzerArgs) Memprof() string {
+	return *t.memprof
 }

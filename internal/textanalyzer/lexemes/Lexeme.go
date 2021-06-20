@@ -2,7 +2,6 @@ package lexemes
 
 import (
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens"
-	"strings"
 )
 
 // Lexeme описатель лексемы в тексте
@@ -12,6 +11,11 @@ type Lexeme struct {
 	// признак последнего слова в предложении
 	isLast bool
 	token  *tokens.Token
+	cachedValue string
+}
+
+func (l *Lexeme)  prepareValue() {
+	l.cachedValue = l.token.NormalValue()
 }
 
 func (l *Lexeme) IsUndefined() bool {
@@ -27,6 +31,7 @@ func (l *Lexeme) Copy() Lexeme {
 		l.stPosition,
 		l.isLast,
 		&newtoken,
+		"",
 	}
 }
 
@@ -39,7 +44,10 @@ func (l *Lexeme) Finish() int {
 }
 
 func (l *Lexeme) Value() string {
-	return strings.Replace(strings.ToUpper(l.token.Value()), "Ё", "Е", -1)
+	if len(l.cachedValue)==0 {
+		l.prepareValue()
+	}
+	return l.cachedValue
 }
 
 func (l *Lexeme) Len() int {
@@ -65,6 +73,7 @@ func NewLexeme(pos int, last bool, token *tokens.Token) *Lexeme {
 		pos,
 		last,
 		token,
+		"",
 	}
 }
 
@@ -72,5 +81,6 @@ func (l *Lexeme) Apply(pos int, last bool, token *tokens.Token) *Lexeme {
 	l.stPosition = pos
 	l.isLast = last
 	l.token = token
+	l.cachedValue = ""
 	return l
 }
