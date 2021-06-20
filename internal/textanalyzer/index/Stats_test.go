@@ -4,6 +4,7 @@ import (
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index"
 	testdata_test "github.com/comdiv/golang_course_comdiv/internal/textanalyzer/testdata"
 	"github.com/stretchr/testify/assert"
+	"sync"
 	"testing"
 )
 
@@ -87,6 +88,30 @@ func TestTask_10_4_no_start_no_finish_json_sync(t *testing.T) {
 	assert.Equal(t, []string{
 		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
 	}, resultWords)
+}
+
+func TestJsonAsyncRaceCheck(t *testing.T) {
+	// 5 раз по 5 в паралелль загрузов большого файла, в 32 потока
+	// нет ассертов только для -race
+
+	for i:=0;i<5;i++{
+		var wg sync.WaitGroup
+		for j:=0;j<5;j++{
+			wg.Add(1)
+			go func(){
+				defer wg.Done()
+				stats, err := index.CollectFromReader(testdata_test.TestDataLargeJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 32})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if len(stats.Terms()) < 100 {
+					t.Fatal("Too small result")
+				}
+			}()
+		}
+		wg.Wait()
+	}
+
 }
 
 func TestTask_10_4_no_start_no_finish_json_async(t *testing.T) {
