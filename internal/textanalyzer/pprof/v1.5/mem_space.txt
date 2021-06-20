@@ -1,0 +1,30 @@
+Type: alloc_space
+Time: Jun 20, 2021 at 8:51pm (+05)
+Showing nodes accounting for 46084.79kB, 100% of 46084.79kB total
+      flat  flat%   sum%        cum   cum%
+16384.75kB 35.55% 35.55% 18432.78kB 40.00%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next
+ 9188.67kB 19.94% 55.49%  9188.67kB 19.94%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStatCollectionF (inline)
+ 6656.41kB 14.44% 69.94%  6656.41kB 14.44%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (inline)
+ 3082.01kB  6.69% 76.62% 14346.49kB 31.13%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add
+ 3072.05kB  6.67% 83.29%  3072.05kB  6.67%  strings.(*Builder).grow (inline)
+ 2568.06kB  5.57% 88.86%  2568.06kB  5.57%  bufio.NewReaderSize (inline)
+ 2048.03kB  4.44% 93.31%  2048.03kB  4.44%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (inline)
+ 1536.02kB  3.33% 96.64%  1536.02kB  3.33%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (inline)
+ 1032.02kB  2.24% 98.88%  1548.79kB  3.36%  encoding/json.(*decodeState).literalStore
+  516.76kB  1.12%   100%   516.76kB  1.12%  encoding/json.unquoteBytes
+         0     0%   100%  2568.06kB  5.57%  bufio.NewReader (inline)
+         0     0%   100%  1548.79kB  3.36%  encoding/json.(*Decoder).Decode
+         0     0%   100%  1548.79kB  3.36%  encoding/json.(*decodeState).object
+         0     0%   100%  1548.79kB  3.36%  encoding/json.(*decodeState).unmarshal
+         0     0%   100%  1548.79kB  3.36%  encoding/json.(*decodeState).value
+         0     0%   100%  3072.05kB  6.67%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (inline)
+         0     0%   100%    44536kB 96.64%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2
+         0     0%   100%    44536kB 96.64%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart
+         0     0%   100%  1548.79kB  3.36%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.readJsonChan.func1
+         0     0%   100%  3072.05kB  6.67%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len (inline)
+         0     0%   100%  4608.07kB 10.00%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value
+         0     0%   100%  2568.06kB  5.57%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.NewS
+         0     0%   100%  2568.06kB  5.57%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.NewS
+         0     0%   100%  2568.06kB  5.57%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.newTokenizerImpl (inline)
+         0     0%   100%  3072.05kB  6.67%  strings.(*Builder).Grow (inline)
+         0     0%   100%  3072.05kB  6.67%  strings.ToUpper

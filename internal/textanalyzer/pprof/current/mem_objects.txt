@@ -1,0 +1,23 @@
+Type: alloc_objects
+Time: Jun 20, 2021 at 8:51pm (+05)
+Showing nodes accounting for 889035, 100% of 889382 total
+Dropped 8 nodes (cum <= 4446)
+      flat  flat%   sum%        cum   cum%
+    349541 39.30% 39.30%     480615 54.04%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next
+    196611 22.11% 61.41%     196611 22.11%  strings.(*Builder).grow (inline)
+    131074 14.74% 76.15%     131074 14.74%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (inline)
+    106502 11.97% 88.12%     106502 11.97%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (inline)
+     98305 11.05% 99.17%      98305 11.05%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (inline)
+      5975  0.67% 99.85%       5975  0.67%  bufio.NewReaderSize (inline)
+      1027  0.12%   100%     402445 45.25%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add
+         0     0%   100%       5975  0.67%  bufio.NewReader (inline)
+         0     0%   100%     196611 22.11%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (inline)
+         0     0%   100%     889199   100%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2
+         0     0%   100%     889199   100%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart
+         0     0%   100%     196611 22.11%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len (inline)
+         0     0%   100%     294916 33.16%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value
+         0     0%   100%       5975  0.67%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.NewS
+         0     0%   100%       5975  0.67%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.NewS
+         0     0%   100%       5975  0.67%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.newTokenizerImpl (inline)
+         0     0%   100%     196611 22.11%  strings.(*Builder).Grow (inline)
+         0     0%   100%     196611 22.11%  strings.ToUpper
