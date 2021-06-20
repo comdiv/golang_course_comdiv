@@ -8,7 +8,7 @@ import (
 )
 
 func TestCollectStats(t *testing.T) {
-	stats := index.CollectFromString("Тут несколько Одинаковых термов именно тут и именно Термов!", nil, 0, index.MODE_PLAIN)
+	stats,_ := index.CollectFromString("Тут несколько Одинаковых термов именно тут и именно Термов!", index.CollectConfig{Mode: index.MODE_PLAIN})
 	assert.Equal(t, 0, stats.Terms()["ТУТ"].FirstIndex())
 	assert.Equal(t, 2, stats.Terms()["ТУТ"].Count())
 	assert.Equal(t, 1, stats.Terms()["ТУТ"].FirstCount())
@@ -48,7 +48,7 @@ func TestTask_10_4_no_start_no_finish(t *testing.T) {
 		ReverseFreq:  false,
 	})
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
-	stats := index.CollectFromReader(testdata_test.TestDataReader(), query, 0, index.MODE_PLAIN)
+	stats,_ := index.CollectFromReader(testdata_test.TestDataReader(), index.CollectConfig{Filter:query, Mode: index.MODE_PLAIN})
 
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
 	result := stats.Find(10, query)
@@ -73,7 +73,7 @@ func TestTask_10_4_no_start_no_finish_json_sync(t *testing.T) {
 		ReverseFreq:  false,
 	})
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
-	stats := index.CollectFromReader(testdata_test.TestDataJsonReader(), query, 0, index.MODE_JSON)
+	stats,_ := index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Filter:query, Mode: index.MODE_JSON})
 
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
 	result := stats.Find(10, query)
@@ -98,7 +98,10 @@ func TestTask_10_4_no_start_no_finish_json_async(t *testing.T) {
 		ReverseFreq:  false,
 	})
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
-	stats := index.CollectFromReader(testdata_test.TestDataJsonReader(), query, 0, index.MODE_PARALLEL_JSON)
+	stats,err := index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Filter:query, Mode: index.MODE_PARALLEL_JSON})
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
 	result := stats.Find(10, query)

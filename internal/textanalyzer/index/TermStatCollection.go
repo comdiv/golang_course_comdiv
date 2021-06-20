@@ -1,6 +1,7 @@
 package index
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/buger/jsonparser"
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes"
@@ -44,14 +45,14 @@ func (c *TermStatCollection) Merge(other *TermStatCollection) *TermStatCollectio
 
 func (c *TermStatCollection) RebuildFrequencyIndex() {
 
-	if len(c.docOrderIndex)==0 { // it will be not sorted after merge
+	if len(c.docOrderIndex) == 0 { // it will be not sorted after merge
 		c.freqOrderIndex = make([]*TermStat, len(c.terms))
 		idx := 0
 		for i := range c.terms {
 			c.freqOrderIndex[idx] = c.terms[i]
 			idx++
 		}
-	}else {
+	} else {
 		c.freqOrderIndex = make([]*TermStat, 0, len(c.terms))
 		c.freqOrderIndex = append(c.freqOrderIndex, c.docOrderIndex...)
 	}
@@ -101,81 +102,130 @@ func (c *TermStatCollection) Add(lexeme *lexemes.Lexeme, part int, idx int) {
 	c.terms[lexeme.Value()] = s
 }
 
-func CollectFromString(text string, filter *TermFilter, part int, mode ReadMode) *TermStatCollection {
-	return CollectFromReader(strings.NewReader(text), filter, part, mode)
+type CollectConfig struct {
+	Filter  *TermFilter
+	Part    int
+	Mode    ReadMode
+	Workers int
 }
 
-func CollectFromReader(reader io.Reader, filter *TermFilter, part int, mode ReadMode) *TermStatCollection {
-	switch mode {
+func CollectFromString(text string, config CollectConfig) (*TermStatCollection, error) {
+	return CollectFromReader(strings.NewReader(text), config)
+}
+
+func CollectFromReader(reader io.Reader, config CollectConfig) (*TermStatCollection, error) {
+	switch config.Mode {
 	case MODE_PLAIN:
-		return collectStats(reader, filter, part)
+		return collectStats(reader, config), nil
 	case MODE_JSON:
-		return collectStatsFromJson(reader, filter)
+		return collectStatsFromJson(reader, config), nil
 	case MODE_PARALLEL_JSON:
-		return collectStatsFromJsonAsync(reader, filter)
+		return collectStatsFromJsonAsync(reader, config)
 	default:
-		return collectStats(reader, filter, part)
+		return collectStats(reader, config), nil
 	}
 }
 
-func collectStatsFromJsonAsync(reader io.Reader, filter *TermFilter) *TermStatCollection {
-	result := NewTermStatCollectionF(filter)
-	subCollections := make(chan *TermStatCollection, 20)
-	collected := make(chan struct{})
-	go func(){
-		defer close(collected)
-		for c := range subCollections {
-			result = result.Merge(c)
-		}
-		collected <- struct{}{}
-	}()
+type JsonTextPart struct {
+	Number int
+	Text   string
+	// при работе с горутинами и каналами надо как-то
+	// более корректно действовать с ошибками
+	Error error
+}
 
-	wg := new(sync.WaitGroup)
-	data, err := ioutil.ReadAll(reader)
-	if err != nil {
-		panic(fmt.Errorf("cannot read bytes from reader %v", err))
-	}
-	_, err = jsonparser.ArrayEach(data, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
+func NewErrorPart(err error) *JsonTextPart {
+	return &JsonTextPart{Error: err}
+}
+
+func readJsonChan(reader io.Reader) <-chan *JsonTextPart {
+	result := make(chan *JsonTextPart)
+	go func() {
+		defer close(result)
+		decoder := json.NewDecoder(reader)
+		// open brace
+		_, err := decoder.Token()
 		if err != nil {
-			panic(fmt.Errorf("error in json %v", err))
+			result <- NewErrorPart(err)
+			return
 		}
-		part, err := jsonparser.GetInt(value, "number")
-		if err != nil {
-			panic(fmt.Errorf("error get number from json %v", err))
-		}
-		text, err := jsonparser.GetString(value, "text")
-		if err != nil {
-			panic(fmt.Errorf("error get text from json %v", err))
-		}
-		wg.Add(1)
-		go func(part int64, text string) {
-			defer wg.Done()
-			subResult:= NewTermStatCollectionF(filter)
-			lexer := lexemes.NewS(text)
-			idx := -1
-			for {
-				idx++
-				lexeme := lexer.Next()
-				if lexeme.IsEof() {
-					break
+		for {
+			var value JsonTextPart
+			err := decoder.Decode(&value)
+			if nil != err {
+				// check end of array
+				if err.Error() != "expected comma after array element" {
+					fmt.Printf("Error: %v\n", err)
+					result <- NewErrorPart(err)
 				}
-				subResult.Add(lexeme, int(part), idx)
+				break
 			}
-			subCollections<-subResult
-		}(part, text)
-	})
-	wg.Wait()
-	close(subCollections)
-	<-collected
-	if err != nil {
-		panic(fmt.Errorf("general error in json %v", err))
-	}
-	result.RebuildFrequencyIndex()
+			result <- &value
+		}
+	}()
 	return result
 }
 
-func collectStatsFromJson(reader io.Reader, filter *TermFilter) *TermStatCollection {
-	result := NewTermStatCollectionF(filter)
+func processParts(config *CollectConfig, input <-chan *JsonTextPart, out chan<- *TermStatCollection, err *error) {
+	for block := range input {
+		// только один последний в обработке блок может быть ошибочным (по принципу организации входного канала
+		// если потом много файлов будет надо будет чуть по другому, скажем канал ошибок
+		if block.Error != nil {
+			*err = block.Error
+			break
+		}
+		subResult := NewTermStatCollectionF(config.Filter)
+		lexer := lexemes.NewS(block.Text)
+		idx := -1
+		for {
+			idx++
+			lexeme := lexer.Next()
+			if lexeme.IsEof() {
+				break
+			}
+			subResult.Add(lexeme, block.Number, idx)
+		}
+		out <- subResult
+	}
+}
+
+func collectStatsFromJsonAsync(
+	reader io.Reader,
+	config CollectConfig,
+) (*TermStatCollection, error) {
+	workers := config.Workers
+	if workers <= 0 {
+		workers = 8 // default value
+	}
+	result := NewTermStatCollectionF(config.Filter)
+	subCollections := make(chan *TermStatCollection, 20)
+	mergewg := new(sync.WaitGroup)
+	mergewg.Add(1)
+	go func() {
+		defer mergewg.Done()
+		for c := range subCollections {
+			result = result.Merge(c)
+		}
+	}()
+	var processError error
+	wg := new(sync.WaitGroup)
+	input := readJsonChan(reader)
+	for i := 0; i < workers; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			processParts(&config, input, subCollections, &processError)
+		}()
+	}
+	wg.Wait()
+	close(subCollections)
+	mergewg.Wait()
+	result.RebuildFrequencyIndex()
+	return result, processError
+}
+
+func collectStatsFromJson(reader io.Reader, config CollectConfig) *TermStatCollection {
+	result := NewTermStatCollectionF(config.Filter)
 	data, err := ioutil.ReadAll(reader)
 	if err != nil {
 		panic(fmt.Errorf("cannot read bytes from reader %v", err))
@@ -210,8 +260,8 @@ func collectStatsFromJson(reader io.Reader, filter *TermFilter) *TermStatCollect
 	return result
 }
 
-func collectStats(reader io.Reader, filter *TermFilter, part int) *TermStatCollection {
-	stats := NewTermStatCollectionF(filter)
+func collectStats(reader io.Reader, config CollectConfig) *TermStatCollection {
+	stats := NewTermStatCollectionF(config.Filter)
 	lexer := lexemes.NewR(reader)
 	idx := -1
 	for {
@@ -220,7 +270,7 @@ func collectStats(reader io.Reader, filter *TermFilter, part int) *TermStatColle
 		if lexeme.IsEof() {
 			break
 		}
-		stats.Add(lexeme, part, idx)
+		stats.Add(lexeme, config.Part, idx)
 	}
 	stats.RebuildFrequencyIndex()
 	return stats
