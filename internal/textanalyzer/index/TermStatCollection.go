@@ -16,7 +16,8 @@ type TermStatCollection struct {
 	terms          map[string]*TermStat
 	docOrderIndex  []*TermStat
 	freqOrderIndex []*TermStat
-	filter         *TermFilter ``
+	filter         *TermFilter
+	errors         []error
 }
 
 type ReadMode int
@@ -32,13 +33,18 @@ func (c *TermStatCollection) Terms() map[string]*TermStat {
 }
 
 func (c *TermStatCollection) Merge(other *TermStatCollection) *TermStatCollection {
-	for i := range other.Terms() {
-		my, ok := c.Terms()[i]
-		if !ok {
-			my = NewTermStat(i)
-			c.Terms()[i] = my
+	// если произошла какая-то ошибка в рамках переданной коллекции, то термы не сводим, только ошибки
+	if other.Errors() != nil {
+		c.AddErrors(other.Errors())
+	} else {
+		for i := range other.Terms() {
+			my, ok := c.Terms()[i]
+			if !ok {
+				my = NewTermStat(i)
+				c.Terms()[i] = my
+			}
+			my.Merge(other.Terms()[i])
 		}
-		my.Merge(other.Terms()[i])
 	}
 	return c
 }
@@ -109,20 +115,20 @@ type CollectConfig struct {
 	Workers int
 }
 
-func CollectFromString(text string, config CollectConfig) (*TermStatCollection, error) {
+func CollectFromString(text string, config CollectConfig) *TermStatCollection {
 	return CollectFromReader(strings.NewReader(text), config)
 }
 
-func CollectFromReader(reader io.Reader, config CollectConfig) (*TermStatCollection, error) {
+func CollectFromReader(reader io.Reader, config CollectConfig) *TermStatCollection {
 	switch config.Mode {
 	case MODE_PLAIN:
-		return collectStats(reader, config), nil
+		return collectStats(reader, config)
 	case MODE_JSON:
-		return collectStatsFromJson(reader, config), nil
+		return collectStatsFromJson(reader, config)
 	case MODE_PARALLEL_JSON:
 		return collectStatsFromJsonAsync(reader, config)
 	default:
-		return collectStats(reader, config), nil
+		return collectStats(reader, config)
 	}
 }
 
@@ -166,13 +172,7 @@ func readJsonChan(reader io.Reader) <-chan *JsonTextPart {
 	return result
 }
 
-func processPart(block *JsonTextPart, config *CollectConfig, out chan<- *TermStatCollection, err *error) {
-	// только один последний в обработке блок может быть ошибочным (по принципу организации входного канала
-	// если потом много файлов будет надо будет чуть по другому, скажем канал ошибок
-	if block.Error != nil {
-		*err = block.Error
-		return
-	}
+func processPart(block *JsonTextPart, config *CollectConfig, out chan<- *TermStatCollection) {
 	subResult := NewTermStatCollectionF(config.Filter)
 	lexer := lexemes.NewS(block.Text)
 	idx := -1
@@ -190,7 +190,7 @@ func processPart(block *JsonTextPart, config *CollectConfig, out chan<- *TermSta
 func collectStatsFromJsonAsync(
 	reader io.Reader,
 	config CollectConfig,
-) (*TermStatCollection, error) {
+) *TermStatCollection {
 	workers := config.Workers
 	if workers <= 0 {
 		workers = 8 // default value
@@ -205,14 +205,14 @@ func collectStatsFromJsonAsync(
 			result = result.Merge(c)
 		}
 	}()
-	var processError error
 	wg := new(sync.WaitGroup)
 	input := readJsonChan(reader)
 	routinePoolController := make(chan struct{}, workers)
 	defer close(routinePoolController)
 	for e := range input {
-		if processError != nil {
-			break
+		if e.Error != nil {
+			result.AddError(e.Error)
+			continue
 		}
 		routinePoolController <- struct{}{}
 		wg.Add(1)
@@ -221,14 +221,14 @@ func collectStatsFromJsonAsync(
 			defer func() {
 				<-routinePoolController
 			}()
-			processPart(jtp, &config, subCollections, &processError)
+			processPart(jtp, &config, subCollections)
 		}(e)
 	}
 	wg.Wait()
 	close(subCollections)
 	mergewg.Wait()
 	result.RebuildFrequencyIndex()
-	return result, processError
+	return result
 }
 
 func collectStatsFromJson(reader io.Reader, config CollectConfig) *TermStatCollection {
@@ -318,4 +318,22 @@ func (c *TermStatCollection) Find(size int, filter *TermFilter) []*TermStat {
 	sort.Slice(result, func(i, j int) bool { return result[i].GetSortIndex() < result[j].GetSortIndex() })
 
 	return result
+}
+
+func (c *TermStatCollection) Errors() []error {
+	return c.errors
+}
+
+func (c *TermStatCollection) AddError(e error) {
+	if c.errors == nil {
+		c.errors = make([]error, 0)
+	}
+	c.errors = append(c.errors, e)
+}
+
+func (c *TermStatCollection) AddErrors(e []error) {
+	if c.errors == nil {
+		c.errors = make([]error, 0)
+	}
+	c.errors = append(c.errors, e...)
 }

@@ -9,7 +9,7 @@ import (
 func Benchmark_NonFilteredCollection(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats, _ = index.CollectFromReader(testdata_test.TestDataReader(), index.CollectConfig{Mode: index.MODE_PLAIN})
+		stats = index.CollectFromReader(testdata_test.TestDataReader(), index.CollectConfig{Mode: index.MODE_PLAIN})
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -19,7 +19,7 @@ func Benchmark_NonFilteredCollection(b *testing.B) {
 func Benchmark_NonFilteredCollectionJson(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats, _ = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PLAIN})
+		stats = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PLAIN})
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -29,7 +29,7 @@ func Benchmark_NonFilteredCollectionJson(b *testing.B) {
 func Benchmark_NonFilteredCollectionJsonParallel_2(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats, _  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 2})
+		stats  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 2})
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -39,7 +39,7 @@ func Benchmark_NonFilteredCollectionJsonParallel_2(b *testing.B) {
 func Benchmark_NonFilteredCollectionJsonParallel_4(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats, _  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 4})
+		stats  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 4})
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -50,7 +50,7 @@ func Benchmark_NonFilteredCollectionJsonParallel_4(b *testing.B) {
 func Benchmark_NonFilteredCollectionJsonParallel_8(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats, _  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON})
+		stats  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON})
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -60,7 +60,7 @@ func Benchmark_NonFilteredCollectionJsonParallel_8(b *testing.B) {
 func Benchmark_NonFilteredCollectionJsonParallel_16(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats, _  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 16})
+		stats  = index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 16})
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -71,7 +71,7 @@ func Benchmark_NonFilteredCollectionJsonParallel_16(b *testing.B) {
 func Benchmark_NonFilteredCollectionJsonParallel_8_large(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats, _  = index.CollectFromReader(testdata_test.TestDataLargeJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON})
+		stats  = index.CollectFromReader(testdata_test.TestDataLargeJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON})
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -81,7 +81,7 @@ func Benchmark_NonFilteredCollectionJsonParallel_8_large(b *testing.B) {
 func Benchmark_NonFilteredCollectionJsonParallel_16_large(b *testing.B) {
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats, _  = index.CollectFromReader(testdata_test.TestDataLargeJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 16})
+		stats  = index.CollectFromReader(testdata_test.TestDataLargeJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 16})
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -89,7 +89,7 @@ func Benchmark_NonFilteredCollectionJsonParallel_16_large(b *testing.B) {
 }
 
 func Benchmark_NonFilteredSearch(b *testing.B) {
-	stats, _ := index.CollectFromReader(testdata_test.TestDataReader(), index.CollectConfig{Mode: index.MODE_PLAIN})
+	stats := index.CollectFromReader(testdata_test.TestDataReader(), index.CollectConfig{Mode: index.MODE_PLAIN})
 	var result []*index.TermStat
 	query := index.NewTermFilter(index.TermFilterOptions{
 		MinLen:       4,
@@ -114,7 +114,7 @@ func Benchmark_PreFilteredCollection(b *testing.B) {
 	})
 	var stats *index.TermStatCollection
 	for i := 0; i < b.N; i++ {
-		stats, _ = index.CollectFromReader(testdata_test.TestDataReader(), index.CollectConfig{Filter: query, Mode: index.MODE_PLAIN})
+		stats = index.CollectFromReader(testdata_test.TestDataReader(), index.CollectConfig{Filter: query, Mode: index.MODE_PLAIN})
 		if stats == nil {
 			b.Fatal("null stats")
 		}
@@ -128,7 +128,7 @@ func Benchmark_PreFilteredSearch(b *testing.B) {
 		IncludeLast:  false,
 		ReverseFreq:  false,
 	})
-	stats, _ := index.CollectFromReader(testdata_test.TestDataReader(),index.CollectConfig{Filter: query, Mode: index.MODE_PLAIN})
+	stats := index.CollectFromReader(testdata_test.TestDataReader(),index.CollectConfig{Filter: query, Mode: index.MODE_PLAIN})
 	var result []*index.TermStat
 
 	for i := 0; i < b.N; i++ {

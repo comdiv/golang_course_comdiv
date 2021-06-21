@@ -40,7 +40,7 @@ func main() {
 	} else {
 		mode = index.MODE_PLAIN
 	}
-	stats,_ := index.CollectFromReader(os.Stdin, index.CollectConfig{Filter:filter, Mode:mode})
+	stats := index.CollectFromReader(os.Stdin, index.CollectConfig{Filter:filter, Mode:mode})
 	result := stats.Find(args.Size(), filter)
 	for _, v := range result {
 		fmt.Printf("%v\n", *v)
