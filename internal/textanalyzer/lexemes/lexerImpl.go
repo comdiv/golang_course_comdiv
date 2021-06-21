@@ -17,14 +17,14 @@ func newLexerImpl(tokenizer tokens.ITokenizer) *lexerImpl {
 	return &lexerImpl{
 		tokenizer:      tokenizer,
 		statementIndex: -1,
-		lexeme:         NewLexeme(0, false, nil),
-		prepared:       NewLexeme(0, false, nil),
+		lexeme:         NewLexeme(0, false, tokens.UNDEFINED_TOKEN),
+		prepared:       NewLexeme(0, false, tokens.UNDEFINED_TOKEN),
 	}
 }
 
 func (l *lexerImpl) Next() *Lexeme {
 	for {
-		token := l.tokenizer.Next()
+		token := l.tokenizer.Next().Copy()
 
 		if token.IsUnknown() {
 			continue
@@ -36,25 +36,27 @@ func (l *lexerImpl) Next() *Lexeme {
 				l.prepared.token = token
 				l.prepared.stPosition = 0
 				l.lexeme.isLast = true
+				l.lexeme.cachedValue = ""
 				return l.lexeme
 			}
 			l.lexeme.token = token
 			l.lexeme.stPosition = 0
 			l.lexeme.isLast = false
+			l.lexeme.cachedValue = ""
 			return l.lexeme
 		}
 
 		if token.IsWord() {
 			l.statementIndex++
-			newt := token.Copy()
 			if !l.prepared.IsUndefined() {
 				l.lexeme, l.prepared = l.prepared, l.lexeme
-				l.prepared.token = &newt
+				l.prepared.token = token
 				l.prepared.stPosition = l.statementIndex
 				l.prepared.isLast = false
+				l.lexeme.cachedValue = ""
 				return l.lexeme
 			}
-			l.prepared.token = &newt
+			l.prepared.token = token
 			l.prepared.stPosition = l.statementIndex
 			l.prepared.isLast = false
 			continue
@@ -67,9 +69,11 @@ func (l *lexerImpl) Next() *Lexeme {
 			if !l.prepared.IsUndefined() {
 				l.prepared.isLast = true
 				l.lexeme, l.prepared = l.prepared, l.lexeme
-				l.prepared.token = nil
+				l.prepared.token = tokens.UNDEFINED_TOKEN
 				l.prepared.isLast = false
 				l.prepared.stPosition = 0
+				l.prepared.cachedValue = ""
+				l.lexeme.cachedValue = ""
 				return l.lexeme
 			}
 		}

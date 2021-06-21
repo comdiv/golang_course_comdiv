@@ -22,9 +22,9 @@ func TestNullLexemeIsUndefined(t *testing.T) {
 }
 
 func TestNewLexeme(t *testing.T) {
-	token := tokens.NewToken(tokens.TOKEN_WD, 12, "Привёт")
-	lexeme := lexemes.NewLexeme(2, true, token)
-	assert.Equal(t, "ПРИВЕТ", lexeme.Value())
+	token := tokens.NewTokenPlus(tokens.TOKEN_WD, 12, "Привёт", false, false)
+	lexeme := lexemes.NewLexeme(2, true, *token)
+	assert.Equal(t, "привет", lexeme.Value())
 	assert.Equal(t, 2, lexeme.StatementPosition())
 	assert.True(t, lexeme.IsLastInStatement())
 	assert.Equal(t, token.Start(), lexeme.Start())
@@ -38,22 +38,22 @@ func TestSingleStatement(t *testing.T) {
 			*lexemes.NewLexeme(
 				0,
 				false,
-				tokens.NewToken(tokens.TOKEN_WD, 2, "Привет"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 2, "Привет", false, false),
 			),
 			*lexemes.NewLexeme(
 				1,
 				false,
-				tokens.NewToken(tokens.TOKEN_WD, 15, "мир"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 15, "мир", false, false),
 			),
 			*lexemes.NewLexeme(
 				2,
 				false,
-				tokens.NewToken(tokens.TOKEN_WD, 26, "и"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 26, "и", false, false),
 			),
 			*lexemes.NewLexeme(
 				3,
 				true,
-				tokens.NewToken(tokens.TOKEN_WD, 29, "здравствуй"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 29, "здравствуй", false, false),
 			),
 		},
 	}.Execute(t)
@@ -66,42 +66,42 @@ func TestMultiStatement(t *testing.T) {
 			*lexemes.NewLexeme(
 				0,
 				false,
-				tokens.NewToken(tokens.TOKEN_WD, 2, "Привет"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 2, "Привет", false, false),
 			),
 			*lexemes.NewLexeme(
 				1,
 				false,
-				tokens.NewToken(tokens.TOKEN_WD, 15, "мир"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 15, "мир", false, false),
 			),
 			*lexemes.NewLexeme(
 				2,
 				false,
-				tokens.NewToken(tokens.TOKEN_WD, 26, "и"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 26, "и", false, false),
 			),
 			*lexemes.NewLexeme(
 				3,
 				false,
-				tokens.NewToken(tokens.TOKEN_WD, 29, "здравствуй"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 29, "здравствуй", false, false),
 			),
 			*lexemes.NewLexeme(
 				4,
 				false,
-				tokens.NewToken(tokens.TOKEN_WD, 51, "Ещё"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 51, "Ещё", false, false),
 			),
 			*lexemes.NewLexeme(
 				5,
 				true,
-				tokens.NewToken(tokens.TOKEN_WD, 58, "предложение"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 58, "предложение", false, false),
 			),
 			*lexemes.NewLexeme(
 				0,
 				false,
-				tokens.NewToken(tokens.TOKEN_WD, 84, "И"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 84, "И", false, false),
 			),
 			*lexemes.NewLexeme(
 				1,
 				true,
-				tokens.NewToken(tokens.TOKEN_WD, 87, "еще"),
+				*tokens.NewTokenPlus(tokens.TOKEN_WD, 87, "еще", false, false),
 			),
 		},
 	}.Execute(t)

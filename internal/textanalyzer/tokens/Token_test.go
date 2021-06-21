@@ -14,3 +14,5 @@ func TestNewToken(t *testing.T) {
 	assert.Equal(t, 21, token.Finish())
 	assert.Equal(t, 12, token.Length())
 }
+
+

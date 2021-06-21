@@ -1,12 +1,26 @@
 package tokens
 
+import (
+	"strings"
+)
+
 // Token токен - охватывает минимальный примитив из исходного текста
 type Token struct {
 	// тип токена
 	tp   TokenType
 	si   int
 	ei   int
+	hasUpper bool
+	isAscii bool
 	data []byte
+}
+
+func (t *Token) HasUpper() bool {
+	return t.hasUpper
+}
+
+func (t *Token) IsAscii() bool {
+	return t.isAscii
 }
 
 func (t *Token) Copy() Token {
@@ -16,6 +30,8 @@ func (t *Token) Copy() Token {
 		tp:   t.tp,
 		si:   t.si,
 		ei:   t.ei,
+		isAscii: t.isAscii,
+		hasUpper: t.hasUpper,
 		data: d,
 	}
 }
@@ -48,12 +64,16 @@ func EofToken(si int) *Token {
 	return &Token{tp: TOKEN_EOF, si: si, ei: si}
 }
 
+func NewTokenPlus(tp TokenType, si int, data string, ascii bool, hasUpper bool) *Token {
+	return &Token{tp: tp, si: si, ei: si + len(data) - 1, data: []byte(data), isAscii: ascii, hasUpper: hasUpper}
+}
+
 func NewToken(tp TokenType, si int, data string) *Token {
-	return &Token{tp: tp, si: si, ei: si + len(data) - 1, data: []byte(data)}
+	return &Token{tp: tp, si: si, ei: si + len(data) - 1, data: []byte(data), isAscii: true, hasUpper: false}
 }
 
 func NewLargeToken(si int, ei int) *Token {
-	return &Token{tp: TOKEN_LC, si: si, ei: ei, data: make([]byte, 0)}
+	return &Token{tp: TOKEN_LC, si: si, ei: ei, data: make([]byte, 0), isAscii: false, hasUpper: false}
 }
 
 func (t *Token) Type() TokenType {
@@ -78,6 +98,15 @@ func (t *Token) Length() int {
 
 func (t *Token) Value() string {
 	return string(t.data)
+}
+
+func (t *Token) NormalValue() string {
+	result := t.Value()
+	if !t.isAscii || t.hasUpper {
+		result = strings.ToLower(result)
+		result = strings.Replace(result, "ё", "е", -1)
+	}
+	return result
 }
 
 func (t *Token) Data() []byte {
@@ -105,6 +134,8 @@ func (t *Token) IsUnknown() bool {
 func (t *Token) IsUndefined() bool {
 	return t.Type() == TOKEN_UD
 }
+
+var UNDEFINED_TOKEN = Token{tp:TOKEN_UD}
 
 func (t *Token) SetEoF(pos int) *Token {
 	t.si = pos

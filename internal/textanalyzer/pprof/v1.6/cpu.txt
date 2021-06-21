@@ -1,0 +1,44 @@
+Type: cpu
+Time: Jun 20, 2021 at 11:50pm (+05)
+Duration: 223.14ms, Total samples = 130ms (58.26%)
+Showing nodes accounting for 130ms, 100% of 130ms total
+      flat  flat%   sum%        cum   cum%
+      40ms 30.77% 30.77%       40ms 30.77%  runtime.stdcall2
+      20ms 15.38% 46.15%       20ms 15.38%  runtime.slicebytetostring
+      10ms  7.69% 53.85%       10ms  7.69%  aeshashbody
+      10ms  7.69% 61.54%       10ms  7.69%  encoding/json.(*Decoder).readValue
+      10ms  7.69% 69.23%       10ms  7.69%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*tokenizerImpl).BuildToken
+      10ms  7.69% 76.92%       20ms 15.38%  runtime.makeslice
+      10ms  7.69% 84.62%       10ms  7.69%  runtime.mallocgc
+      10ms  7.69% 92.31%       20ms 15.38%  runtime.mapaccess1_faststr
+      10ms  7.69%   100%       10ms  7.69%  runtime.memmove
+         0     0%   100%       10ms  7.69%  encoding/json.(*Decoder).Decode
+         0     0%   100%       20ms 15.38%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (inline)
+         0     0%   100%       20ms 15.38%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add
+         0     0%   100%       20ms 15.38%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Merge
+         0     0%   100%       20ms 15.38%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func1
+         0     0%   100%       60ms 46.15%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2
+         0     0%   100%       60ms 46.15%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart
+         0     0%   100%       10ms  7.69%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.readJsonChan.func1
+         0     0%   100%       20ms 15.38%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len
+         0     0%   100%       20ms 15.38%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value (inline)
+         0     0%   100%       20ms 15.38%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue (inline)
+         0     0%   100%       40ms 30.77%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next
+         0     0%   100%       30ms 23.08%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (inline)
+         0     0%   100%       20ms 15.38%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue
+         0     0%   100%       20ms 15.38%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (inline)
+         0     0%   100%       10ms  7.69%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*tokenizerImpl).Next
+         0     0%   100%       30ms 23.08%  runtime.gopreempt_m
+         0     0%   100%       30ms 23.08%  runtime.goschedImpl
+         0     0%   100%       30ms 23.08%  runtime.lock (inline)
+         0     0%   100%       30ms 23.08%  runtime.lock2
+         0     0%   100%       30ms 23.08%  runtime.lockWithRank (inline)
+         0     0%   100%       30ms 23.08%  runtime.morestack
+         0     0%   100%       10ms  7.69%  runtime.mstart
+         0     0%   100%       30ms 23.08%  runtime.newstack
+         0     0%   100%       10ms  7.69%  runtime.preemptM
+         0     0%   100%       10ms  7.69%  runtime.preemptall
+         0     0%   100%       10ms  7.69%  runtime.preemptone
+         0     0%   100%       30ms 23.08%  runtime.semasleep
+         0     0%   100%       10ms  7.69%  runtime.stopTheWorldWithSema
+         0     0%   100%       10ms  7.69%  runtime.systemstack

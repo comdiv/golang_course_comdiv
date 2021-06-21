@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 	"unicode"
+	"unicode/utf8"
 )
 
 type tokenizerImpl struct {
@@ -12,6 +13,8 @@ type tokenizerImpl struct {
 	buf      []byte
 	eof      bool
 	next     byte
+	isAscii  bool
+	hasUpper  bool
 
 	overlapLength int
 	wasDM         bool
@@ -40,6 +43,8 @@ func (t *tokenizerImpl) Next() *Token {
 	if t.eof {
 		return t.token.SetEoF(t.position)
 	}
+	t.isAscii = true
+	t.hasUpper = false
 	t.buf = t.buf[:0]
 	t.si = t.position
 	if t.next == 0 {
@@ -68,6 +73,8 @@ func (t *tokenizerImpl) Next() *Token {
 			}
 			return t.BuildToken()
 		}
+
+
 
 		// игнорируем простые апострофы и кавычки
 		if b == '\'' || b == '"' {
@@ -124,6 +131,14 @@ func (t *tokenizerImpl) Next() *Token {
 			return t.BuildToken()
 		}
 
+		if b>=utf8.RuneSelf {
+			t.isAscii = false
+		}
+
+		if b>='A' && b<='Z' {
+			t.hasUpper = true
+		}
+
 		t.add(b)
 
 	}
@@ -146,17 +161,32 @@ func (t *tokenizerImpl) BuildToken() *Token {
 			wasRus := false
 			wasLat := false
 			wasOther := false
-			for _, s := range string(t.buf) {
-				switch {
-				case unicode.Is(unicode.Latin, s):
-					wasLat = true
-				case unicode.Is(unicode.Cyrillic, s):
-					wasRus = true
-				default:
-					wasOther = true
+			if (t.isAscii){
+				for i:=0;i<len(t.buf);i++{
+					c := t.buf[i]
+					switch {
+					case (c>='a' && c<='z') || (c>='A' && c<='Z'):
+						wasLat = true
+					default:
+						wasOther = true
+					}
+					if wasOther {
+						break
+					}
 				}
-				if wasOther {
-					break
+			}else {
+				for _, s := range string(t.buf) {
+					switch {
+					case unicode.Is(unicode.Latin, s):
+						wasLat = true
+					case unicode.Is(unicode.Cyrillic, s):
+						wasRus = true
+					default:
+						wasOther = true
+					}
+					if wasOther {
+						break
+					}
 				}
 			}
 			tp = TOKEN_WD
@@ -166,11 +196,14 @@ func (t *tokenizerImpl) BuildToken() *Token {
 		}
 		t.token.tp = tp
 		t.token.data = t.buf
+		t.token.hasUpper = t.hasUpper
+		t.token.isAscii = t.isAscii
 		t.token.ei = t.si + len(t.token.data) - 1
 		return t.token
 	}
 	t.token.ei = t.position
 	t.token.data = t.token.data[:0]
+	t.token.isAscii = false
 	t.token.tp = TOKEN_LC
 	return t.token
 }

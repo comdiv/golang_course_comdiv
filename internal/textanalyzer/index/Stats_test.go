@@ -4,38 +4,39 @@ import (
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index"
 	testdata_test "github.com/comdiv/golang_course_comdiv/internal/textanalyzer/testdata"
 	"github.com/stretchr/testify/assert"
+	"sync"
 	"testing"
 )
 
 func TestCollectStats(t *testing.T) {
-	stats,_ := index.CollectFromString("Тут несколько Одинаковых термов именно тут и именно Термов!", index.CollectConfig{Mode: index.MODE_PLAIN})
-	assert.Equal(t, 0, stats.Terms()["ТУТ"].FirstIndex())
-	assert.Equal(t, 2, stats.Terms()["ТУТ"].Count())
-	assert.Equal(t, 1, stats.Terms()["ТУТ"].FirstCount())
-	assert.Equal(t, 0, stats.Terms()["ТУТ"].LastCount())
-	assert.Equal(t, 3, stats.Terms()["ТУТ"].Len())
+	stats := index.CollectFromString("Тут несколько Одинаковых термов именно тут и именно Термов!", index.CollectConfig{Mode: index.MODE_PLAIN})
+	assert.Equal(t, 0, stats.Terms()["тут"].FirstIndex())
+	assert.Equal(t, 2, stats.Terms()["тут"].Count())
+	assert.Equal(t, 1, stats.Terms()["тут"].FirstCount())
+	assert.Equal(t, 0, stats.Terms()["тут"].LastCount())
+	assert.Equal(t, 3, stats.Terms()["тут"].Len())
 
-	assert.Equal(t, 3, stats.Terms()["ТЕРМОВ"].FirstIndex())
-	assert.Equal(t, 2, stats.Terms()["ТЕРМОВ"].Count())
-	assert.Equal(t, 0, stats.Terms()["ТЕРМОВ"].FirstCount())
-	assert.Equal(t, 1, stats.Terms()["ТЕРМОВ"].LastCount())
-	assert.Equal(t, 6, stats.Terms()["ТЕРМОВ"].Len())
+	assert.Equal(t, 3, stats.Terms()["термов"].FirstIndex())
+	assert.Equal(t, 2, stats.Terms()["термов"].Count())
+	assert.Equal(t, 0, stats.Terms()["термов"].FirstCount())
+	assert.Equal(t, 1, stats.Terms()["термов"].LastCount())
+	assert.Equal(t, 6, stats.Terms()["термов"].Len())
 
 	docorder := stats.DocOrderIndex()
-	assert.Equal(t, "ТУТ", docorder[0].Value())
-	assert.Equal(t, "НЕСКОЛЬКО", docorder[1].Value())
-	assert.Equal(t, "ОДИНАКОВЫХ", docorder[2].Value())
-	assert.Equal(t, "ТЕРМОВ", docorder[3].Value())
-	assert.Equal(t, "ИМЕННО", docorder[4].Value())
-	assert.Equal(t, "И", docorder[5].Value())
+	assert.Equal(t, "тут", docorder[0].Value())
+	assert.Equal(t, "несколько", docorder[1].Value())
+	assert.Equal(t, "одинаковых", docorder[2].Value())
+	assert.Equal(t, "термов", docorder[3].Value())
+	assert.Equal(t, "именно", docorder[4].Value())
+	assert.Equal(t, "и", docorder[5].Value())
 
 	freqorder := stats.FreqOrderIndex()
-	assert.Equal(t, "ТУТ", freqorder[0].Value())
-	assert.Equal(t, "ТЕРМОВ", freqorder[1].Value())
-	assert.Equal(t, "ИМЕННО", freqorder[2].Value())
-	assert.Equal(t, "НЕСКОЛЬКО", freqorder[3].Value())
-	assert.Equal(t, "ОДИНАКОВЫХ", freqorder[4].Value())
-	assert.Equal(t, "И", freqorder[5].Value())
+	assert.Equal(t, "тут", freqorder[0].Value())
+	assert.Equal(t, "термов", freqorder[1].Value())
+	assert.Equal(t, "именно", freqorder[2].Value())
+	assert.Equal(t, "несколько", freqorder[3].Value())
+	assert.Equal(t, "одинаковых", freqorder[4].Value())
+	assert.Equal(t, "и", freqorder[5].Value())
 
 }
 
@@ -48,7 +49,7 @@ func TestTask_10_4_no_start_no_finish(t *testing.T) {
 		ReverseFreq:  false,
 	})
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
-	stats,_ := index.CollectFromReader(testdata_test.TestDataReader(), index.CollectConfig{Filter:query, Mode: index.MODE_PLAIN})
+	stats := index.CollectFromReader(testdata_test.TestDataReader(), index.CollectConfig{Filter:query, Mode: index.MODE_PLAIN})
 
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
 	result := stats.Find(10, query)
@@ -60,7 +61,7 @@ func TestTask_10_4_no_start_no_finish(t *testing.T) {
 	}
 
 	assert.Equal(t, []string{
-		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
+		"like", "told", "looked", "marry", "went", "love", "want", "into", "took", "cant",
 	}, resultWords)
 }
 
@@ -73,7 +74,7 @@ func TestTask_10_4_no_start_no_finish_json_sync(t *testing.T) {
 		ReverseFreq:  false,
 	})
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
-	stats,_ := index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Filter:query, Mode: index.MODE_JSON})
+	stats := index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Filter:query, Mode: index.MODE_JSON})
 
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
 	result := stats.Find(10, query)
@@ -85,8 +86,31 @@ func TestTask_10_4_no_start_no_finish_json_sync(t *testing.T) {
 	}
 
 	assert.Equal(t, []string{
-		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
+		"like", "told", "looked", "marry", "went", "love", "want", "into", "took", "cant",
 	}, resultWords)
+}
+
+func TestJsonAsyncRaceCheck(t *testing.T) {
+	// 5 раз по 5 в паралелль загрузов большого файла, в 32 потока
+	// нет ассертов только для -race
+	for i:=0;i<5;i++{
+		var wg sync.WaitGroup
+		for j:=0;j<5;j++{
+			wg.Add(1)
+			go func(){
+				defer wg.Done()
+				stats := index.CollectFromReader(testdata_test.TestDataLargeJsonReader(), index.CollectConfig{Mode: index.MODE_PARALLEL_JSON, Workers: 32})
+				if stats.Errors() != nil {
+					t.Error(stats.Errors())
+				}
+				if len(stats.Terms()) < 100 {
+					t.Error("Too less terms")
+				}
+			}()
+		}
+		wg.Wait()
+	}
+
 }
 
 func TestTask_10_4_no_start_no_finish_json_async(t *testing.T) {
@@ -98,9 +122,9 @@ func TestTask_10_4_no_start_no_finish_json_async(t *testing.T) {
 		ReverseFreq:  false,
 	})
 	// собираем статистику, используя наш запрос и при построении для оптимизации (учитываться будет только длина)
-	stats,err := index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Filter:query, Mode: index.MODE_PARALLEL_JSON})
-	if err != nil {
-		t.Fatal(err)
+	stats := index.CollectFromReader(testdata_test.TestDataJsonReader(), index.CollectConfig{Filter:query, Mode: index.MODE_PARALLEL_JSON})
+	if stats.Errors()!=nil {
+		t.Fatal(stats.Errors())
 	}
 
 	// берем топ 10 самых частых слов длиной 4+ в порядке docOrder
@@ -113,7 +137,7 @@ func TestTask_10_4_no_start_no_finish_json_async(t *testing.T) {
 	}
 
 	assert.Equal(t, []string{
-		"LIKE", "TOLD", "LOOKED", "MARRY", "WENT", "LOVE", "WANT", "INTO", "TOOK", "CANT",
+		"like", "told", "looked", "marry", "went", "love", "want", "into", "took", "cant",
 	}, resultWords)
 }
 
@@ -181,4 +205,20 @@ func TestTermStat_Merge(t *testing.T) {
 	col1.Merge(col2)
 
 	assert.Equal(t, res, col1.Terms()["x"])
+}
+
+
+func TestErrors(t *testing.T) {
+	statsNoErr := index.CollectFromString(`[{"number":1,"text":"hello"},{"number":2,"text":"world"}]`, index.CollectConfig{
+		Mode: index.MODE_PARALLEL_JSON,
+	})
+	assert.Nil(t, statsNoErr.Errors())
+	assert.Contains(t, statsNoErr.Terms(),"hello")
+	assert.Contains(t, statsNoErr.Terms(),"world")
+	statsWithErr :=  index.CollectFromString(`[{"number":1,"text":"hello"},{"number":2,text":"world"}]`, index.CollectConfig{
+		Mode: index.MODE_PARALLEL_JSON,
+	})
+	assert.Len(t, statsWithErr.Errors(), 1)
+	assert.Contains(t, statsWithErr.Terms(),"hello")
+	assert.NotContains(t, statsWithErr.Terms(),"world")
 }

@@ -52,7 +52,7 @@ func Test_SimpleSingleWord(t *testing.T) {
 	TokenizeTextCase{
 		"Привет",
 		[]tokens.Token{
-			*tokens.NewToken(tokens.TOKEN_WD, 0, "Привет"),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 0, "Привет", false, false),
 		},
 	}.Execute(t)
 }
@@ -61,10 +61,10 @@ func Test_Two_Words_Splitted_With_Ws(t *testing.T) {
 	TokenizeTextCase{
 		"Привет   мир!",
 		[]tokens.Token{
-			*tokens.NewToken(tokens.TOKEN_WD, 0, "Привет"),
-			*tokens.NewToken(tokens.TOKEN_WS, 12, "   "),
-			*tokens.NewToken(tokens.TOKEN_WD, 15, "мир"),
-			*tokens.NewToken(tokens.TOKEN_DM, 21, "!"),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 0, "Привет", false, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 12, "   ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 15, "мир", false, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_DM, 21, "!", true, false),
 		},
 	}.Execute(t)
 }
@@ -73,10 +73,10 @@ func Test_InvalidWords(t *testing.T) {
 	TokenizeTextCase{
 		"Mixрусскийeng 1.32 jkjkjkjkjdkfsdfsdkfjsdkfjksdfjksdfjsdkfjsdkfjsdkfjsdkfjsdkfjksdfjsdkfjsdkfjsdkfjsdkfjskdfjksdfjkdsfjkds",
 		[]tokens.Token{
-			*tokens.NewToken(tokens.TOKEN_UK, 0, "Mixрусскийeng"),
-			*tokens.NewToken(tokens.TOKEN_WS, 20, " "),
-			*tokens.NewToken(tokens.TOKEN_NB, 21, "1.32"),
-			*tokens.NewToken(tokens.TOKEN_WS, 25, " "),
+			*tokens.NewTokenPlus(tokens.TOKEN_UK, 0, "Mixрусскийeng", false, true),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 20, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_NB, 21, "1.32", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 25, " ", true, false),
 			*tokens.NewLargeToken(26, 129),
 		},
 	}.Execute(t)
@@ -84,33 +84,33 @@ func Test_InvalidWords(t *testing.T) {
 
 func Test_Statement_Ends(t *testing.T) {
 	TokenizeTextCase{
-		"A B! C D. E F? G 1.1 H\n I J",
+		"A b! C d. E f? G 1.1 h\n i j",
 		[]tokens.Token{
-			*tokens.NewToken(tokens.TOKEN_WD, 0, "A"),
-			*tokens.NewToken(tokens.TOKEN_WS, 1, " "),
-			*tokens.NewToken(tokens.TOKEN_WD, 2, "B"),
-			*tokens.NewToken(tokens.TOKEN_DM, 3, "!"),
-			*tokens.NewToken(tokens.TOKEN_WS, 4, " "),
-			*tokens.NewToken(tokens.TOKEN_WD, 5, "C"),
-			*tokens.NewToken(tokens.TOKEN_WS, 6, " "),
-			*tokens.NewToken(tokens.TOKEN_WD, 7, "D"),
-			*tokens.NewToken(tokens.TOKEN_ES, 8, "."),
-			*tokens.NewToken(tokens.TOKEN_WS, 9, " "),
-			*tokens.NewToken(tokens.TOKEN_WD, 10, "E"),
-			*tokens.NewToken(tokens.TOKEN_WS, 11, " "),
-			*tokens.NewToken(tokens.TOKEN_WD, 12, "F"),
-			*tokens.NewToken(tokens.TOKEN_DM, 13, "?"),
-			*tokens.NewToken(tokens.TOKEN_WS, 14, " "),
-			*tokens.NewToken(tokens.TOKEN_WD, 15, "G"),
-			*tokens.NewToken(tokens.TOKEN_WS, 16, " "),
-			*tokens.NewToken(tokens.TOKEN_NB, 17, "1.1"),
-			*tokens.NewToken(tokens.TOKEN_WS, 20, " "),
-			*tokens.NewToken(tokens.TOKEN_WD, 21, "H"),
-			*tokens.NewToken(tokens.TOKEN_ES, 22, "\n"),
-			*tokens.NewToken(tokens.TOKEN_WS, 23, " "),
-			*tokens.NewToken(tokens.TOKEN_WD, 24, "I"),
-			*tokens.NewToken(tokens.TOKEN_WS, 25, " "),
-			*tokens.NewToken(tokens.TOKEN_WD, 26, "J"),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 0, "A", true, true),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 1, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 2, "b", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_DM, 3, "!", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 4, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 5, "C", true, true),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 6, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 7, "d", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_ES, 8, ".", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 9, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 10, "E", true, true) ,
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 11, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 12, "f", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_DM, 13, "?", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 14, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 15, "G", true, true),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 16, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_NB, 17, "1.1", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 20, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 21, "h", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_ES, 22, "\n", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 23, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 24, "i", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WS, 25, " ", true, false),
+			*tokens.NewTokenPlus(tokens.TOKEN_WD, 26, "j", true, false),
 		},
 	}.Execute(t)
 }

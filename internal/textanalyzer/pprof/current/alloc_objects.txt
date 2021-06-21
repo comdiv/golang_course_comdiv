@@ -1,0 +1,24 @@
+Type: alloc_objects
+Time: Jun 20, 2021 at 11:50pm (+05)
+Showing nodes accounting for 265139, 99.73% of 265848 total
+Dropped 13 nodes (cum <= 1329)
+      flat  flat%   sum%        cum   cum%
+    131074 49.30% 49.30%     131074 49.30%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Value (inline)
+     81925 30.82% 80.12%      81925 30.82%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.NewTermStat (inline)
+     32768 12.33% 92.45%      32768 12.33%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).Copy (inline)
+     10923  4.11% 96.56%      10923  4.11%  syscall.(*LazyDLL).NewProc (inline)
+      8192  3.08% 99.64%       8449  3.18%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.newTokenizerImpl (inline)
+       257 0.097% 99.73%     213256 80.22%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermStatCollection).Add
+         0     0% 99.73%     131074 49.30%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.(*TermFilter).MatchesLexeme (inline)
+         0     0% 99.73%     254675 95.80%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.collectStatsFromJsonAsync.func2
+         0     0% 99.73%     254675 95.80%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index.processPart
+         0     0% 99.73%     131074 49.30%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Len
+         0     0% 99.73%     131074 49.30%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).Value (inline)
+         0     0% 99.73%     131074 49.30%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*Lexeme).prepareValue (inline)
+         0     0% 99.73%      32768 12.33%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.(*lexerImpl).Next
+         0     0% 99.73%       8449  3.18%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes.NewS
+         0     0% 99.73%     131074 49.30%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.(*Token).NormalValue
+         0     0% 99.73%       8449  3.18%  github.com/comdiv/golang_course_comdiv/internal/textanalyzer/tokens.NewS
+         0     0% 99.73%      10960  4.12%  runtime.doInit
+         0     0% 99.73%      10965  4.12%  runtime.main
+         0     0% 99.73%      10923  4.11%  syscall.init
