@@ -1,0 +1,180 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Text Analyzer Rest",
+    "description": "Rest definition for text analyzer rest",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8080"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "text": {
+        "properties": {
+          "number": {
+            "type": "integer",
+            "description": "part number"
+          },
+          "text": {
+            "type": "string",
+            "description": "part text"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "result": {
+        "properties": {
+          "op": {
+            "type": "string",
+            "description": "operation type"
+          },
+          "state": {
+            "type": "string",
+            "description": "operation state"
+          },
+          "error": {
+            "type": "object",
+            "description": "operation error"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "paths": {
+    "/reset": {
+      "get": {
+        "description": "drop current collected stats",
+        "responses": {
+          "default": {
+            "description": "std answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stat/": {
+      "description": "returns currently collected stats",
+      "get": {
+        "responses": {
+          "default": {
+            "description": "std answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stat/{top}": {
+      "description": "returns currently collected stats",
+      "parameters": [
+        {
+          "in": "path",
+          "name": "top",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "count of returning values (ARGV size (10 by default) if ommited)"
+        }
+      ],
+      "get": {
+        "responses": {
+          "default": {
+            "description": "std answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/text": {
+      "description": "upload and index text to stats",
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "number",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
+            "description": "part number, 0 if ommited",
+            "allowEmptyValue": false,
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "text",
+            "schema": {
+              "type": "string"
+            },
+            "description": "part content",
+            "required": true
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "std answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/result"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/text"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/text"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "std answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/result"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

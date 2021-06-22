@@ -79,9 +79,17 @@ func (a *httpApplicationContext) stop() {
 
 func (a *httpApplicationContext) setupHandlers() {
 	a.mux.HandleFunc("/stop", func(writer http.ResponseWriter, request *http.Request) {
+		setupCorsResponse(&writer,request)
+		if (request).Method == "OPTIONS" {
+			return
+		}
 		a.stop()
 	})
 	a.mux.HandleFunc("/reset", func(writer http.ResponseWriter, request *http.Request) {
+		setupCorsResponse(&writer,request)
+		if (request).Method == "OPTIONS" {
+			return
+		}
 		a.reset()
 		writer.Header().Set("Content-Type", "application/json")
 		data, _ := json.MarshalIndent(struct {
@@ -91,6 +99,10 @@ func (a *httpApplicationContext) setupHandlers() {
 		writer.Write(data)
 	})
 	a.mux.HandleFunc("/stat/", func(writer http.ResponseWriter, request *http.Request) {
+		setupCorsResponse(&writer,request)
+		if (request).Method == "OPTIONS" {
+			return
+		}
 		data := struct {
 			Op     string               `json:"op"`
 			State  string               `json:"state"`
@@ -135,6 +147,10 @@ func (a *httpApplicationContext) setupHandlers() {
 		writer.Write(out)
 	})
 	a.mux.HandleFunc("/text", func(writer http.ResponseWriter, request *http.Request) {
+		setupCorsResponse(&writer,request)
+		if (request).Method == "OPTIONS" {
+			return
+		}
 		jsonpart := extractJsonFromRequest(request)
 		data := struct {
 			Op    string             `json:"op"`
@@ -156,6 +172,12 @@ func (a *httpApplicationContext) setupHandlers() {
 		writer.WriteHeader(statusCode)
 		writer.Write(out)
 	})
+}
+
+func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
 }
 
 func extractJsonFromRequest(r *http.Request) index.JsonTextPart {
