@@ -14,26 +14,46 @@ type TermStat struct {
 	lastCount  int
 }
 
-type TermStatConfig struct {
-	Value string
-	FirstPart int
-	FirstIndex int
-	Count int
-	FirstCount int
-	LastCount int
+type TermStatDto struct {
+	Value      string `json:"value"`
+	FirstPart  int `json:"first_part"`
+	FirstIndex int `json:"first_index"`
+	Len        int `json:"len"`
+	Count      int `json:"count"`
+	FirstCount int `json:"first_count"`
+	LastCount  int `json:"last_count"`
 }
 
+func (t *TermStat) ToDto() TermStatDto {
+	return TermStatDto{
+		t.value,
+		t.firstPart,
+		t.firstIndex,
+		t.len,
+		t.count,
+		t.firstCount,
+		t.lastCount,
+	}
+}
+
+type TermStatConfig struct {
+	Value      string
+	FirstPart  int
+	FirstIndex int
+	Count      int
+	FirstCount int
+	LastCount  int
+}
 
 func NewTermStatCustom(config TermStatConfig) *TermStat {
 	return &TermStat{
-		value : config.Value,
-		firstPart : config.FirstPart,
-		firstIndex : config.FirstIndex,
-		len :  len([]rune(config.Value)),
-		count : config.Count,
-		firstCount : config.FirstCount,
-		lastCount : config.LastCount,
-
+		value:      config.Value,
+		firstPart:  config.FirstPart,
+		firstIndex: config.FirstIndex,
+		len:        len([]rune(config.Value)),
+		count:      config.Count,
+		firstCount: config.FirstCount,
+		lastCount:  config.LastCount,
 	}
 }
 
@@ -101,5 +121,5 @@ func (l *TermStat) FirstPart() int {
 // GetSortIndex - формирует синтетический порядковый номер для сквозного упорядочения
 // число само по себе не является обозначение позиции
 func (l *TermStat) GetSortIndex() int64 {
-	return int64(l.firstPart) * 10000000000000 + int64(l.firstIndex)
+	return int64(l.firstPart)*10000000000000 + int64(l.firstIndex)
 }

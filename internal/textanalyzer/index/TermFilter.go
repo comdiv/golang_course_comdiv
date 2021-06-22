@@ -8,6 +8,21 @@ type TermFilter struct {
 	includeLast  bool
 	reverseFreq  bool
 }
+type TermFilterDto struct {
+	Minlen       int  `json:"minlen"`
+	IncludeFirst bool `json:"include_first"`
+	IncludeLast  bool `json:"include_last"`
+	ReverseFreq  bool `json:"reverse_freq"`
+}
+
+func (t *TermFilter) ToDto() TermFilterDto {
+	return TermFilterDto{
+		t.minlen,
+		t.includeFirst,
+		t.includeLast,
+		t.reverseFreq,
+	}
+}
 
 func (t *TermFilter) Minlen() int {
 	return t.minlen
