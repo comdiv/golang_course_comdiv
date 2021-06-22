@@ -49,7 +49,7 @@ func PprofStartStandaloneServer(port int, oncomplete func()) *http.Server {
 		if oncomplete!=nil {
 			defer oncomplete()
 		}
-		fmt.Println("Start listen pprof on "+strconv.Itoa(port))
+		fmt.Println("start listen pprof on "+strconv.Itoa(port))
 		fmt.Println(pprofserver.ListenAndServe())
 	}()
 	return pprofserver

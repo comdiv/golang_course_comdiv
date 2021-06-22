@@ -17,27 +17,56 @@ func HttpMain(args *TextAnalyzerArgs) {
 		pprofserver = PprofStartStandaloneServer(args.Pprofhttp(), func(){wg.Done()})
 	}
 	wg.Add(1)
-	var mainmux *http.ServeMux
-	if args.PprofHttpMode() == PPROF_SELF {
-		mainmux = http.NewServeMux()
-	}else{
-		mainmux = http.DefaultServeMux
+	mainmux := createMux(args)
+	application := &httpApplicationContext{
+		args: args,
+		mux: mainmux,
+		mainserver: &http.Server{Addr: "127.0.0.1:"+strconv.Itoa(args.Http()), Handler: mainmux},
+		pprofserver: pprofserver,
 	}
-	mainserver := &http.Server{Addr: "127.0.0.1:"+strconv.Itoa(args.Http()), Handler: mainmux}
-	mainmux.HandleFunc("/stop", func(writer http.ResponseWriter, request *http.Request) {
-		if pprofserver != nil {
-			pprofserver.Shutdown(context.Background())
-		}
-		mainserver.Shutdown(context.Background())
-	})
+	application.setupHandlers()
 	go func() {
 		defer wg.Done()
-		if args.PprofHttpMode() == PPROF_MAIN {
-			fmt.Println("Start listen main with pprof on "+strconv.Itoa(args.Http()))
-		}else{
-			fmt.Println("Start listen main on "+strconv.Itoa(args.Http()))
-		}
-		fmt.Println(mainserver.ListenAndServe())
+		application.start()
 	}()
 	wg.Wait()
+}
+
+func createMux(args *TextAnalyzerArgs) *http.ServeMux {
+	var result *http.ServeMux
+	if args.PprofHttpMode() == PPROF_SELF {
+		result = http.NewServeMux()
+	}else{
+		result = http.DefaultServeMux
+	}
+	return result
+}
+
+type httpApplicationContext struct {
+	args *TextAnalyzerArgs
+	mux *http.ServeMux
+	mainserver *http.Server
+	pprofserver *http.Server
+}
+
+func (a *httpApplicationContext) stop() {
+	if a.pprofserver != nil {
+		a.pprofserver.Shutdown(context.Background())
+	}
+	a.mainserver.Shutdown(context.Background())
+}
+
+func (a *httpApplicationContext) setupHandlers() {
+	a.mux.HandleFunc("/stop", func(writer http.ResponseWriter, request *http.Request) {
+		a.stop()
+	})
+}
+
+func (a *httpApplicationContext) start(){
+	if a.args.PprofHttpMode() == PPROF_MAIN {
+		fmt.Println("start listen main with pprof on "+strconv.Itoa(a.args.Http()))
+	}else{
+		fmt.Println("start listen main on "+strconv.Itoa(a.args.Http()))
+	}
+	fmt.Println(a.mainserver.ListenAndServe())
 }
