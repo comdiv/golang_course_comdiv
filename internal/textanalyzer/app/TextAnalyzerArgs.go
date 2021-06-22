@@ -27,7 +27,7 @@ func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
 	if exists {
 		env_debug = ENV_DEBUG == "true"
 	}
-	return &TextAnalyzerArgs{
+	result := &TextAnalyzerArgs{
 		size:      flag.Int("size", 10, "Collect top SIZE frequent words"),
 		minlen:    flag.Int("minlen", 4, "Min length for word in symmbols"),
 		useFirst:  flag.Bool("first", false, "Include first words of statements"),
@@ -40,6 +40,8 @@ func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
 		http:      flag.Int("http", -1, "If set - port to listen in http mode"),
 		pprofhttp: flag.String("pprofhttp", "no", "If set - port to listen for http prof - if `same` or `` same as http"),
 	}
+	result.Parse()
+	return result
 }
 
 func (a *TextAnalyzerArgs) GetCollectorConfig() index.CollectConfig {
