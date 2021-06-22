@@ -36,4 +36,8 @@ ta_profile :
         go tool pprof -alloc_objects -svg mem.prof > ./pprof/v$(taver)/alloc_objects.svg && \
 		cp -rf ./pprof/v$(taver)/* ./pprof/current
 
+ta_http :
+	echo "Start text stat service"
+	cd ./internal/textanalyzer && \
+		go run main.go --first --last --http 8080 --pprofhttp same
 
