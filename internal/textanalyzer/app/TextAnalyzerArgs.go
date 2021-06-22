@@ -2,7 +2,9 @@ package app
 
 import (
 	"flag"
+	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index"
 	"os"
+	"strconv"
 )
 
 type TextAnalyzerArgs struct {
@@ -16,10 +18,8 @@ type TextAnalyzerArgs struct {
 	memprof   *string
 	debug     *bool
 	http      *int
-	pprofhttp *int
+	pprofhttp *string
 }
-
-
 
 func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
 	ENV_DEBUG, exists := os.LookupEnv("DEBUG")
@@ -38,54 +38,111 @@ func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
 		memprof:   flag.String("memprof", "", "File for storing Mem profiler info"),
 		debug:     flag.Bool("debug", env_debug, "Debug mode - NOT CLEAR HOW TO USE"),
 		http:      flag.Int("http", -1, "If set - port to listen in http mode"),
-		pprofhttp: flag.Int("pprofhttp", -1, "If set - port to listen for http prof"),
+		pprofhttp: flag.String("pprofhttp", "no", "If set - port to listen for http prof - if `same` or `` same as http"),
 	}
 }
 
-func (t *TextAnalyzerArgs) Parse() {
+func (a *TextAnalyzerArgs) GetCollectorConfig() index.CollectConfig {
+	return index.CollectConfig{Filter: a.GetStatisticsFilter(), Mode: a.GetReadMode()}
+}
+
+func (a *TextAnalyzerArgs) GetStatisticsFilter() *index.TermFilter {
+	return index.NewTermFilter(
+		index.TermFilterOptions{
+			MinLen:       a.Minlen(),
+			IncludeFirst: a.UseFirst(),
+			IncludeLast:  a.UseLast(),
+			ReverseFreq:  a.Nonfreq(),
+		},
+	)
+}
+
+func (a *TextAnalyzerArgs) GetReadMode() index.ReadMode {
+	var mode index.ReadMode
+	if a.Json() {
+		mode = index.MODE_PARALLEL_JSON
+	} else {
+		mode = index.MODE_PLAIN
+	}
+	return mode
+}
+
+type PprofHttpMode int
+
+const (
+	PPROF_NONE PprofHttpMode = 0
+	PPROF_SELF PprofHttpMode = 1
+	PPROF_MAIN PprofHttpMode = 2
+)
+
+func (a *TextAnalyzerArgs) IsHttpMode() bool {
+	return a.Http() > 0
+}
+
+func (a *TextAnalyzerArgs) PprofHttpMode() PprofHttpMode {
+	switch {
+	case !a.IsHttpMode() || a.Pprofhttp() <= 0:
+		return PPROF_NONE
+	case a.Http() != a.Pprofhttp() :
+		return PPROF_SELF
+	case a.Http() == a.Pprofhttp() :
+		return PPROF_MAIN
+	}
+	return PPROF_NONE
+}
+
+func (a *TextAnalyzerArgs) Parse() {
 	flag.Parse()
 }
 
-func (t TextAnalyzerArgs) Size() int {
-	return *t.size
+func (a TextAnalyzerArgs) Size() int {
+	return *a.size
 }
 
-func (t TextAnalyzerArgs) Minlen() int {
-	return *t.minlen
+func (a TextAnalyzerArgs) Minlen() int {
+	return *a.minlen
 }
 
-func (t TextAnalyzerArgs) UseFirst() bool {
-	return *t.useFirst
+func (a TextAnalyzerArgs) UseFirst() bool {
+	return *a.useFirst
 }
 
-func (t TextAnalyzerArgs) UseLast() bool {
-	return *t.useLast
+func (a TextAnalyzerArgs) UseLast() bool {
+	return *a.useLast
 }
 
-func (t TextAnalyzerArgs) Nonfreq() bool {
-	return *t.nonfreq
+func (a TextAnalyzerArgs) Nonfreq() bool {
+	return *a.nonfreq
 }
 
-func (t *TextAnalyzerArgs) Cpuprof() string {
-	return *t.cpuprof
+func (a *TextAnalyzerArgs) Cpuprof() string {
+	return *a.cpuprof
 }
 
-func (t *TextAnalyzerArgs) Memprof() string {
-	return *t.memprof
+func (a *TextAnalyzerArgs) Memprof() string {
+	return *a.memprof
 }
 
-func (t *TextAnalyzerArgs) Debug() bool {
-	return *t.debug
+func (a *TextAnalyzerArgs) Debug() bool {
+	return *a.debug
 }
 
-func (t *TextAnalyzerArgs) Http() int {
-	return *t.http
+func (a *TextAnalyzerArgs) Http() int {
+	return *a.http
 }
 
-func (t *TextAnalyzerArgs) Pprofhttp() int {
-	return *t.pprofhttp
+func (a *TextAnalyzerArgs) Pprofhttp() int {
+	switch {
+	case !a.IsHttpMode() || *a.pprofhttp == "no":
+		return -1
+	case *a.pprofhttp == "same" || *a.pprofhttp == "" :
+		return a.Http()
+	default:
+		res,_ := strconv.Atoi(*a.pprofhttp)
+		return res
+	}
 }
 
-func (t *TextAnalyzerArgs) Json() bool {
-	return *t.json
+func (a *TextAnalyzerArgs) Json() bool {
+	return *a.json
 }

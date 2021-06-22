@@ -1,60 +1,68 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/app"
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index"
-	"log"
+	"net/http"
+	_ "net/http/pprof"
 	"os"
-	"runtime"
-	"runtime/pprof"
+	"strconv"
+	"sync"
 )
 
 func main() {
 	args := app.NewTextAnalyzerArgsF()
 	args.Parse()
+	app.PprofStartCpuIfRequired(args)
 
-	if args.Cpuprof() != "" {
-		f, err := os.Create(args.Cpuprof())
-		if err != nil {
-			log.Fatal("could not create CPU profile: ", err)
+	if args.IsHttpMode() {
+		var wg sync.WaitGroup
+		// handler to close from main server for gracefull shutdown
+		var pprofserver *http.Server
+		if args.PprofHttpMode() == app.PPROF_SELF {
+			wg.Add(1)
+			// for pprof using default mux
+			pprofserver = &http.Server{Addr: "127.0.0.1:"+strconv.Itoa(args.Pprofhttp())}
+			go func() {
+				defer wg.Done()
+				fmt.Println("Start listen pprof on "+strconv.Itoa(args.Pprofhttp()))
+				fmt.Println(pprofserver.ListenAndServe())
+			}()
 		}
-		defer f.Close() // error handling omitted for example
-		if err := pprof.StartCPUProfile(f); err != nil {
-			log.Fatal("could not start CPU profile: ", err)
+		wg.Add(1)
+		var mainmux *http.ServeMux
+		if args.PprofHttpMode() == app.PPROF_SELF {
+			mainmux = http.NewServeMux()
+		}else{
+			mainmux = http.DefaultServeMux
 		}
-		defer pprof.StopCPUProfile()
-	}
-
-	filter := index.NewTermFilter(
-		index.TermFilterOptions{
-			MinLen:       args.Minlen(),
-			IncludeFirst: args.UseFirst(),
-			IncludeLast:  args.UseLast(),
-			ReverseFreq:  args.Nonfreq(),
-		},
-	)
-	var mode index.ReadMode
-	if args.Json() {
-		mode = index.MODE_PARALLEL_JSON
+		mainserver := &http.Server{Addr: "127.0.0.1:"+strconv.Itoa(args.Http()), Handler: mainmux}
+		mainmux.HandleFunc("/stop", func(writer http.ResponseWriter, request *http.Request) {
+			if pprofserver != nil {
+				pprofserver.Shutdown(context.Background())
+			}
+			mainserver.Shutdown(context.Background())
+		})
+		go func() {
+			defer wg.Done()
+			if args.PprofHttpMode() == app.PPROF_MAIN {
+				fmt.Println("Start listen main with pprof on "+strconv.Itoa(args.Http()))
+			}else{
+				fmt.Println("Start listen main on "+strconv.Itoa(args.Http()))
+			}
+			fmt.Println(mainserver.ListenAndServe())
+		}()
+		wg.Wait()
 	} else {
-		mode = index.MODE_PLAIN
-	}
-	stats := index.CollectFromReader(os.Stdin, index.CollectConfig{Filter:filter, Mode:mode})
-	result := stats.Find(args.Size(), filter)
-	for _, v := range result {
-		fmt.Printf("%v\n", *v)
+		filter := args.GetStatisticsFilter()
+		stats := index.CollectFromReader(os.Stdin, args.GetCollectorConfig())
+		result := stats.Find(args.Size(), filter)
+		for _, v := range result {
+			fmt.Printf("%v\n", *v)
+		}
 	}
 
-	if args.Memprof() != "" {
-		f, err := os.Create(args.Memprof())
-		if err != nil {
-			log.Fatal("could not create memory profile: ", err)
-		}
-		defer f.Close() // error handling omitted for example
-		runtime.GC() // get up-to-date statistics
-		if err := pprof.WriteHeapProfile(f); err != nil {
-			log.Fatal("could not write memory profile: ", err)
-		}
-	}
+	app.PprofWriteMemoryIfRequired(args)
 }
