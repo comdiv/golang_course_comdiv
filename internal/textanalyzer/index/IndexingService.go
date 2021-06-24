@@ -39,8 +39,8 @@ func (t *IndexingService) Index(part int, text string) {
 	t.stats.Merge(subindex)
 }
 
-// Collect возврат top size элементов из индекса
-func (t *IndexingService) Collect(size int, filter *TermFilter) []TermStat {
+// Find возврат top size элементов из индекса
+func (t *IndexingService) Find(size int, filter *TermFilter) []TermStat {
 	// тут мы блокируем только на чтение, соответственно разрешает конкурентный доступ
 	t.statSync.RLock()
 	defer t.statSync.RUnlock()

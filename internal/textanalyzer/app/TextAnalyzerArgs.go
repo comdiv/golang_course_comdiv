@@ -28,7 +28,7 @@ func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
 		env_debug = ENV_DEBUG == "true"
 	}
 	result := &TextAnalyzerArgs{
-		size:      flag.Int("size", 10, "Collect top SIZE frequent words"),
+		size:      flag.Int("size", 10, "Find top SIZE frequent words"),
 		minlen:    flag.Int("minlen", 4, "Min length for word in symmbols"),
 		useFirst:  flag.Bool("first", false, "Include first words of statements"),
 		useLast:   flag.Bool("last", false, "Include last words of statements"),

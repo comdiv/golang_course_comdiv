@@ -23,11 +23,11 @@ func HttpMain(args *TextAnalyzerArgs) {
 	wg.Add(1)
 	mainmux := createMux(args)
 	application := &httpApplicationContext{
-		args:        args,
-		mux:         mainmux,
-		mainserver:  &http.Server{Addr: "127.0.0.1:" + strconv.Itoa(args.Http()), Handler: mainmux},
-		pprofserver: pprofserver,
-		stats:       index.NewTermStatCollectionF(args.GetStatisticsFilter()),
+		args:            args,
+		mux:             mainmux,
+		mainserver:      &http.Server{Addr: "127.0.0.1:" + strconv.Itoa(args.Http()), Handler: mainmux},
+		pprofserver:     pprofserver,
+		indexingService: index.NewIndexService(args),
 	}
 	application.setupHandlers()
 	go func() {
@@ -48,26 +48,11 @@ func createMux(args *TextAnalyzerArgs) *http.ServeMux {
 }
 
 type httpApplicationContext struct {
-	args        *TextAnalyzerArgs
-	mux         *http.ServeMux
-	mainserver  *http.Server
-	pprofserver *http.Server
-	syncobj     sync.Mutex
-	stats       *index.TermStatCollection
-}
-
-func (a *httpApplicationContext) reset() {
-	a.syncobj.Lock()
-	defer a.syncobj.Unlock()
-	a.stats = index.NewTermStatCollectionF(a.args.GetStatisticsFilter())
-}
-
-func (a *httpApplicationContext) text(j index.JsonTextPart) {
-	currentStats := index.CollectFromString(j.Text, index.CollectConfig{Part: j.Number})
-	a.syncobj.Lock()
-	defer a.syncobj.Unlock()
-	a.stats.Merge(currentStats)
-	a.stats.RebuildFrequencyIndex()
+	args            *TextAnalyzerArgs
+	mux             *http.ServeMux
+	mainserver      *http.Server
+	pprofserver     *http.Server
+	indexingService *index.IndexingService
 }
 
 func (a *httpApplicationContext) stop() {
@@ -79,18 +64,18 @@ func (a *httpApplicationContext) stop() {
 
 func (a *httpApplicationContext) setupHandlers() {
 	a.mux.HandleFunc("/stop", func(writer http.ResponseWriter, request *http.Request) {
-		setupCorsResponse(&writer,request)
+		setupCorsResponse(&writer, request)
 		if (request).Method == "OPTIONS" {
 			return
 		}
 		a.stop()
 	})
 	a.mux.HandleFunc("/reset", func(writer http.ResponseWriter, request *http.Request) {
-		setupCorsResponse(&writer,request)
+		setupCorsResponse(&writer, request)
 		if (request).Method == "OPTIONS" {
 			return
 		}
-		a.reset()
+		a.indexingService.Reset()
 		writer.Header().Set("Content-Type", "application/json")
 		data, _ := json.MarshalIndent(struct {
 			Op    string `json:"op"`
@@ -99,7 +84,7 @@ func (a *httpApplicationContext) setupHandlers() {
 		writer.Write(data)
 	})
 	a.mux.HandleFunc("/stat/", func(writer http.ResponseWriter, request *http.Request) {
-		setupCorsResponse(&writer,request)
+		setupCorsResponse(&writer, request)
 		if (request).Method == "OPTIONS" {
 			return
 		}
@@ -116,7 +101,7 @@ func (a *httpApplicationContext) setupHandlers() {
 		parts := strings.Split(path, "/")
 		size := -1
 		switch {
-		case len(parts) == 3 && parts[2] == "" : // /stat ""+"stat" + ""
+		case len(parts) == 3 && parts[2] == "": // /stat ""+"stat" + ""
 			size = a.args.Size()
 		case len(parts) == 3: // /stat/10 "" + "stat"+ "10"
 			_size, err := strconv.Atoi(parts[2])
@@ -134,7 +119,7 @@ func (a *httpApplicationContext) setupHandlers() {
 			filter := a.args.GetStatisticsFilter()
 			filterDto := filter.ToDto()
 			data.Filter = &filterDto
-			terms := a.stats.Find(size, filter)
+			terms := a.indexingService.Find(size, filter)
 			data.Data = make([]index.TermStatDto, len(terms))
 			for i, v := range terms {
 				data.Data[i] = v.ToDto()
@@ -147,7 +132,7 @@ func (a *httpApplicationContext) setupHandlers() {
 		writer.Write(out)
 	})
 	a.mux.HandleFunc("/text", func(writer http.ResponseWriter, request *http.Request) {
-		setupCorsResponse(&writer,request)
+		setupCorsResponse(&writer, request)
 		if (request).Method == "OPTIONS" {
 			return
 		}
@@ -166,7 +151,7 @@ func (a *httpApplicationContext) setupHandlers() {
 			data.State = "empty"
 			statusCode = http.StatusBadRequest
 		default:
-			a.text(jsonpart)
+			a.indexingService.Index(jsonpart.Number, jsonpart.Text)
 		}
 		out, _ := json.MarshalIndent(data, "", "    ")
 		writer.WriteHeader(statusCode)
