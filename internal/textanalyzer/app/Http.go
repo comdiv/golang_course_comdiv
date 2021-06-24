@@ -70,68 +70,38 @@ func (a *httpApplicationContext) setupHandlers() {
 		}
 		a.stop()
 	})
-	a.mux.HandleFunc("/reset", func(writer http.ResponseWriter, request *http.Request) {
+	a.mux.HandleFunc("/reset", ResetHandler(a.indexingService))
+	a.mux.HandleFunc("/stat/", StatHandler(a.args, a.indexingService))
+	a.mux.HandleFunc("/text", IndexHandler(a.indexingService))
+	a.mux.HandleFunc("/index", IndexHandler(a.indexingService))
+}
+
+func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
+}
+
+type HttpHandler func(writer http.ResponseWriter, request *http.Request)
+
+func ResetHandler(indexer *IndexingService) HttpHandler {
+	return func(writer http.ResponseWriter, request *http.Request) {
 		setupCorsResponse(&writer, request)
 		if (request).Method == "OPTIONS" {
 			return
 		}
-		a.indexingService.Reset()
+		indexer.Reset()
 		writer.Header().Set("Content-Type", "application/json")
 		data, _ := json.MarshalIndent(struct {
 			Op    string `json:"op"`
 			State string `json:"state"`
 		}{"reset", "complete"}, "", "    ")
 		writer.Write(data)
-	})
-	a.mux.HandleFunc("/stat/", func(writer http.ResponseWriter, request *http.Request) {
-		setupCorsResponse(&writer, request)
-		if (request).Method == "OPTIONS" {
-			return
-		}
-		data := struct {
-			Op     string               `json:"op"`
-			State  string               `json:"state"`
-			Size   int                  `json:"size"`
-			Error  error                `json:"error"`
-			Filter *index.TermFilterDto `json:"filter"`
-			Data   []index.TermStatDto  `json:"data"`
-		}{"stat", "success", 0, nil, nil, nil}
-		statusCode := http.StatusOK
-		path := request.URL.Path
-		parts := strings.Split(path, "/")
-		size := -1
-		switch {
-		case len(parts) == 3 && parts[2] == "": // /stat ""+"stat" + ""
-			size = a.args.Size()
-		case len(parts) == 3: // /stat/10 "" + "stat"+ "10"
-			_size, err := strconv.Atoi(parts[2])
-			if err != nil {
-				data.Error = err
-				data.State = "error"
-			}
-			size = _size
-		case len(parts) > 3: // /stat/10/xxx
-			data.Error = errors.New("too many config in path")
-			data.State = "error"
-		}
-		data.Size = size
-		if size > 0 {
-			filter := a.args.GetStatisticsFilter()
-			filterDto := filter.ToDto()
-			data.Filter = &filterDto
-			terms := a.indexingService.Find(size, filter)
-			data.Data = make([]index.TermStatDto, len(terms))
-			for i, v := range terms {
-				data.Data[i] = v.ToDto()
-			}
-		} else {
-			data.State = "empty"
-		}
-		out, _ := json.MarshalIndent(data, "", "    ")
-		writer.WriteHeader(statusCode)
-		writer.Write(out)
-	})
-	a.mux.HandleFunc("/text", func(writer http.ResponseWriter, request *http.Request) {
+	}
+}
+
+func IndexHandler(indexer *IndexingService) HttpHandler {
+	return func(writer http.ResponseWriter, request *http.Request) {
 		setupCorsResponse(&writer, request)
 		if (request).Method == "OPTIONS" {
 			return
@@ -151,18 +121,63 @@ func (a *httpApplicationContext) setupHandlers() {
 			data.State = "empty"
 			statusCode = http.StatusBadRequest
 		default:
-			a.indexingService.Index(jsonpart.Number, jsonpart.Text)
+			indexer.Index(jsonpart.Number, jsonpart.Text)
 		}
 		out, _ := json.MarshalIndent(data, "", "    ")
 		writer.WriteHeader(statusCode)
 		writer.Write(out)
-	})
+	}
 }
 
-func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
+func StatHandler(config *TextAnalyzerArgs, indexer *IndexingService) HttpHandler {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		setupCorsResponse(&writer, request)
+		if (request).Method == "OPTIONS" {
+			return
+		}
+		data := struct {
+			Op     string               `json:"op"`
+			State  string               `json:"state"`
+			Size   int                  `json:"size"`
+			Error  error                `json:"error"`
+			Filter *index.TermFilterDto `json:"filter"`
+			Data   []index.TermStatDto  `json:"data"`
+		}{"stat", "success", 0, nil, nil, nil}
+		statusCode := http.StatusOK
+		path := request.URL.Path
+		parts := strings.Split(path, "/")
+		size := -1
+		switch {
+		case len(parts) == 3 && parts[2] == "": // /stat ""+"stat" + ""
+			size = config.Size()
+		case len(parts) == 3: // /stat/10 "" + "stat"+ "10"
+			_size, err := strconv.Atoi(parts[2])
+			if err != nil {
+				data.Error = err
+				data.State = "error"
+			}
+			size = _size
+		case len(parts) > 3: // /stat/10/xxx
+			data.Error = errors.New("too many config in path")
+			data.State = "error"
+		}
+		data.Size = size
+		if size > 0 {
+			filter := config.GetStatisticsFilter()
+			filterDto := filter.ToDto()
+			data.Filter = &filterDto
+			terms := indexer.Find(size, filter)
+			data.Data = make([]index.TermStatDto, len(terms))
+			for i, v := range terms {
+				data.Data[i] = v.ToDto()
+			}
+		} else {
+			data.State = "empty"
+		}
+		out, _ := json.MarshalIndent(data, "", "    ")
+		writer.WriteHeader(statusCode)
+		writer.Write(out)
+	}
 }
 
 func extractJsonFromRequest(r *http.Request) index.JsonTextPart {
