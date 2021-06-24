@@ -57,9 +57,9 @@ type httpApplicationContext struct {
 
 func (a *httpApplicationContext) stop() {
 	if a.pprofserver != nil {
-		a.pprofserver.Shutdown(context.Background())
+		_ = a.pprofserver.Shutdown(context.Background())
 	}
-	a.mainserver.Shutdown(context.Background())
+	_ = a.mainserver.Shutdown(context.Background())
 }
 
 func (a *httpApplicationContext) setupHandlers() {
@@ -107,7 +107,7 @@ func ResetHandler(indexer *IndexingService) HttpHandler {
 			Op    string `json:"op"`
 			State string `json:"state"`
 		}{"reset", "success"}, "", "    ")
-		writer.Write(data)
+		_,_ = writer.Write(data)
 	}
 }
 
@@ -137,7 +137,7 @@ func IndexHandler(indexer *IndexingService) HttpHandler {
 		}
 		out, _ := json.MarshalIndent(data, "", "    ")
 		writer.WriteHeader(statusCode)
-		writer.Write(out)
+		_,_ = writer.Write(out)
 	}
 }
 
@@ -189,7 +189,7 @@ func StatHandler(config *TextAnalyzerArgs, indexer *IndexingService) HttpHandler
 		}
 		out, _ := json.MarshalIndent(data, "", "    ")
 		writer.WriteHeader(statusCode)
-		writer.Write(out)
+		_,_ = writer.Write(out)
 	}
 }
 
@@ -203,7 +203,7 @@ func extractJsonFromRequest(r *http.Request) index.JsonTextPart {
 		}
 		return result
 	}
-	r.ParseForm()
+	_ = r.ParseForm()
 	var params map[string][]string
 	if len(r.Form) != 0 {
 		params = r.Form
