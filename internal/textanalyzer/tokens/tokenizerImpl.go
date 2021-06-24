@@ -77,7 +77,7 @@ func (t *tokenizerImpl) Next() *Token {
 
 
 		// игнорируем простые апострофы и кавычки
-		if b == '\'' || b == '"' {
+		if b == '\'' || b == '"' || b == '(' || b == ')' {
 			continue
 		}
 

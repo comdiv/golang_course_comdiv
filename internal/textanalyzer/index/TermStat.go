@@ -16,12 +16,12 @@ type TermStat struct {
 
 type TermStatDto struct {
 	Value      string `json:"value"`
-	FirstPart  int `json:"first_part"`
-	FirstIndex int `json:"first_index"`
-	Len        int `json:"len"`
-	Count      int `json:"count"`
-	FirstCount int `json:"first_count"`
-	LastCount  int `json:"last_count"`
+	FirstPart  int    `json:"first_part"`
+	FirstIndex int    `json:"first_index"`
+	Len        int    `json:"len"`
+	Count      int    `json:"count"`
+	FirstCount int    `json:"first_count"`
+	LastCount  int    `json:"last_count"`
 }
 
 func (t *TermStat) ToDto() TermStatDto {
