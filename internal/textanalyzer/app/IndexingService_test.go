@@ -40,28 +40,29 @@ func useNoNil(i interface{}) {
 
 func TestForRaceDetection(t *testing.T) {
 	indexingService := app.NewIndexService(app.NewTextAnalyzerArgsNF(testConfig))
-	seed := int64(1234213532523)
-	randomizer := rand.New(rand.NewSource(seed))
+
 	// тут мы просто рандомно пишем, читаем и ресетим сервис
 	// сходимость данных тут не проверяется - проверяем именно на оперделение race между 100 условными клиентами
-	// каждый из которых делает 1000 рандомных команд
+	// каждый из которых делает 5000 рандомных команд
 	var wg sync.WaitGroup
 	for i := 0; i < 100; i++ {
+		seed := int64(1234213532523*(i+1))
+		randomizer := rand.New(rand.NewSource(seed))
 		wg.Add(1)
-		go func() {
+		go func(_i int) {
 			defer wg.Done()
 			for r := 0; r < 1000; r++ {
 				next := randomizer.Int()
 				switch {
 				case next%5 == 0:
 					useNoNil(indexingService.Find(10, index.NewTermFilter(index.TermFilterOptions{})))
-				case next%3 == 0:
+				case next%7 == 0:
 					indexingService.Reset()
 				default:
-					indexingService.Index(i+r, "it is a text for indexing from some part of text")
+					indexingService.Index(_i+r, "it is a text for indexing from some part of text")
 				}
 			}
-		}()
+		}(i)
 	}
 	wg.Wait()
 }

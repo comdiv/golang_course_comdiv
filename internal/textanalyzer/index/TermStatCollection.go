@@ -78,9 +78,6 @@ func (c *TermStatCollection) DocOrderIndex() []*TermStat {
 }
 
 func (c *TermStatCollection) FreqOrderIndex() []*TermStat {
-	if c.freqOrderIndex == nil {
-		c.RebuildFrequencyIndex()
-	}
 	return c.freqOrderIndex
 }
 
