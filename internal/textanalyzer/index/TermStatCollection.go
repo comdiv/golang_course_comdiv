@@ -206,7 +206,7 @@ func collectStatsFromJsonAsync(
 	go func() {
 		defer mergewg.Done()
 		for c := range subCollections {
-			result = result.Merge(c)
+			result.Merge(c)
 		}
 	}()
 	wg := new(sync.WaitGroup)
