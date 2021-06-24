@@ -1,22 +1,23 @@
-package index
+package app
 
 import (
-	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/app"
+	"fmt"
+	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index"
 	"sync"
 )
 
 // IndexingService сервис индексации входящих запросов с текстами, используется в Http
 type IndexingService struct {
 	// настройки
-	args *app.TextAnalyzerArgs
+	args *TextAnalyzerArgs
 	// текущий индекс статистики
-	stats *TermStatCollection
+	stats *index.TermStatCollection
 	// синхронизатор доступа к статистике и у нас есть именно блокировки на чтение и запись
 	statSync sync.RWMutex
 }
 
 // NewIndexService создать и инициализировать новый сервис индексации
-func NewIndexService(args *app.TextAnalyzerArgs) *IndexingService {
+func NewIndexService(args *TextAnalyzerArgs) *IndexingService {
 	result := &IndexingService{args: args}
 	result.Reset()
 	return result
@@ -24,15 +25,20 @@ func NewIndexService(args *app.TextAnalyzerArgs) *IndexingService {
 
 // Reset сброс состояния текущего индекса
 func (t *IndexingService) Reset() {
+	fmt.Println("r")
 	t.statSync.Lock()
-	defer t.statSync.Unlock()
-	t.stats = NewTermStatCollectionF(t.args.GetStatisticsFilter())
+	fmt.Println("rl")
+	defer func(){
+		t.statSync.Unlock()
+		fmt.Println("ru")
+	}()
+	t.stats = index.NewTermStatCollectionF(t.args.GetStatisticsFilter())
 }
 
 // Index индексация переданного текста в текущей коллекции
 func (t *IndexingService) Index(part int, text string) {
 	// формируем индекс отдельного участка
-	subindex := CollectFromString(text, CollectConfig{Part: part, Filter: t.args.GetStatisticsFilter()})
+	subindex := index.CollectFromString(text, index.CollectConfig{Part: part, Filter: t.args.GetStatisticsFilter()})
 	// далее синхронно редуцируем результат в состав общей статистики
 	t.statSync.Lock()
 	defer t.statSync.Unlock()
@@ -40,13 +46,18 @@ func (t *IndexingService) Index(part int, text string) {
 }
 
 // Find возврат top size элементов из индекса
-func (t *IndexingService) Find(size int, filter *TermFilter) []TermStat {
+func (t *IndexingService) Find(size int, filter *index.TermFilter) []index.TermStat {
+	fmt.Println("f")
 	// тут мы блокируем только на чтение, соответственно разрешает конкурентный доступ
 	t.statSync.RLock()
-	defer t.statSync.RUnlock()
+	fmt.Println("fl")
+	defer func(){
+		t.statSync.RUnlock()
+		fmt.Println("fu")
+	}()
 	referencedResult := t.stats.Find(size, filter)
 	// получим копию дереференсированных данных во избежание порчи после передачи
-	result := make([]TermStat,len(referencedResult))
+	result := make([]index.TermStat,len(referencedResult))
 	for i:=0;i<len(result);i++{
 		result[i] = *referencedResult[i]
 	}

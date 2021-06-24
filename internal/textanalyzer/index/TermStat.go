@@ -1,6 +1,7 @@
 package index
 
 import (
+	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/lexemes"
 )
 
@@ -108,6 +109,9 @@ func (l *TermStat) Count() int {
 }
 
 func (l *TermStat) FirstCount() int {
+	if(l == nil){
+		fmt.Println("aaa!!")
+	}
 	return l.firstCount
 }
 

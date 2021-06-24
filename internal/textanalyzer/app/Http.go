@@ -27,7 +27,7 @@ func HttpMain(args *TextAnalyzerArgs) {
 		mux:             mainmux,
 		mainserver:      &http.Server{Addr: "127.0.0.1:" + strconv.Itoa(args.Http()), Handler: mainmux},
 		pprofserver:     pprofserver,
-		indexingService: index.NewIndexService(args),
+		indexingService: NewIndexService(args),
 	}
 	application.setupHandlers()
 	go func() {
@@ -52,7 +52,7 @@ type httpApplicationContext struct {
 	mux             *http.ServeMux
 	mainserver      *http.Server
 	pprofserver     *http.Server
-	indexingService *index.IndexingService
+	indexingService *IndexingService
 }
 
 func (a *httpApplicationContext) stop() {
@@ -111,7 +111,7 @@ func (a *httpApplicationContext) setupHandlers() {
 			}
 			size = _size
 		case len(parts) > 3: // /stat/10/xxx
-			data.Error = errors.New("too many args in path")
+			data.Error = errors.New("too many config in path")
 			data.State = "error"
 		}
 		data.Size = size

@@ -21,6 +21,36 @@ type TextAnalyzerArgs struct {
 	pprofhttp *string
 }
 
+type NonFlagsAnalyzerConfig struct {
+	Size      int
+	Minlen    int
+	UseFirst  bool
+	UseLast   bool
+	Nonfreq   bool
+	Json      bool
+	Cpuprof   string
+	Memprof   string
+	Debug     bool
+	Http      int
+	Pprofhttp string
+}
+
+func NewTextAnalyzerArgsNF(config NonFlagsAnalyzerConfig) *TextAnalyzerArgs {
+	result := &TextAnalyzerArgs{
+		minlen:    &config.Minlen,
+		useFirst:  &config.UseFirst,
+		useLast:   &config.UseLast,
+		nonfreq:   &config.Nonfreq,
+		json:      &config.Json,
+		cpuprof:   &config.Cpuprof,
+		memprof:   &config.Memprof,
+		debug:     &config.Debug,
+		http:      &config.Http,
+		pprofhttp: &config.Pprofhttp,
+	}
+	return result
+}
+
 func NewTextAnalyzerArgsF() *TextAnalyzerArgs {
 	ENV_DEBUG, exists := os.LookupEnv("DEBUG")
 	var env_debug bool
