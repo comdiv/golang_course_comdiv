@@ -46,7 +46,13 @@ func (c *TermStatCollection) Merge(other *TermStatCollection) *TermStatCollectio
 			my.Merge(other.Terms()[i])
 		}
 	}
+	// сбросить частотный фильтр
+	c.freqOrderIndex = nil
 	return c
+}
+
+func (c *TermStatCollection) IsIndexReady() bool {
+	return c.freqOrderIndex != nil
 }
 
 func (c *TermStatCollection) RebuildFrequencyIndex() {
@@ -77,6 +83,7 @@ func (c *TermStatCollection) FreqOrderIndex() []*TermStat {
 	}
 	return c.freqOrderIndex
 }
+
 func NewTermStatCollection() *TermStatCollection {
 	return NewTermStatCollectionF(nil)
 }
@@ -306,6 +313,10 @@ func (c *TermStatCollection) Find(size int, filter *TermFilter) []*TermStat {
 	} else {
 		for i := 0; i < len(freqs); i++ {
 			v := freqs[i]
+			if v == nil {
+				// им по идее не откуда браться!!!
+				fmt.Println("was nil in collection!!!")
+			}
 			if filter.MatchesStats(v) {
 				result = append(result, v)
 				if len(result) == size {

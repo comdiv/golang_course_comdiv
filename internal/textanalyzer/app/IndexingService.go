@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/textanalyzer/index"
 	"sync"
 )
@@ -25,13 +24,8 @@ func NewIndexService(args *TextAnalyzerArgs) *IndexingService {
 
 // Reset сброс состояния текущего индекса
 func (t *IndexingService) Reset() {
-	fmt.Println("r")
 	t.statSync.Lock()
-	fmt.Println("rl")
-	defer func(){
-		t.statSync.Unlock()
-		fmt.Println("ru")
-	}()
+	defer t.statSync.Unlock()
 	t.stats = index.NewTermStatCollectionF(t.args.GetStatisticsFilter())
 }
 
@@ -43,22 +37,18 @@ func (t *IndexingService) Index(part int, text string) {
 	t.statSync.Lock()
 	defer t.statSync.Unlock()
 	t.stats.Merge(subindex)
+	t.stats.RebuildFrequencyIndex()
 }
 
 // Find возврат top size элементов из индекса
 func (t *IndexingService) Find(size int, filter *index.TermFilter) []index.TermStat {
-	fmt.Println("f")
 	// тут мы блокируем только на чтение, соответственно разрешает конкурентный доступ
 	t.statSync.RLock()
-	fmt.Println("fl")
-	defer func(){
-		t.statSync.RUnlock()
-		fmt.Println("fu")
-	}()
+	defer t.statSync.RUnlock()
 	referencedResult := t.stats.Find(size, filter)
 	// получим копию дереференсированных данных во избежание порчи после передачи
-	result := make([]index.TermStat,len(referencedResult))
-	for i:=0;i<len(result);i++{
+	result := make([]index.TermStat, len(referencedResult))
+	for i := 0; i < len(result); i++ {
 		result[i] = *referencedResult[i]
 	}
 	return result
