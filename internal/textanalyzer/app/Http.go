@@ -70,10 +70,20 @@ func (a *httpApplicationContext) setupHandlers() {
 		}
 		a.stop()
 	})
-	a.mux.HandleFunc("/reset", ResetHandler(a.indexingService))
-	a.mux.HandleFunc("/stat/", StatHandler(a.args, a.indexingService))
-	a.mux.HandleFunc("/text", IndexHandler(a.indexingService))
-	a.mux.HandleFunc("/index", IndexHandler(a.indexingService))
+	SetupIndexerMux(a.mux, a.indexingService)
+}
+
+func SetupIndexerMux(mux *http.ServeMux, indexer *IndexingService) {
+	mux.HandleFunc("/reset", ResetHandler(indexer))
+	mux.HandleFunc("/stat/", StatHandler(indexer.args, indexer))
+	mux.HandleFunc("/text", IndexHandler(indexer))
+	mux.HandleFunc("/index", IndexHandler(indexer))
+}
+
+func NewIndexerMux(indexer *IndexingService) *http.ServeMux {
+	result := http.NewServeMux()
+	SetupIndexerMux(result, indexer)
+	return result
 }
 
 func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
