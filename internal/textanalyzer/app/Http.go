@@ -100,12 +100,13 @@ func ResetHandler(indexer *IndexingService) HttpHandler {
 		if (request).Method == "OPTIONS" {
 			return
 		}
+		writer.Header().Set("Content-Type","application/json")
 		indexer.Reset()
 		writer.Header().Set("Content-Type", "application/json")
 		data, _ := json.MarshalIndent(struct {
 			Op    string `json:"op"`
 			State string `json:"state"`
-		}{"reset", "complete"}, "", "    ")
+		}{"reset", "success"}, "", "    ")
 		writer.Write(data)
 	}
 }
@@ -116,6 +117,7 @@ func IndexHandler(indexer *IndexingService) HttpHandler {
 		if (request).Method == "OPTIONS" {
 			return
 		}
+		writer.Header().Set("Content-Type","application/json")
 		jsonpart := extractJsonFromRequest(request)
 		data := struct {
 			Op    string             `json:"op"`
@@ -145,6 +147,7 @@ func StatHandler(config *TextAnalyzerArgs, indexer *IndexingService) HttpHandler
 		if (request).Method == "OPTIONS" {
 			return
 		}
+		writer.Header().Set("Content-Type","application/json")
 		data := struct {
 			Op     string               `json:"op"`
 			State  string               `json:"state"`

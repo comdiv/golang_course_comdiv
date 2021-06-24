@@ -38,7 +38,8 @@ func useNoNil(i interface{}) {
 	}
 }
 
-func TestForRaceDetection(t *testing.T) {
+// поместил в бенчмарк, чтобы не вызывался при каждом вызове - тяжеловатый тест
+func Benchmark_TestForRaceDetection(b *testing.B) {
 	indexingService := app.NewIndexService(app.NewTextAnalyzerArgsNF(testConfig))
 
 	// тут мы просто рандомно пишем, читаем и ресетим сервис
