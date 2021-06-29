@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 )
 
 var emptyTransformer = func(s string) string { return s }
@@ -181,6 +182,9 @@ func TestPipeLineIsWorkingAfterStartConcurrently(t *testing.T) {
 		defer wg.Done()
 		for range in {
 			noPipeCounter++
+			if noPipeCounter == 1000 {
+				time.Sleep(10 * time.Millisecond) // ci ubuntu ranner always make preference for this counter, should pause
+			}
 		}
 	}()
 	go func() {
