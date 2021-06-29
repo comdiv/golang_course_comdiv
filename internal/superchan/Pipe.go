@@ -16,7 +16,6 @@ type Pipe struct {
 	stopper    chan struct{}
 	wg         sync.WaitGroup
 	operlock   sync.Mutex
-	joinMarker bool
 	autoClose  bool
 }
 
