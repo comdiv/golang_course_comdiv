@@ -1,9 +1,9 @@
-package superchan_test
+package pipe_test
 
 import (
 	"context"
 	"fmt"
-	"github.com/comdiv/golang_course_comdiv/internal/superchan"
+	"github.com/comdiv/golang_course_comdiv/internal/superchan/pipe"
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"strings"
@@ -22,14 +22,14 @@ func prefixer(prefix string) func(s string) string {
 
 // проверяем что вообще создается труба
 func TestNewPipe(t *testing.T) {
-	var pipe *superchan.Pipe = superchan.NewPipe(context.TODO(), make(chan string), make(chan string), emptyTransformer)
+	var pipe *pipe.Pipe = pipe.New(context.TODO(), make(chan string), make(chan string), emptyTransformer)
 	assert.NotNil(t, pipe)
 }
 
 func TestPipeIsPassiveBeforeStart(t *testing.T) {
 	in := make(chan string)
 	out := make(chan string)
-	pipe := superchan.NewPipe(context.TODO(), in, out, emptyTransformer)
+	pipe := pipe.New(context.TODO(), in, out, emptyTransformer)
 	assert.NotNil(t, pipe)
 	// так как мы не стартовали пайп и он не читает in, то запущенная ниже корутина перехватит весь вход
 	var wg sync.WaitGroup
@@ -53,7 +53,7 @@ func TestPipeIsPassiveBeforeStart(t *testing.T) {
 func TestPipeUsualWork(t *testing.T) {
 	in := make(chan string)
 	out := make(chan string)
-	pipe := superchan.NewPipe(context.TODO(), in, out, prefixer("test"))
+	pipe := pipe.New(context.TODO(), in, out, prefixer("test"))
 	// трубу надо стартовать
 	pipe.Start()
 	// ну и она фоново перегоняет in в out с заданной трансформацией
@@ -87,7 +87,7 @@ func TestUsesContext(t *testing.T) {
 	in := make(chan string)
 	out := make(chan string)
 	context, cancel := context.WithCancel(context.TODO())
-	pipe := superchan.NewPipe(context, in, out, prefixer("test"))
+	pipe := pipe.New(context, in, out, prefixer("test"))
 	// трубу надо стартовать
 	pipe.Start()
 	// ну и она фоново перегоняет in в out с заданной трансформацией
@@ -117,7 +117,7 @@ func TestUsesContext(t *testing.T) {
 func TestCanBeStoppedExplicitly(t *testing.T) {
 	in := make(chan string)
 	out := make(chan string)
-	pipe := superchan.NewPipe(context.TODO(), in, out, prefixer("test"))
+	pipe := pipe.New(context.TODO(), in, out, prefixer("test"))
 	// трубу надо стартовать
 	pipe.Start()
 	// ну и она фоново перегоняет in в out с заданной трансформацией
@@ -147,7 +147,7 @@ func TestCanBeStoppedExplicitly(t *testing.T) {
 // смотрим работу "трубы" с автозакрытием
 func TestNewTransformChannel(t *testing.T) {
 	in := make(chan string)
-	out:= superchan.NewTransformChannel(context.TODO(),in, prefixer("test"))
+	out:= pipe.PipeChannel(context.TODO(),in, prefixer("test"))
 	counter := 0
 	totalCount := 10000
 	var wg sync.WaitGroup
@@ -170,7 +170,7 @@ func TestNewTransformChannel(t *testing.T) {
 func TestPipeLineIsWorkingAfterStartConcurrently(t *testing.T) {
 	in := make(chan string)
 	out := make(chan string)
-	pipe := superchan.NewPipe(context.TODO(), in, out, emptyTransformer)
+	pipe := pipe.New(context.TODO(), in, out, emptyTransformer)
 	assert.NotNil(t, pipe)
 	pipe.Start()
 	var wg sync.WaitGroup

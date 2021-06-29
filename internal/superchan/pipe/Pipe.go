@@ -1,4 +1,4 @@
-package superchan
+package pipe
 
 import (
 	"context"
@@ -8,25 +8,25 @@ import (
 )
 
 type Pipe struct {
-	context    context.Context
-	in         <-chan string
-	out        chan<- string
-	transform  func(s string) string
-	started    int32
-	stopper    chan struct{}
-	wg         sync.WaitGroup
-	operlock   sync.Mutex
-	autoClose  bool
+	context   context.Context
+	in        <-chan string
+	out       chan<- string
+	transform func(s string) string
+	started   int32
+	stopper   chan struct{}
+	wg        sync.WaitGroup
+	operlock  sync.Mutex
+	autoClose bool
 }
 
-func NewPipe(context context.Context, in <-chan string, out chan<- string, transform func(s string) string) *Pipe {
-	return &Pipe{context: context, in: in, out: out, transform: transform, stopper: make(chan struct{},1)}
+func New(context context.Context, in <-chan string, out chan<- string, transform func(s string) string) *Pipe {
+	return &Pipe{context: context, in: in, out: out, transform: transform, stopper: make(chan struct{}, 1)}
 }
 
 // на основе Pipe активный канал, который будет закрыт после разбора всего in или остановки контекста
-func NewTransformChannel(context context.Context, in <-chan string, transform func(s string) string) <-chan string {
+func PipeChannel(context context.Context, in <-chan string, transform func(s string) string) <-chan string {
 	out := make(chan string)
-	pipe := NewPipe(context, in, out, transform)
+	pipe := New(context, in, out, transform)
 	pipe.autoClose = true
 	pipe.Start()
 	return out
