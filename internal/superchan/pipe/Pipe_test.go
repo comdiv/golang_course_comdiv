@@ -22,14 +22,14 @@ func prefixer(prefix string) func(s string) string {
 
 // проверяем что вообще создается труба
 func TestNewPipe(t *testing.T) {
-	var pipe = pipe.New(context.TODO(), make(chan string), make(chan string), emptyTransformer)
+	var pipe = pipe.New(make(chan string), make(chan string), emptyTransformer)
 	assert.NotNil(t, pipe)
 }
 
 func TestPipeIsPassiveBeforeStart(t *testing.T) {
 	in := make(chan string)
 	out := make(chan string)
-	pipe := pipe.New(context.TODO(), in, out, emptyTransformer)
+	pipe := pipe.New(in, out, emptyTransformer)
 	assert.NotNil(t, pipe)
 	// так как мы не стартовали пайп и он не читает in, то запущенная ниже корутина перехватит весь вход
 	var wg sync.WaitGroup
@@ -50,12 +50,19 @@ func TestPipeIsPassiveBeforeStart(t *testing.T) {
 	assert.Equal(t, totalCount, noPipeCounter)
 }
 
-func TestPipeUsualWork(t *testing.T) {
+func TestPipeStart(t *testing.T) {
 	in := make(chan string)
 	out := make(chan string)
-	pipe := pipe.New(context.TODO(), in, out, prefixer("test"))
+	pipe := pipe.New(in, out, prefixer("test"))
+
 	// трубу надо стартовать
-	pipe.Start()
+	var pipegroup sync.WaitGroup
+	pipegroup.Add(1)
+	go func(){
+		defer pipegroup.Done()
+		pipe.Start(context.Background())
+	}()
+
 	// ну и она фоново перегоняет in в out с заданной трансформацией
 
 	var wg sync.WaitGroup
@@ -74,7 +81,38 @@ func TestPipeUsualWork(t *testing.T) {
 		in <- strconv.Itoa(i)
 	}
 	close(in)
-	pipe.Wait() // так как in закрыт, то труба завершится, сама труба out не закрывает (нет полномочий),
+	pipegroup.Wait() // так как in закрыт, то труба завершится, сама труба out не закрывает (нет полномочий),
+	// но вдруг был буфер на in, дожищдаемя, чтобы он был обработан
+	close(out)
+	wg.Wait()
+	// все перегнано
+	assert.Equal(t, totalCount, counter)
+}
+
+func TestPipe_StartAsync(t *testing.T) {
+	in := make(chan string)
+	out := make(chan string)
+	pipe := pipe.New(in, out, prefixer("test"))
+
+	// трубу надо стартовать
+	pipeWaiter := pipe.StartAsync(context.Background())
+	var wg sync.WaitGroup
+	counter := 0
+	totalCount := 10000
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for v := range out {
+			// проверяем что работала трансформация
+			assert.True(t, strings.HasPrefix(v, "test-"))
+			counter++
+		}
+	}()
+	for i := 0; i < totalCount; i++ {
+		in <- strconv.Itoa(i)
+	}
+	close(in)
+	pipeWaiter()
 	// но вдруг был буфер на in, дожищдаемя, чтобы он был обработан
 	close(out)
 	wg.Wait()
@@ -86,10 +124,10 @@ func TestPipeUsualWork(t *testing.T) {
 func TestUsesContext(t *testing.T) {
 	in := make(chan string)
 	out := make(chan string)
-	context, cancel := context.WithCancel(context.TODO())
-	pipe := pipe.New(context, in, out, prefixer("test"))
+	ctx, cancel := context.WithCancel(context.TODO())
+	pipe := pipe.New(in, out, prefixer("test"))
 	// трубу надо стартовать
-	pipe.Start()
+	pipeWaiter := pipe.StartAsync(ctx)
 	// ну и она фоново перегоняет in в out с заданной трансформацией
 	counter := 0
 	totalCount := 10000
@@ -109,37 +147,7 @@ func TestUsesContext(t *testing.T) {
 		}
 		close(in)
 	}()
-	pipe.Wait() //  по идее закроется примерно на 1000-1001 элементе
-	assert.GreaterOrEqual(t, counter, 1000)
-	assert.LessOrEqual(t, counter, 1005)
-}
-
-func TestCanBeStoppedExplicitly(t *testing.T) {
-	in := make(chan string)
-	out := make(chan string)
-	pipe := pipe.New(context.TODO(), in, out, prefixer("test"))
-	// трубу надо стартовать
-	pipe.Start()
-	// ну и она фоново перегоняет in в out с заданной трансформацией
-	counter := 0
-	totalCount := 10000
-	go func() {
-		for v := range out {
-			// проверяем что работала трансформация
-			assert.True(t, strings.HasPrefix(v, "test-"))
-			counter++
-			if counter > 1000 {
-				go pipe.Stop()
-			}
-		}
-	}()
-	go func() {
-		for i := 0; i < totalCount; i++ {
-			in <- strconv.Itoa(i)
-		}
-		close(in)
-	}()
-	pipe.Wait() //  по идее закроется примерно на 1000-1001 элементе
+	pipeWaiter() //  по идее закроется примерно на 1000-1001 элементе
 	assert.GreaterOrEqual(t, counter, 1000)
 	assert.LessOrEqual(t, counter, 1005)
 }
@@ -170,9 +178,9 @@ func TestNewTransformChannel(t *testing.T) {
 func TestPipeLineIsWorkingAfterStartConcurrently(t *testing.T) {
 	in := make(chan string)
 	out := make(chan string)
-	pipe := pipe.New(context.TODO(), in, out, emptyTransformer)
+	pipe := pipe.New( in, out, emptyTransformer)
 	assert.NotNil(t, pipe)
-	pipe.Start()
+	pipeWaiter := pipe.StartAsync(context.TODO())
 	var wg sync.WaitGroup
 	pipeCounter := 0
 	noPipeCounter := 0
@@ -197,7 +205,7 @@ func TestPipeLineIsWorkingAfterStartConcurrently(t *testing.T) {
 		in <- strconv.Itoa(i)
 	}
 	close(in)
-	pipe.Wait()
+	pipeWaiter()
 	close(out)
 	wg.Wait()
 	// все должно было обработаться
