@@ -15,7 +15,7 @@ type DynamicMerger struct {
 	idgen      int
 	locker     sync.RWMutex
 	wg         sync.WaitGroup
-	swg         sync.WaitGroup
+	swg        sync.WaitGroup
 	stopper    chan struct{}
 }
 
@@ -26,8 +26,8 @@ func New(inputs []chan string, out chan string) *DynamicMerger {
 	}
 	return result
 }
+
 // регистрирует новый канал и возвращает его токн
 func (m *DynamicMerger) Register(ch chan string) {
-	pipe.New(context.TODO(), ch, m.out, func(s string) string{return s}).Start()
+	pipe.New(context.TODO(), ch, m.out, func(s string) string { return s }).Start()
 }
-

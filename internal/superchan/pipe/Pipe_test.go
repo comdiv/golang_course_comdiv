@@ -22,7 +22,7 @@ func prefixer(prefix string) func(s string) string {
 
 // проверяем что вообще создается труба
 func TestNewPipe(t *testing.T) {
-	var pipe *pipe.Pipe = pipe.New(context.TODO(), make(chan string), make(chan string), emptyTransformer)
+	var pipe = pipe.New(context.TODO(), make(chan string), make(chan string), emptyTransformer)
 	assert.NotNil(t, pipe)
 }
 
