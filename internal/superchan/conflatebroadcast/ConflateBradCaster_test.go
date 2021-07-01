@@ -24,8 +24,8 @@ func TestConflateBroadCaster_AllowWriteEvenIfNoListeners(t *testing.T) {
 	conflater.Publish(context.TODO(), src_2)
 
 	// и даже добавим коналы слушатели, которые НИКТО не будет читать
-	target_1 := make(chan string)
-	target_2 := make(chan string)
+	target_1 := make(chan func() string)
+	target_2 := make(chan func() string)
 	conflater.Listen(context.TODO(), target_1)
 	conflater.Listen(context.TODO(), target_2)
 
@@ -67,8 +67,8 @@ func TestConflateBroadCaster_LazyListeners(t *testing.T) {
 	conflater.Publish(context.TODO(), src_2)
 
 	//  добавим коналы слушатели, и на этот раз обвесим их слушателями
-	target_1 := make(chan string)
-	target_2 := make(chan string)
+	target_1 := make(chan func() string)
+	target_2 := make(chan func() string)
 	conflater.Listen(context.TODO(), target_1)
 	conflater.Listen(context.TODO(), target_2)
 
@@ -87,9 +87,10 @@ func TestConflateBroadCaster_LazyListeners(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		for v := range target_1 {
+			val := v()
 			counter_1++
-			println("listener 1: got: "+ v)
-			if v == "99" {
+			println("listener 1: got: "+ val)
+			if val == "99" {
 				return
 			}
 			time.Sleep(30 * time.Millisecond)
@@ -98,9 +99,18 @@ func TestConflateBroadCaster_LazyListeners(t *testing.T) {
 	go func() {
 		defer wg.Done()
 		for v := range target_2 {
+			val := v()
+
+			// заодно проверяем, что функция - с мемоизацией, значение не меняется
+			if (counter_2 > 3) {
+				time.Sleep(30) // точно поменялся current
+				// но вызов v()  нет
+				assert.Equal(t, val, v())
+			}
+
 			counter_2++
-			println("listener 2: got: "+ v)
-			if v == "99" {
+			println("listener 2: got: "+ val)
+			if val == "99" {
 				return
 			}
 			time.Sleep(40 * time.Millisecond)

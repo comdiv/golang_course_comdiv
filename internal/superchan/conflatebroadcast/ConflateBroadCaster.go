@@ -76,7 +76,20 @@ func (c *ConflateBroadCaster) Publish(ctx context.Context, ch <-chan string) sup
 	return c.merger.Bind(ctx, ch)
 }
 
-func (c *ConflateBroadCaster) Listen(ctx context.Context, ch chan<- string) superchan.Job {
+type memo struct {
+	c *ConflateBroadCaster
+	read bool
+	value string
+}
+func (m *memo) Get() string {
+	if !m.read {
+		m.value = m.c.current
+		m.read = true
+	}
+	return m.value
+}
+
+func (c *ConflateBroadCaster) Listen(ctx context.Context, ch chan<- (func() string)) superchan.Job {
 
 	if ctx == nil || ctx == context.TODO() {
 		ctx = c.defaultContext
@@ -95,8 +108,11 @@ func (c *ConflateBroadCaster) Listen(ctx context.Context, ch chan<- string) supe
 				break
 			}
 			if c.messageId > last {
+				m := memo{
+					c:c,
+				}
 				select {
-				case ch <- c.current:
+				case ch <- m.Get :
 					last = c.messageId
 				default:
 					break
