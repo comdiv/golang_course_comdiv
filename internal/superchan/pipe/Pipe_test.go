@@ -95,7 +95,7 @@ func TestPipe_StartAsync(t *testing.T) {
 	pipe := pipe.New(in, out, prefixer("test"))
 
 	// трубу надо стартовать
-	pipeWaiter := pipe.StartAsync(context.Background())
+	pipeJob := pipe.StartAsync(context.Background())
 	var wg sync.WaitGroup
 	counter := 0
 	totalCount := 10000
@@ -112,7 +112,7 @@ func TestPipe_StartAsync(t *testing.T) {
 		in <- strconv.Itoa(i)
 	}
 	close(in)
-	pipeWaiter()
+	pipeJob.Finish()
 	// но вдруг был буфер на in, дожищдаемя, чтобы он был обработан
 	close(out)
 	wg.Wait()
@@ -127,7 +127,7 @@ func TestUsesContext(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.TODO())
 	pipe := pipe.New(in, out, prefixer("test"))
 	// трубу надо стартовать
-	pipeWaiter := pipe.StartAsync(ctx)
+	pipeJob := pipe.StartAsync(ctx)
 	// ну и она фоново перегоняет in в out с заданной трансформацией
 	counter := 0
 	totalCount := 10000
@@ -147,7 +147,7 @@ func TestUsesContext(t *testing.T) {
 		}
 		close(in)
 	}()
-	pipeWaiter() //  по идее закроется примерно на 1000-1001 элементе
+	pipeJob.Wait() //  по идее закроется примерно на 1000-1001 элементе
 	assert.GreaterOrEqual(t, counter, 1000)
 	assert.LessOrEqual(t, counter, 1005)
 }
@@ -180,7 +180,7 @@ func TestPipeLineIsWorkingAfterStartConcurrently(t *testing.T) {
 	out := make(chan string)
 	pipe := pipe.New( in, out, emptyTransformer)
 	assert.NotNil(t, pipe)
-	pipeWaiter := pipe.StartAsync(context.TODO())
+	pipeJob := pipe.StartAsync(context.TODO())
 	var wg sync.WaitGroup
 	pipeCounter := 0
 	noPipeCounter := 0
@@ -205,7 +205,7 @@ func TestPipeLineIsWorkingAfterStartConcurrently(t *testing.T) {
 		in <- strconv.Itoa(i)
 	}
 	close(in)
-	pipeWaiter()
+	pipeJob.Finish()
 	close(out)
 	wg.Wait()
 	// все должно было обработаться

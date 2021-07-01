@@ -1,6 +1,7 @@
 package dynmerger_test
 
 import (
+	"context"
 	"github.com/comdiv/golang_course_comdiv/internal/superchan/dynmerger"
 	"github.com/stretchr/testify/assert"
 	"strconv"
@@ -14,18 +15,18 @@ func TestDynamicMerger_Start(t *testing.T) {
 	in1 := make(chan string)
 	in2 := make(chan string)
 	out := make(chan string)
-	dynmerger.New([]chan string{in1, in2}, out)
+	dynmerger.New(context.TODO(), []chan string{in1, in2}, out)
 	var wg sync.WaitGroup
 	counter := 0
 	perInCount := 100
 	wg.Add(1)
-	go func(){
+	go func() {
 		defer wg.Done()
 		for range out {
 			counter++
 		}
 	}()
-	for i:=0;i<perInCount;i++{
+	for i := 0; i < perInCount; i++ {
 		in1 <- strconv.Itoa(i)
 		in2 <- strconv.Itoa(i)
 	}
@@ -42,13 +43,13 @@ func TestDynamicMerger_Register(t *testing.T) {
 	in1 := make(chan string)
 	in2 := make(chan string)
 	out := make(chan string)
-	merger := dynmerger.New([]chan string{in1, in2}, out)
+	merger := dynmerger.New(context.TODO(), []chan string{in1, in2}, out)
 
 	var wg sync.WaitGroup
 	counter := 0
 	perInCount := 100
 	wg.Add(1)
-	go func(){
+	go func() {
 		defer wg.Done()
 		for range out {
 			counter++
@@ -57,12 +58,12 @@ func TestDynamicMerger_Register(t *testing.T) {
 
 	in3 := make(chan string)
 
-	for i:=0;i<perInCount;i++{
+	for i := 0; i < perInCount; i++ {
 
 		in1 <- strconv.Itoa(i)
 		in2 <- strconv.Itoa(i)
 		if i == 20 {
-			merger.Register(in3)
+			merger.Bind(context.TODO(), in3)
 		}
 		if i >= 20 {
 			in3 <- strconv.Itoa(i)
@@ -76,5 +77,35 @@ func TestDynamicMerger_Register(t *testing.T) {
 
 	close(out)
 	wg.Wait()
-	assert.Equal(t, perInCount*2 + 80, counter)
+	assert.Equal(t, perInCount*2+80, counter)
+}
+
+func TestDynamicMerger_Bind_And_Unbind(t *testing.T) {
+	out := make(chan string)
+	merger := dynmerger.New(context.TODO(), []chan string{}, out)
+	in1 := make(chan string)
+	hasprocessed := false
+	// промотка входного канала
+	go func(){
+		for range in1 {
+			time.Sleep(1 * time.Millisecond)
+		}
+	}()
+	// промотка выходного канала
+	go func(){
+		for range out {
+			hasprocessed = true
+		}
+	}()
+	job := merger.Bind(context.TODO(), in1)
+	for i:=0;i<100;i++{
+		in1 <- "any"
+	}
+	assert.True(t, hasprocessed)
+	job.Finish()
+	hasprocessed = false
+	for i:=0;i<100;i++{
+		in1 <- "any"
+	}
+	assert.False(t, hasprocessed)
 }

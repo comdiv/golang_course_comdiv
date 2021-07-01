@@ -2,6 +2,7 @@ package pipe
 
 import (
 	"context"
+	"github.com/comdiv/golang_course_comdiv/internal/superchan"
 	"sync"
 )
 
@@ -26,15 +27,20 @@ func PipeChannel(ctx context.Context, in <-chan string, transform func(s string)
 }
 
 // стартует трубу с заданным контекстом, возвращает функицю для ожидания завершения
-func (p *Pipe) StartAsync(ctx context.Context) func() {
+func (p *Pipe) StartAsync(ctx context.Context) superchan.Job {
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go func(){
+	innerCtx, cancel := context.WithCancel(ctx)
+	go func() {
 		defer wg.Done()
-		p.Start(ctx)
+		p.Start(innerCtx)
 	}()
-	return func() {
-		wg.Wait()
+	return superchan.Job{
+		Id:     superchan.NextJobId(),
+		Cancel: cancel,
+		Wait: func() {
+			wg.Wait()
+		},
 	}
 }
 
