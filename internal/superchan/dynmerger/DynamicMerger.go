@@ -25,7 +25,7 @@ func New(ctx context.Context, inputs []chan string, out chan string) *DynamicMer
 }
 
 // регистрирует новый канал и возвращает его токн
-func (m *DynamicMerger) Bind(ctx context.Context, ch chan string) superchan.Job {
+func (m *DynamicMerger) Bind(ctx context.Context, ch <-chan string) superchan.Job {
 	parentCtx := ctx
 	if parentCtx == nil || parentCtx == context.TODO() {
 		parentCtx = m.defaultContext
