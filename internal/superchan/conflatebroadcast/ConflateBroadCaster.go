@@ -5,7 +5,6 @@ import (
 	"github.com/comdiv/golang_course_comdiv/internal/superchan"
 	"github.com/comdiv/golang_course_comdiv/internal/superchan/dynmerger"
 	"sync"
-	"sync/atomic"
 )
 
 // ConflateBroadCaster увязывает множество входов (поставщиков) и выходов (слушателей) в конфлейт режиме
@@ -20,7 +19,8 @@ type ConflateBroadCaster struct {
 	current        string
 	defaultContext context.Context
 	listeners      []func(s string)
-	messageId      int64
+	// канал уведомлений о новых событиях
+	notify chan struct{}
 }
 
 func New(ctx context.Context) *ConflateBroadCaster {
@@ -34,6 +34,7 @@ func New(ctx context.Context) *ConflateBroadCaster {
 		current:        "",
 		defaultContext: ctx,
 		listeners:      make([]func(s string), 0),
+		notify:         make(chan struct{}),
 	}
 }
 
@@ -60,8 +61,9 @@ func (c *ConflateBroadCaster) Start(ctx context.Context) {
 		select {
 		case next, ok := <-c.in:
 			if ok {
-				atomic.AddInt64(&c.messageId, 1)
 				c.current = next
+				close(c.notify)
+				c.notify = make(chan struct{})
 			} else {
 				return
 			}
@@ -71,16 +73,18 @@ func (c *ConflateBroadCaster) Start(ctx context.Context) {
 	}
 }
 
+
 // добавляет поставщика данных из которого производится чтение
 func (c *ConflateBroadCaster) Publish(ctx context.Context, ch <-chan string) superchan.Job {
 	return c.merger.Bind(ctx, ch)
 }
 
 type memo struct {
-	c *ConflateBroadCaster
-	read bool
+	c     *ConflateBroadCaster
+	read  bool
 	value string
 }
+
 func (m *memo) Get() string {
 	if !m.read {
 		m.value = m.c.current
@@ -99,21 +103,16 @@ func (c *ConflateBroadCaster) Listen(ctx context.Context, ch chan<- (func() stri
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		var last int64 = 0
 		for {
 			select {
 			case <-innerContext.Done():
 				return
-			default:
-				break
-			}
-			if c.messageId > last {
+			case <-c.notify:
 				m := memo{
-					c:c,
+					c: c,
 				}
 				select {
-				case ch <- m.Get :
-					last = c.messageId
+				case ch <- m.Get:
 				default:
 					break
 				}
