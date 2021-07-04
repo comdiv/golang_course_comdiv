@@ -99,7 +99,7 @@ func TestConflateBroadCaster_LazyListeners(t *testing.T) {
 
 			// заодно проверяем, что функция - с мемоизацией, значение не меняется
 			if (counter_2 > 3) {
-				time.Sleep(30) // точно поменялся current
+				time.Sleep(30 * time.Millisecond) // точно поменялся current
 				// но вызов v()  нет
 				assert.Equal(t, val, v())
 			}
