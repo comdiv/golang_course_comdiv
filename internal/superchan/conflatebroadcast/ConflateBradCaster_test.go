@@ -2,7 +2,6 @@ package dynbroadcaster_test
 
 import (
 	"context"
-	"fmt"
 	dynbroadcaster "github.com/comdiv/golang_course_comdiv/internal/superchan/conflatebroadcast"
 	"github.com/stretchr/testify/assert"
 	"strconv"
@@ -36,7 +35,6 @@ func TestConflateBroadCaster_AllowWriteEvenIfNoListeners(t *testing.T) {
 		defer wg.Done()
 		for i:=0;i<100; i+=2 {
 			src_1 <- strconv.Itoa(i)
-			fmt.Printf("producer 1: sent %v\n", i)
 			time.Sleep(10 * time.Millisecond)
 		}
 	}()
@@ -45,7 +43,6 @@ func TestConflateBroadCaster_AllowWriteEvenIfNoListeners(t *testing.T) {
 		defer wg.Done()
 		for i:=1;i<100; i+=2 {
 			src_2 <- strconv.Itoa(i)
-			fmt.Printf("producer 2: sent %v\n", i)
 			time.Sleep(20 * time.Millisecond)
 		}
 	}()
@@ -89,7 +86,6 @@ func TestConflateBroadCaster_LazyListeners(t *testing.T) {
 		for v := range target_1 {
 			val := v()
 			counter_1++
-			println("listener 1: got: "+ val)
 			if val == "99" {
 				return
 			}
@@ -109,7 +105,6 @@ func TestConflateBroadCaster_LazyListeners(t *testing.T) {
 			}
 
 			counter_2++
-			println("listener 2: got: "+ val)
 			if val == "99" {
 				return
 			}
@@ -124,7 +119,6 @@ func TestConflateBroadCaster_LazyListeners(t *testing.T) {
 		defer wg.Done()
 		for i:=0;i<100; i+=2 {
 			src_1 <- strconv.Itoa(i)
-			fmt.Printf("producer 1: sent %v\n", i)
 			time.Sleep(10 * time.Millisecond)
 		}
 	}()
@@ -133,7 +127,6 @@ func TestConflateBroadCaster_LazyListeners(t *testing.T) {
 		defer wg.Done()
 		for i:=1;i<100; i+=2 {
 			src_2 <- strconv.Itoa(i)
-			fmt.Printf("producer 2: sent %v\n", i)
 			time.Sleep(20 * time.Millisecond)
 		}
 	}()

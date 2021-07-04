@@ -5,6 +5,7 @@ import (
 	"github.com/comdiv/golang_course_comdiv/internal/superchan"
 	"github.com/comdiv/golang_course_comdiv/internal/superchan/dynmerger"
 	"sync"
+	"sync/atomic"
 )
 
 // ConflateBroadCaster увязывает множество входов (поставщиков) и выходов (слушателей) в конфлейт режиме
@@ -19,8 +20,21 @@ type ConflateBroadCaster struct {
 	current        string
 	defaultContext context.Context
 	listeners      []func(s string)
-	// канал уведомлений о новых событиях
-	notify chan struct{}
+	cond           *sync.Cond
+	messageId      int64
+}
+
+func (c *ConflateBroadCaster) WaitNew(last int64) <-chan struct{} {
+	result := make(chan struct{})
+	go func() {
+		c.cond.L.Lock()
+		defer c.cond.L.Unlock()
+		if c.messageId <= last {
+			c.cond.Wait()
+		}
+		close(result)
+	}()
+	return result
 }
 
 func New(ctx context.Context) *ConflateBroadCaster {
@@ -28,14 +42,15 @@ func New(ctx context.Context) *ConflateBroadCaster {
 		ctx = context.Background()
 	}
 	in := make(chan string)
-	return &ConflateBroadCaster{
+	result := &ConflateBroadCaster{
 		merger:         dynmerger.New(ctx, []chan string{}, in),
 		in:             in,
 		current:        "",
 		defaultContext: ctx,
 		listeners:      make([]func(s string), 0),
-		notify:         make(chan struct{}),
+		cond:           sync.NewCond(&sync.Mutex{}),
 	}
+	return result
 }
 
 func (c *ConflateBroadCaster) StartAsync(ctx context.Context) superchan.Job {
@@ -61,9 +76,11 @@ func (c *ConflateBroadCaster) Start(ctx context.Context) {
 		select {
 		case next, ok := <-c.in:
 			if ok {
+				c.cond.L.Lock()
+				atomic.AddInt64(&c.messageId, 1)
 				c.current = next
-				close(c.notify)
-				c.notify = make(chan struct{})
+				c.cond.Broadcast()
+				c.cond.L.Unlock()
 			} else {
 				return
 			}
@@ -72,7 +89,6 @@ func (c *ConflateBroadCaster) Start(ctx context.Context) {
 		}
 	}
 }
-
 
 // добавляет поставщика данных из которого производится чтение
 func (c *ConflateBroadCaster) Publish(ctx context.Context, ch <-chan string) superchan.Job {
@@ -94,7 +110,6 @@ func (m *memo) Get() string {
 }
 
 func (c *ConflateBroadCaster) Listen(ctx context.Context, ch chan<- (func() string)) superchan.Job {
-
 	if ctx == nil || ctx == context.TODO() {
 		ctx = c.defaultContext
 	}
@@ -102,17 +117,20 @@ func (c *ConflateBroadCaster) Listen(ctx context.Context, ch chan<- (func() stri
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
+		var last int64 = 0
 		defer wg.Done()
 		for {
 			select {
 			case <-innerContext.Done():
 				return
-			case <-c.notify:
+			case <-c.WaitNew(last):
+				next := c.messageId
 				m := memo{
 					c: c,
 				}
 				select {
 				case ch <- m.Get:
+					last = next
 				default:
 					break
 				}
