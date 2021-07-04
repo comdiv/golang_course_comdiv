@@ -161,7 +161,7 @@ func (t *tokenizerImpl) BuildToken() *Token {
 			wasRus := false
 			wasLat := false
 			wasOther := false
-			if (t.isAscii){
+			if t.isAscii {
 				for i:=0;i<len(t.buf);i++{
 					c := t.buf[i]
 					switch {

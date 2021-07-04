@@ -23,6 +23,10 @@ run:
   # on Windows.
   skip-dirs:
     - cmd.*
+    - pprof
+
+  skip-files:
+    - .*\.(prof|svg|xml|md|txt|json)
 
   # default is true. Enables skipping of directories:
   #   vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
@@ -31,3 +35,5 @@ run:
   # Allow multiple parallel golangci-lint instances running.
   # If false (default) - golangci-lint acquires file lock on start.
   allow-parallel-runners: false
+
+
