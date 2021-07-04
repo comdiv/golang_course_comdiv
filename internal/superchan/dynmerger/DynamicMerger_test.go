@@ -2,6 +2,7 @@ package dynmerger_test
 
 import (
 	"context"
+	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/superchan/dynmerger"
 	"github.com/stretchr/testify/assert"
 	"strconv"
@@ -94,6 +95,9 @@ func TestDynamicMerger_Bind_And_Unbind(t *testing.T) {
 	// промотка выходного канала
 	go func(){
 		for range out {
+			if !hasprocessed {
+				fmt.Println("Has some data in out!")
+			}
 			hasprocessed = true
 		}
 	}()

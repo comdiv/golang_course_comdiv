@@ -2,6 +2,7 @@ package pipe
 
 import (
 	"context"
+	"fmt"
 	"github.com/comdiv/golang_course_comdiv/internal/superchan"
 	"sync"
 )
@@ -52,12 +53,14 @@ func (p *Pipe) Start(ctx context.Context) { // returns waiter function to join s
 	for {
 		select {
 		case <-ctx.Done():
+			fmt.Println("Finish pipe by ctx.Done")
 			return
 		case s, ok := <-p.in:
 			if ok {
 				st := p.transform(s)
 				p.out <- st
 			} else {
+				fmt.Println("Finish pipe by closed in")
 				return
 			}
 		}
