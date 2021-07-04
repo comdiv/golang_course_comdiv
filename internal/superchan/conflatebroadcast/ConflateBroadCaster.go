@@ -5,7 +5,6 @@ import (
 	"github.com/comdiv/golang_course_comdiv/internal/superchan"
 	"github.com/comdiv/golang_course_comdiv/internal/superchan/dynmerger"
 	"sync"
-	"sync/atomic"
 )
 
 // ConflateBroadCaster увязывает множество входов (поставщиков) и выходов (слушателей) в конфлейт режиме
@@ -26,10 +25,13 @@ type ConflateBroadCaster struct {
 
 func (c *ConflateBroadCaster) WaitNew(last int64, notify chan struct{}) <-chan struct{} {
 	go func() {
-		c.cond.L.Lock()
-		defer c.cond.L.Unlock()
 		if c.messageId <= last {
-			c.cond.Wait()
+			c.cond.L.Lock()
+			// повторая проверка, так как может теоретически быть так, что между проверкой и локом что-то поменялос
+			if c.messageId <= last {
+				c.cond.Wait()
+			}
+			c.cond.L.Unlock()
 		}
 		notify <- struct{}{}
 	}()
@@ -76,7 +78,7 @@ func (c *ConflateBroadCaster) Start(ctx context.Context) {
 		case next, ok := <-c.in:
 			if ok {
 				c.cond.L.Lock()
-				atomic.AddInt64(&c.messageId, 1)
+				c.messageId++
 				c.current = next
 				c.cond.Broadcast()
 				c.cond.L.Unlock()
@@ -114,7 +116,7 @@ func (c *ConflateBroadCaster) Listen(ctx context.Context, ch chan<- (func() stri
 	}
 	innerContext, cancel := context.WithCancel(ctx)
 	var wg sync.WaitGroup
-	wg.Add(1)``
+	wg.Add(1)
 	go func() {
 		var last int64 = 0
 		defer wg.Done()
