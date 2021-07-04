@@ -24,17 +24,16 @@ type ConflateBroadCaster struct {
 	messageId      int64
 }
 
-func (c *ConflateBroadCaster) WaitNew(last int64) <-chan struct{} {
-	result := make(chan struct{})
+func (c *ConflateBroadCaster) WaitNew(last int64, notify chan struct{}) <-chan struct{} {
 	go func() {
 		c.cond.L.Lock()
 		defer c.cond.L.Unlock()
 		if c.messageId <= last {
 			c.cond.Wait()
 		}
-		close(result)
+		notify <- struct{}{}
 	}()
-	return result
+	return notify
 }
 
 func New(ctx context.Context) *ConflateBroadCaster {
@@ -115,15 +114,17 @@ func (c *ConflateBroadCaster) Listen(ctx context.Context, ch chan<- (func() stri
 	}
 	innerContext, cancel := context.WithCancel(ctx)
 	var wg sync.WaitGroup
-	wg.Add(1)
+	wg.Add(1)``
 	go func() {
 		var last int64 = 0
 		defer wg.Done()
+		notify := make(chan struct{})
+		defer close(notify)
 		for {
 			select {
 			case <-innerContext.Done():
 				return
-			case <-c.WaitNew(last):
+			case <-c.WaitNew(last, notify):
 				next := c.messageId
 				m := memo{
 					c: c,
