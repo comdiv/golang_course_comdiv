@@ -39,9 +39,7 @@ func (p *Pipe) StartAsync(ctx context.Context) superchan.Job {
 	return superchan.Job{
 		Id:     superchan.NextJobId(),
 		Cancel: cancel,
-		Wait: func() {
-			wg.Wait()
-		},
+		Wait:   wg.Wait,
 	}
 }
 

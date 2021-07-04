@@ -1,6 +1,9 @@
 package superchan
 
-import "sync/atomic"
+import (
+	"fmt"
+	"sync/atomic"
+)
 
 type Job struct {
 	Id     int32
@@ -16,6 +19,7 @@ func (j *Job) Finish(){
 	if j.OnFinish!=nil {
 		j.OnFinish()
 	}
+	fmt.Println("job finished")
 }
 
 var jobId int32

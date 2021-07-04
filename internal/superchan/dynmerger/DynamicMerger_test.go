@@ -82,6 +82,7 @@ func TestDynamicMerger_Register(t *testing.T) {
 }
 
 func TestDynamicMerger_Bind_And_Unbind(t *testing.T) {
+	fmt.Println("Start TestDynamicMerger_Bind_And_Unbind")
 	out := make(chan string)
 	merger := dynmerger.New(context.TODO(), []chan string{}, out)
 	in1 := make(chan string)
@@ -107,6 +108,8 @@ func TestDynamicMerger_Bind_And_Unbind(t *testing.T) {
 	}
 	assert.True(t, hasprocessed)
 	job.Finish()
+	// не фает что промотка выходного канала все дообработала, увеличим гарантии!!
+	time.Sleep(10 * time.Millisecond)
 	hasprocessed = false
 	for i:=0;i<100;i++{
 		in1 <- "any"
